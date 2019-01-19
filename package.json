@@ -1,0 +1,19 @@
+{
+  "name": "ssig",
+  "version": "0.0.1",
+  "description": "SSIG",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michal Pasierbski <mpasierbski@gmail.com>",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "mysql2": "^1.6.4",
+    "sequelize": "^4.42.0",
+    "sequelize-cli": "^5.4.0"
+  }
+}
