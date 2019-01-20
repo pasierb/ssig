@@ -16,7 +16,7 @@ class VersionResolver extends ModelResolver {
   }
 }
 
-const schema = `
+const typeSchema = `
   type Version {
     id: String!
     projectId: String!
@@ -28,4 +28,4 @@ const schema = `
   }
 `;
 
-module.exports = { schema, VersionResolver };
+module.exports = { typeSchema, VersionResolver };

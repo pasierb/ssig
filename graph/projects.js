@@ -1,3 +1,5 @@
+"use strict";
+
 const { Project } = require("../db/models");
 const ModelResolver = require("./ModelResolver");
 const { VersionResolver } = require("./versions");
@@ -14,7 +16,7 @@ class ProjectResolver extends ModelResolver {
   }
 }
 
-const schema = `
+const typeSchema = `
   type Project {
     id: String!
     name: String!
@@ -23,12 +25,12 @@ const schema = `
   }
 `;
 
-const queries = `
+const querySchema = `
   getProjects: [Project]
   getProject(id: String!): Project
 `;
 
-const resolvers = {
+const queries = {
   async getProjects() {
     const projects = await Project.findAll();
 
@@ -41,4 +43,24 @@ const resolvers = {
   }
 };
 
-module.exports = { schema, queries, resolvers, ProjectResolver };
+const mutationSchema = `
+  createVersion(projectId: String!): Version
+`;
+
+const mutations = {
+  async createVersion({ projectId }) {
+    const project = await Project.findByPk(projectId);
+    const version = await project.createVersion();
+
+    return new VersionResolver(version);
+  }
+};
+
+module.exports = {
+  typeSchema,
+  querySchema,
+  queries,
+  mutationSchema,
+  mutations,
+  ProjectResolver
+};

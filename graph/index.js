@@ -5,20 +5,24 @@ const projects = require("./projects");
 const versions = require("./versions");
 
 const graph = [projects, versions].reduce(
-  (acc, { schema, queries, resolvers }) => {
-    acc.schema += schema;
-
-    if (queries) {
-      acc.query += queries;
+  (acc, { typeSchema, querySchema, queries, mutationSchema, mutations }) => {
+    if (typeSchema) {
+      acc.schema += typeSchema;
     }
 
-    if (resolvers) {
-      acc.root = Object.assign({}, acc.root, resolvers);
+    if (querySchema && queries) {
+      acc.rootQuery += querySchema;
+      acc.root = Object.assign({}, acc.root, queries);
+    }
+
+    if (mutationSchema && mutations) {
+      acc.rootMutation += mutationSchema;
+      acc.root = Object.assign({}, acc.root, mutations);
     }
 
     return acc;
   },
-  { schema: "", query: "", root: {} }
+  { schema: "", rootQuery: "", root: {}, rootMutation: "", mutation: {} }
 );
 
 module.exports = {
@@ -26,8 +30,12 @@ module.exports = {
     ${graph.schema}
 
     type Query {
-      ${graph.query}
+      ${graph.rootQuery}
+    }
+
+    type Mutation {
+      ${graph.rootMutation}
     }
   `),
-  root: graph.root
+  root: graph.root,
 };
