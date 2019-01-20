@@ -9,4 +9,9 @@ services:
     environment:
       MYSQL_DATABASE: ssig_development
       MYSQL_ROOT_PASSWORD: changemessig
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
     
