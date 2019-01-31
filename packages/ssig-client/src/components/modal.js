@@ -1,0 +1,31 @@
+import { h, Component } from "preact";
+
+export default class Modal extends Component {
+  listenClose = e => {
+    if (this.props.isOpen && e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener("keyup", this.listenClose);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keyup", this.listenClose);
+  }
+
+  render() {
+    if (!this.props.isOpen) return null;
+
+    return (
+      <div class="modal" className="is-active">
+        <div class="modal-background" />
+        <div class="modal-content">
+          <div className="box">{this.props.children}</div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" />
+      </div>
+    );
+  }
+}

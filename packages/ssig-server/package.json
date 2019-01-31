@@ -1,0 +1,25 @@
+{
+  "name": "ssig-server",
+  "version": "0.0.1",
+  "description": "SSIG Serve",
+  "main": "app.js",
+  "scripts": {
+    "dev": "node app.js",
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michal Pasierbski <mpasierbski@gmail.com>",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "canvas": "^2.3.1",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.1.1",
+    "graphql-type-json": "^0.2.1",
+    "mysql2": "^1.6.4",
+    "sequelize": "^4.42.0",
+    "sequelize-cli": "^5.4.0",
+    "ssig-renderer": "^1.0.1"
+  }
+}
