@@ -1,11 +1,11 @@
 import { h, Component } from "preact";
 import { Router } from "preact-router";
 
-import Header from "./header";
+import Header from "./header/Header";
 
 // Code-splitting is automated for routes
-import Projects from "../routes/projects";
-import Version from "../routes/version";
+import ProjectsPage from "../routes/ProjectsPage";
+import VersionPage from "../routes/VersionPage";
 
 import "bulma";
 
@@ -23,8 +23,8 @@ export default class App extends Component {
       <div id="app">
         <Header />
 				<Router onChange={this.handleRoute}>
-					<Projects path="/" />
-					<Version path="/projects/:projectId/versions/:versionId" />
+					<ProjectsPage path="/" />
+					<VersionPage path="/projects/:projectId/versions/:versionId" />
 				</Router>
       </div>
     );

@@ -14,7 +14,7 @@ const query = `
   }
 `;
 
-export default class Projects extends Component {
+export default class ProjectsPage extends Component {
   state = {
     projects: []
   };

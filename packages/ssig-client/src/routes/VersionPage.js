@@ -1,9 +1,9 @@
 import { h, Component } from "preact";
-import NewLayerFormContainer from "../containers/newLayerFormContainer";
-import Modal from "../components/modal";
+import NewLayerFormContainer from "../containers/NewLayerFormContainer";
+import Modal from "../components/Modal";
 import EditorContainer from "../containers/EditorContainer";
 
-export default class Version extends Component {
+export default class VersionPage extends Component {
   state = {
     isNewLayerModalOpen: false,
     project: null
