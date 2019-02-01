@@ -8,9 +8,9 @@ export default class LayerList extends Component {
   layerToggleHandler = layer => e => {
     e.preventDefault();
 
-    this.setState({
-      activeLayerId: layer.id
-    });
+    this.setState(state => ({
+      activeLayerId: layer.id === state.activeLayerId ? null : layer.id
+    }));
   };
 
   render(props, state) {
