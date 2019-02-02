@@ -2,6 +2,7 @@ import { h, Component } from "preact";
 import { Router } from "preact-router";
 
 import Header from "./header/Header";
+import Footer from "./Footer";
 
 // Code-splitting is automated for routes
 import ProjectsPage from "../routes/ProjectsPage";
@@ -22,10 +23,11 @@ export default class App extends Component {
     return (
       <div id="app">
         <Header />
-				<Router onChange={this.handleRoute}>
-					<ProjectsPage path="/" />
-					<VersionPage path="/projects/:projectId/versions/:versionId" />
-				</Router>
+        <Router onChange={this.handleRoute}>
+          <ProjectsPage path="/" />
+          <VersionPage path="/projects/:projectId/versions/:versionId/edit" />
+        </Router>
+        <Footer />
       </div>
     );
   }

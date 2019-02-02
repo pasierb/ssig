@@ -25,6 +25,12 @@ const typeSchema = `
     createdAt: String!
     updatedAt: String!
   }
+
+  input VersionInput {
+    width: Int
+    height: Int
+    backgroundColor: String
+  }
 `;
 
 const querySchema = `
@@ -39,18 +45,25 @@ const queries = {
   }
 };
 
+const mutationSchema = `
+  createVersion(projectId: String!): Version
+  updateVersion(id: String!, input: VersionInput!): Version
+`;
+
 const mutations = {
   async createVersion({ projectId }) {
     const project = await models.Project.findByPk(projectId);
     const version = await project.createVersion();
 
     return versionResolver(version);
+  },
+  async updateVersion({ id, input }) {
+    const version = await models.Version.findByPk(id);
+    await version.update(input);
+
+    return versionResolver(version);
   }
 };
-
-const mutationSchema = `
-  createVersion(projectId: String!): Version
-`;
 
 module.exports = {
   typeSchema,

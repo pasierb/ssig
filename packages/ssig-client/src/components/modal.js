@@ -1,8 +1,9 @@
 import { h, Component } from "preact";
+import Portal from "preact-portal";
 
 export default class Modal extends Component {
   listenClose = e => {
-    if (this.props.isOpen && e.code === 'Escape') {
+    if (this.props.isOpen && e.code === "Escape") {
       this.props.onClose();
     }
   };
@@ -15,17 +16,23 @@ export default class Modal extends Component {
     document.removeEventListener("keyup", this.listenClose);
   }
 
-  render() {
+  render(props) {
     if (!this.props.isOpen) return null;
 
     return (
-      <div class="modal" className="is-active">
-        <div class="modal-background" />
-        <div class="modal-content">
-          <div className="box">{this.props.children}</div>
+      <Portal into="body">
+        <div className="modal is-active">
+          <div class="modal-background" />
+          <div class="modal-content">
+            <div className="box">{this.props.children}</div>
+          </div>
+          <button
+            class="modal-close is-large"
+            aria-label="close"
+            onClick={props.onClose}
+          />
         </div>
-        <button class="modal-close is-large" aria-label="close" />
-      </div>
+      </Portal>
     );
   }
 }

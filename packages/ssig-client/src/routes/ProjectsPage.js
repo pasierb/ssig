@@ -1,5 +1,6 @@
 import { h, Component } from "preact";
-import { Link } from 'preact-router/match';
+import ProjectsGrid from "../components/ProjectsGrid";
+import ProjectCard from "../components/ProjectCard";
 import client from "../graph";
 
 const query = `
@@ -7,7 +8,7 @@ const query = `
     projects {
       id
       name
-      versions {
+      versions(limit: 1) {
         id
       }
     }
@@ -30,16 +31,12 @@ export default class ProjectsPage extends Component {
       <div className="container">
         <h1 className="title">Projects</h1>
 
-        <ul>
-          {this.state.projects.map(project => (
-            <li>
-              {project.name}
-              {project.versions.map(version =>
-                <Link href={`/projects/${project.id}/versions/${version.id}`}>{version.id}</Link>
-              )}
-            </li>
-          ))}
-        </ul>
+        <ProjectsGrid
+          projects={this.state.projects}
+          renderItem={project => (
+            <ProjectCard project={project} version={project.versions[0]} />
+          )}
+        />
       </div>
     );
   }

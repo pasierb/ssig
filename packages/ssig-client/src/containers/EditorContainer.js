@@ -6,6 +6,9 @@ const VERSION_QUERY = `
   query getVersion($versionId: String!) {
     version(id: $versionId) {
       id
+      width
+      height
+      backgroundColor
       status
       layers {
         id
@@ -50,7 +53,7 @@ export default class EditorContainer extends Component {
   handleLayerChange = layer => {
     const { id, x, y, name, typeData } = layer;
 
-    // TODO: make an optimistic UI update first, them persist
+    // TODO: make an optimistic UI update first, then persist
     client
       .request(UPDATE_LAYER_MUTATION, {
         id,
@@ -68,6 +71,12 @@ export default class EditorContainer extends Component {
       return <p>Loading</p>;
     }
 
-    return <Editor layers={layers} onLayerChange={this.handleLayerChange} />;
+    return (
+      <Editor
+        version={version}
+        layers={layers}
+        onLayerChange={this.handleLayerChange}
+      />
+    );
   }
 }

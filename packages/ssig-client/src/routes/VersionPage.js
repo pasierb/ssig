@@ -10,7 +10,6 @@ export default class VersionPage extends Component {
   };
 
   handleCreateLayer = () => {
-    this.fetchData();
     this.handleNewLayerModalToggle();
   };
 

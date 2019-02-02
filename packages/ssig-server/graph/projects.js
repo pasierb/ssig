@@ -5,8 +5,8 @@ const { versionResolver } = require("./versions");
 
 function projectResolver(model) {
   return Object.assign({}, model.dataValues, {
-    async versions(args, obj) {
-      const versions = await model.getVersions({ where: args });
+    async versions({ limit = 10 }, obj) {
+      const versions = await model.getVersions({ limit });
 
       return versions.map(versionResolver);
     },
@@ -23,7 +23,7 @@ const typeSchema = `
     id: String!
     name: String!
     createdAt: String!
-    versions: [Version]
+    versions(limit: Int): [Version]
     version(id: String!): Version
   }
 `;
