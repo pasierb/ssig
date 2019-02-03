@@ -1,6 +1,6 @@
 "use strict";
 
-const { Project } = require("../db/models");
+const { Project, Version } = require("../db/models");
 const { versionResolver } = require("./versions");
 
 function projectResolver(model) {
@@ -23,6 +23,7 @@ const typeSchema = `
     id: String!
     name: String!
     createdAt: String!
+    publishedVersionId: String
     versions(limit: Int): [Version]
     version(id: String!): Version
   }
@@ -48,6 +49,7 @@ const queries = {
 
 const mutationSchema = `
   createProject(name: String!): Project
+  publishProjectVersion(projectId: String!, versionId: String!): Project
 `;
 
 const mutations = {
@@ -56,6 +58,17 @@ const mutations = {
 
     // create first draft version
     await project.createVersion();
+
+    return projectResolver(project);
+  },
+  async publishProjectVersion({ projectId, versionId }) {
+    const project = await Project.findByPk(projectId);
+    const version = await Version.findByPk(versionId, {
+      where: { projectId }
+    });
+
+    await version.update({ publishedAt: new Date() });
+    await project.update({ publishedVersionId: version.id });
 
     return projectResolver(project);
   }

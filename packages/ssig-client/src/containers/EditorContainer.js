@@ -10,6 +10,8 @@ const VERSION_QUERY = `
       height
       backgroundColor
       status
+      projectId
+      publishedAt
       layers {
         id
         name
@@ -31,6 +33,15 @@ const UPDATE_LAYER_MUTATION = `
   }
 `;
 
+const PUBLISH_VERSION_MUTATION = `
+  mutation publishVersion($projectId: String!, $versionId: String!) {
+    publishProjectVersion(projectId: $projectId, versionId: $versionId) {
+      id
+      publishedVersionId
+    }
+  }
+`;
+
 export default class EditorContainer extends Component {
   data = {
     version: undefined,
@@ -48,6 +59,17 @@ export default class EditorContainer extends Component {
         version: rest
       });
     });
+  };
+
+  handleVersionPublish = () => {
+    const { version } = this.state;
+
+    client
+      .request(PUBLISH_VERSION_MUTATION, {
+        projectId: version.projectId,
+        versionId: version.id
+      })
+      .then(this.fetchData);
   };
 
   handleLayerChange = layer => {
@@ -75,6 +97,7 @@ export default class EditorContainer extends Component {
       <Editor
         version={version}
         layers={layers}
+        onVersionPublish={this.handleVersionPublish}
         onLayerChange={this.handleLayerChange}
       />
     );

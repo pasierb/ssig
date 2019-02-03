@@ -22,6 +22,7 @@ const typeSchema = `
     width: Int!
     height: Int!
     backgroundColor: String!
+    publishedAt: String!
     createdAt: String!
     updatedAt: String!
   }

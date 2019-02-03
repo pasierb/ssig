@@ -13,6 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      publishedVersionId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Version",
+          key: "id"
+        }
       }
     },
     {}
@@ -20,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
 
   Project.associate = function({ Version }) {
     Project.hasMany(Version, { foreignKey: "projectId", sourceKey: "id" });
+    Project.belongsTo(Version, {
+      foreignKey: "publishedVersionId",
+      sourceKey: "id"
+    });
   };
 
   return Project;

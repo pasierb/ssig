@@ -17,7 +17,7 @@ export default class Editor extends Component {
   };
 
   render(props, state) {
-    const { version, layers, onLayerChange } = props;
+    const { version, layers, onLayerChange, onVersionPublish } = props;
 
     return (
       <div className="columns">
@@ -25,7 +25,8 @@ export default class Editor extends Component {
           <VersionPreview layers={layers} version={version} />
         </div>
         <div className="column">
-          <button onClick={this.toggleVersionModal}>Version setting</button>
+          <button className="button" onClick={this.toggleVersionModal}>Version setting</button>
+          <button className="button" disabled={version.publishedAt} onClick={onVersionPublish}>Version publish</button>
           <h4 className="title is-4">Layers</h4>
           <LayerList
             layers={layers}
