@@ -22,7 +22,7 @@ export default class VersionPage extends Component {
     });
   };
 
-  render({ versionId }) {
+  render({ versionId, projectId }) {
     return (
       <div>
         <div className="container is-fluid">
@@ -30,7 +30,7 @@ export default class VersionPage extends Component {
 
           <button onClick={this.handleNewLayerModalToggle}>Add</button>
 
-          <EditorContainer versionId={versionId} />
+          <EditorContainer projectId={projectId} versionId={versionId} />
         </div>
 
         <Modal

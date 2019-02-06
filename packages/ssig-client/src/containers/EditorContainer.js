@@ -3,23 +3,25 @@ import client from "../graph";
 import Editor from "../components/Editor";
 
 const VERSION_QUERY = `
-  query getVersion($versionId: String!) {
-    version(id: $versionId) {
-      id
-      width
-      height
-      backgroundColor
-      status
-      projectId
-      publishedAt
-      layers {
+  query getProjectVersion($projectId: String!, $versionId: String!) {
+    project(id: $projectId) {
+      version(id: $versionId) {
         id
-        name
-        type
-        typeData
-        x
-        y
-        z
+        width
+        height
+        backgroundColor
+        status
+        projectId
+        publishedAt
+        layers {
+          id
+          name
+          type
+          typeData
+          x
+          y
+          z
+        }
       }
     }
   }
@@ -49,12 +51,14 @@ export default class EditorContainer extends Component {
   };
 
   fetchData = () => {
-    const { versionId } = this.props;
+    const { versionId, projectId } = this.props;
 
-    client.request(VERSION_QUERY, { versionId }).then(({ version }) => {
+    client.request(VERSION_QUERY, { projectId, versionId }).then(({ project }) => {
+      const { version } = project;
       const { layers, ...rest } = version;
 
       this.setState({
+        project,
         layers,
         version: rest
       });

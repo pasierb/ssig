@@ -12,6 +12,7 @@ export default function(config, env, helpers) {
   config.devServer = Object.assign({}, devServer, {
     proxy: {
       "/api": "http://localhost:3000",
+      "/auth": "http://localhost:3000",
       "/graphql": "http://localhost:3000"
     }
   });

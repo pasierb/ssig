@@ -5,8 +5,9 @@ const GraphQLJSON = require("graphql-type-json");
 const projects = require("./projects");
 const versions = require("./versions");
 const layers = require("./layers");
+const me = require("./me");
 
-const graph = [projects, versions, layers].reduce(
+const graph = [me, projects, versions, layers].reduce(
   (acc, { typeSchema, querySchema, queries, mutationSchema, mutations }) => {
     if (typeSchema) {
       acc.schema += typeSchema;

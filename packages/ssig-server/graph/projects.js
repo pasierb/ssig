@@ -35,13 +35,23 @@ const querySchema = `
 `;
 
 const queries = {
-  async projects() {
-    const projects = await Project.findAll();
+  async projects(args, req) {
+    if (!req.user) {
+      return [];
+    }
+
+    const projects = await req.user.getProjects();
 
     return projects.map(projectResolver);
   },
-  async project({ id }) {
-    const project = await Project.findByPk(id);
+  async project({ id }, req) {
+    if (!req.user) {
+      return null;
+    }
+
+    const project = await Project.findOne({
+      where: { id, userId: req.user.id }
+    });
 
     return projectResolver(project);
   }
@@ -53,16 +63,26 @@ const mutationSchema = `
 `;
 
 const mutations = {
-  async createProject({ name }) {
-    const project = await Project.create({ name });
+  async createProject({ name }, req) {
+    if (!req.user) {
+      return null;
+    }
+
+    const project = await Project.create({ name, userId: req.user.id });
 
     // create first draft version
     await project.createVersion();
 
     return projectResolver(project);
   },
-  async publishProjectVersion({ projectId, versionId }) {
-    const project = await Project.findByPk(projectId);
+  async publishProjectVersion({ projectId, versionId }, req) {
+    if (!req.user) {
+      return null;
+    }
+
+    const project = await Project.findIne({
+      where: { id: projectId, userId: req.user.id }
+    });
     const version = await Version.findByPk(versionId, {
       where: { projectId }
     });
