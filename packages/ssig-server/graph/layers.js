@@ -1,5 +1,6 @@
 "use strict";
 
+const fetch = require("node-fetch");
 const models = require("../db/models");
 const { versionResolver } = require("./versions");
 
@@ -46,14 +47,41 @@ const mutationSchema = `
 const mutations = {
   async createLayer({ versionId, layerInput }) {
     const version = await models.Version.findByPk(versionId);
-    const maxZ = await models.Layer.max('z', { where: { versionId } })
-    const layer = await version.createLayer({ ...layerInput, z: (maxZ || 0) + 1 });
+    const maxZ = await models.Layer.max("z", { where: { versionId } });
+    const layer = await version.createLayer({
+      ...layerInput,
+      z: (maxZ || 0) + 1
+    });
 
     return layerResolver(layer);
   },
   async updateLayer({ id, layerInput }) {
     const layer = await models.Layer.findByPk(id);
-    await layer.update(layerInput);
+    const updateData = { ...layerInput };
+
+    if (layer.type === "image") {
+      try {
+        const { buffer, contentType } = await fetch(
+          layer.typeData.imageUri
+        ).then(async res => {
+          const buffer = await res.buffer();
+
+          return {
+            contentType: res.headers.get('content-type'),
+            buffer
+          };
+        });
+
+        updateData.typeData.imageData = `data:${contentType};base64, ${buffer.toString(
+          "base64"
+        )}`;
+      } catch (e) {
+        console.log(e);
+        updateData.typeData.imageData = undefined;
+      }
+    }
+
+    await layer.update(updateData);
 
     return layerResolver(layer);
   },

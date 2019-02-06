@@ -1,10 +1,11 @@
 import { h, Component } from "preact";
-import Modal from "./Modal";
-import LayerList from "./LayerList";
-import LayerForm from "./LayerForm";
-import VersionPreview from "./VersionPreview";
-import VersionForm from "./VersionForm";
-import NewLayerForm from "./NewLayerForm";
+import Modal from "../Modal";
+import LayerList from "../LayerList";
+import LayerForm from "../LayerForm";
+import VersionPreview from "../VersionPreview";
+import VersionForm from "../VersionForm";
+import NewLayerForm from "../NewLayerForm";
+import styles from './Editor.scss';
 
 export default class Editor extends Component {
   state = {
@@ -33,11 +34,11 @@ export default class Editor extends Component {
     const { version, layers, onLayerChange, onVersionPublish } = props;
 
     return (
-      <div className="columns">
-        <div className="column">
+      <div className={styles.Editor}>
+        <div>
           <VersionPreview layers={layers} version={version} />
         </div>
-        <div className="column">
+        <div>
           <button className="button" onClick={this.toggleVersionModal}>
             Version setting
           </button>

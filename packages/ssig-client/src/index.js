@@ -1,5 +1,5 @@
 import { h } from "preact";
-import App from "./components/app";
+import App from "./components/App";
 import createStore from "unistore";
 import devtools from "unistore/devtools";
 import { Provider } from "unistore/preact";

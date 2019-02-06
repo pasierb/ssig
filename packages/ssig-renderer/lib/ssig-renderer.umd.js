@@ -125,20 +125,21 @@
   }
 
   /**
-   * 
-   * @param {HTMLCanvasElement} canvas 
-   * @param {object} layer 
+   *
+   * @param {HTMLCanvasElement} canvas
+   * @param {object} layer
    * @param {Promise<HTMLImageElement>} getImage
    */
   async function drawImageLayer(canvas, layer, getImage) {
     const { x, y, typeData } = layer;
-    const { imageUri, repeat, shadow, borderRadius } = typeData;
-    const image = await getImage(imageUri); // TODO
+    const { imageUri, imageData, repeat, shadow, borderRadius } = typeData;
+    const image = await getImage(imageData || imageUri); // TODO
+    image.name = layer.name;
     const width = typeData.width || image.width;
     const height = typeData.height || image.height;
 
     setupCanvas(canvas, ctx => {
-      if (repeat && repeat !== 'no-repeat') {
+      if (repeat && repeat !== "no-repeat") {
         const pattern = ctx.createPattern(image, repeat);
 
         ctx.fillStyle = pattern;

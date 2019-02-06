@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import client from "../graph";
-import Editor from "../components/Editor";
+import Editor from "../components/Editor/Editor";
 
 const VERSION_QUERY = `
   query getProjectVersion($projectId: String!, $versionId: String!) {
