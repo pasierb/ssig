@@ -15,13 +15,19 @@ export default class LayerBase extends Component {
 
   drawLayer = () => {
     try {
-      this.props.renderer(this.canvasEl, this.props.layer)
-    } catch(e) {
+      this.props.renderer(this.canvasEl, this.props.layer);
+    } catch (e) {
       console.log(e);
     }
-  }
+  };
 
-  render() {
-    return <canvas width="500" height="500" ref={canvas => this.canvasEl = canvas} />;
+  render({ version }) {
+    return (
+      <canvas
+        width={version.width}
+        height={version.height}
+        ref={canvas => (this.canvasEl = canvas)}
+      />
+    );
   }
 }

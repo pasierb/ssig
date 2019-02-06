@@ -12,7 +12,7 @@ const VersionPreview = props => {
 
       {layers.map(layer => (
         <div className={styles.VersionPreview__layerContainer}>
-          <Layer layer={layer} />
+          <Layer layer={layer} version={version} />
         </div>
       ))}
     </div>
