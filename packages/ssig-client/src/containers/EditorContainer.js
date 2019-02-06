@@ -35,6 +35,14 @@ const UPDATE_LAYER_MUTATION = `
   }
 `;
 
+const CREATE_LAYER_MUTATION = `
+  mutation createNewLayer($layerInput: LayerInput!, $versionId: String!) {
+    createLayer(versionId: $versionId, layerInput: $layerInput) {
+      id
+    }
+  }
+`;
+
 const PUBLISH_VERSION_MUTATION = `
   mutation publishVersion($projectId: String!, $versionId: String!) {
     publishProjectVersion(projectId: $projectId, versionId: $versionId) {
@@ -88,6 +96,13 @@ export default class EditorContainer extends Component {
       .then(this.fetchData);
   };
 
+  handleLayerCreate = layer => {
+    const { versionId } = this.props;
+    const { type, name } = layer;
+
+    client.request(CREATE_LAYER_MUTATION, { versionId, layerInput: { type, name }}).then(this.fetchData)
+  }
+
   componentWillMount() {
     this.fetchData();
   }
@@ -103,6 +118,7 @@ export default class EditorContainer extends Component {
         layers={layers}
         onVersionPublish={this.handleVersionPublish}
         onLayerChange={this.handleLayerChange}
+        onLayerCreate={this.handleLayerCreate}
       />
     );
   }

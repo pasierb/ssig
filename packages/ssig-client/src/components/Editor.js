@@ -4,16 +4,29 @@ import LayerList from "./LayerList";
 import LayerForm from "./LayerForm";
 import VersionPreview from "./VersionPreview";
 import VersionForm from "./VersionForm";
+import NewLayerForm from "./NewLayerForm";
 
 export default class Editor extends Component {
   state = {
-    versionModalOpen: false
+    isVersionModalOpen: false,
+    isNewLayerModalOpen: false
   };
 
   toggleVersionModal = () => {
     this.setState(state => ({
-      versionModalOpen: !state.versionModalOpen
+      isVersionModalOpen: !state.isVersionModalOpen
     }));
+  };
+
+  toggleNewLayerModal = () => {
+    this.setState(state => ({
+      isNewLayerModalOpen: !state.isNewLayerModalOpen
+    }));
+  };
+
+  handleCreateLayer = layer => {
+    this.toggleNewLayerModal();
+    this.props.onLayerCreate(layer);
   };
 
   render(props, state) {
@@ -25,8 +38,19 @@ export default class Editor extends Component {
           <VersionPreview layers={layers} version={version} />
         </div>
         <div className="column">
-          <button className="button" onClick={this.toggleVersionModal}>Version setting</button>
-          <button className="button" disabled={version.publishedAt} onClick={onVersionPublish}>Version publish</button>
+          <button className="button" onClick={this.toggleVersionModal}>
+            Version setting
+          </button>
+          <button
+            className="button"
+            disabled={version.publishedAt}
+            onClick={onVersionPublish}
+          >
+            Version publish
+          </button>
+          <button className="button" onClick={this.toggleNewLayerModal}>
+            Add layer
+          </button>
           <h4 className="title is-4">Layers</h4>
           <LayerList
             layers={layers}
@@ -36,10 +60,17 @@ export default class Editor extends Component {
           />
         </div>
         <Modal
-          isOpen={state.versionModalOpen}
+          isOpen={state.isVersionModalOpen}
           onClose={this.toggleVersionModal}
         >
           <VersionForm version={version} />
+        </Modal>
+
+        <Modal
+          isOpen={state.isNewLayerModalOpen}
+          onClose={this.toggleNewLayerModal}
+        >
+          <NewLayerForm onSubmit={this.handleCreateLayer} />
         </Modal>
       </div>
     );
