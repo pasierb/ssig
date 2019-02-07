@@ -7,12 +7,13 @@ WORKDIR ${APP_HOME}
 
 COPY . ${APP_HOME}
 
-RUN ["npm", "install", "lerna", "-g"]
+RUN npm i -g lerna
+RUN lerna bootstrap
+RUN lerna run build
 
-RUN ["lerna", "bootstrap"]
-RUN ["lerna", "run", "build"]
+RUN ls ./packages/ssig-client/build
 
-COPY packages/ssig-client/build packages/ssig-server/public/
+RUN cp -r ./packages/ssig-client/build ./packages/ssig-server/public
 
 EXPOSE 8080
 
