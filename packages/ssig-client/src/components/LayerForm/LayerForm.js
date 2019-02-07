@@ -2,10 +2,12 @@ import { h, Component } from "preact";
 import { Field, InputField } from "./elements";
 import TextLayerFieldset from "./TextLayerFieldset";
 import ImageLayerFieldset from "./ImageLayerFieldset";
+import RectangularLayerFieldset from "./RectangularLayerFieldset";
 
 const TYPE_FIELDSET = {
   text: TextLayerFieldset,
-  image: ImageLayerFieldset
+  image: ImageLayerFieldset,
+  rectangular: RectangularLayerFieldset
 };
 
 export default class LayerForm extends Component {

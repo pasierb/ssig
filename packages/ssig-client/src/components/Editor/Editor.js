@@ -56,7 +56,7 @@ export default class Editor extends Component {
           <LayerList
             layers={layers}
             renderItem={layer => (
-              <LayerForm onChange={onLayerChange} layer={layer} />
+              <LayerForm key={layer.id} onChange={onLayerChange} layer={layer} />
             )}
           />
         </div>

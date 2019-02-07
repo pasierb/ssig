@@ -31,6 +31,7 @@ export default class NewLayerForm extends Component {
               <select name="type">
                 <option value="text">Text</option>
                 <option value="image">Image</option>
+                <option value="rectangular">Rectangular</option>
               </select>
             </div>
           </div>

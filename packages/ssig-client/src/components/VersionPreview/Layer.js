@@ -1,9 +1,11 @@
 import TextLayer from "./TextLayer";
 import ImageLayer from "./ImageLayer";
+import RectangularLayer from "./RectangularLayer";
 
 const LAYER_TYPE_COMPONENT = {
   text: TextLayer,
-  image: ImageLayer
+  image: ImageLayer,
+  rectangular: RectangularLayer
 };
 
 export default function Layer(props) {

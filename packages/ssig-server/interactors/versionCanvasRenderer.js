@@ -1,4 +1,8 @@
-const { drawImageLayer, drawTextLayer } = require("ssig-renderer");
+const {
+  drawImageLayer,
+  drawTextLayer,
+  drawRectangularLayer
+} = require("ssig-renderer");
 const { createCanvas, loadImage } = require("canvas");
 
 async function versionCanvasRenderer(version) {
@@ -17,6 +21,9 @@ async function versionCanvasRenderer(version) {
         }
         case "image": {
           return await drawImageLayer(canvas, layer, loadImage);
+        }
+        case "rectangular": {
+          return drawRectangularLayer(canvas, layer);
         }
       }
     })

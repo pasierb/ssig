@@ -165,8 +165,30 @@
     return canvas;
   }
 
+  /**
+   * 
+   * @param {HTMLCanvasElement} canvas 
+   * @param {object} layer 
+   */
+  function drawRectangularLayer(canvas, layer) {
+    const { x, y, typeData } = layer;
+    const { width, height, color, shadow } = typeData;
+
+    setupCanvas(canvas, ctx => {
+      if (shadow) {
+        setShadow(ctx, layer);
+      }
+
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, width, height);
+    });
+
+    return canvas;
+  }
+
   exports.drawTextLayer = drawTextLayer;
   exports.drawImageLayer = drawImageLayer;
+  exports.drawRectangularLayer = drawRectangularLayer;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
