@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const path = require("path");
 const express = require("express");
 const expressSession = require("express-session");
 const passport = require("passport");
@@ -11,6 +12,7 @@ const { twitterAuthenticator } = require("./interactors");
 const { User } = require("./db/models");
 
 const app = express();
+const port = process.env.SERVER_PORT || 3000;
 
 passport.serializeUser(({ id }, done) => {
   return done(null, id);
@@ -85,4 +87,16 @@ app.use(
   })
 );
 
-app.listen(3000);
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/public/index.html"));
+});
+
+app.listen(port, err => {
+  if (err) {
+    console.error(e);
+  }
+
+  console.log(`ssig server running on port ${port}`);
+});

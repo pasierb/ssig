@@ -6,7 +6,13 @@ WORKDIR ${APP_HOME}
 
 COPY . ${APP_HOME}
 
-RUN ["npm", "install"]
-RUN ["lerna", "bootstrap"]
+RUN ["npm", "install", "lerna", "-g"]
 
-CMD ["npm", "start"]
+RUN ["lerna", "bootstrap"]
+RUN ["lerna", "run", "build"]
+
+COPY ./packages/ssig-client/build ./packages/ssig-server/public
+
+EXPOSE 8080
+
+CMD lerna run db:migrate && node ./packages/ssig-server/app.js

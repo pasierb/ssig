@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "per-env",
     "start:production": "npm run -s serve",
     "start:development": "npm run -s dev",
-    "build": "preact build",
+    "build": "preact build --no-prerender",
     "serve": "preact build && preact serve",
     "dev": "preact watch -p 3001",
     "lint": "eslint src",
@@ -16,7 +15,7 @@
   "eslintIgnore": [
     "build/*"
   ],
-  "devDependencies": {
+  "dependencies": {
     "eslint": "^4.9.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^21.2.1",
@@ -24,9 +23,7 @@
     "per-env": "^1.0.2",
     "preact-cli": "^2.1.0",
     "preact-render-spy": "^1.2.1",
-    "sass-loader": "^7.1.0"
-  },
-  "dependencies": {
+    "sass-loader": "^7.1.0",
     "bulma": "^0.7.2",
     "graphql-request": "^1.8.2",
     "preact": "^8.2.6",
