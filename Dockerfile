@@ -11,8 +11,8 @@ RUN ["npm", "install", "lerna", "-g"]
 RUN ["lerna", "bootstrap"]
 RUN ["lerna", "run", "build"]
 
-COPY ./packages/ssig-client/build ./packages/ssig-server/public
+COPY ${APP_HOME}/packages/ssig-client/build ${APP_HOME}/packages/ssig-server/public
 
 EXPOSE 8080
 
-CMD lerna run db:migrate && node ./packages/ssig-server/app.js
+CMD lerna run db:migrate && node ${APP_HOME}/packages/ssig-server/app.js
