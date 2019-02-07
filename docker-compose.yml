@@ -1,0 +1,19 @@
+version: "3"
+services:
+  ssig:
+    build: .
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+    - 3306:3306
+    environment:
+      MYSQL_DATABASE: ssig_development
+      MYSQL_ROOT_PASSWORD: changemessig
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    

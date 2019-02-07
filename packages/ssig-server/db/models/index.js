@@ -3,7 +3,7 @@
 const path = require("path");
 const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "development";
-const config = require("../../config/database.json")[env];
+const config = require("../../config/database.js")[env];
 
 const { database, username, password, ...restConfig } = config;
 const sequelize = new Sequelize(database, username, password, restConfig);
