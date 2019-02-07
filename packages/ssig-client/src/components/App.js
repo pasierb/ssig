@@ -1,7 +1,7 @@
 import { h, Component } from "preact";
 import { Router } from "preact-router";
 
-import Header from "./header/Header";
+import Header from "./Header";
 import Footer from "./Footer";
 
 // Code-splitting is automated for routes
