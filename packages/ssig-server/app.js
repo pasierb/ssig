@@ -55,6 +55,20 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: graph.schema,
+    rootValue: graph.root,
+    graphiql: process.env.NODE_ENV !== "production"
+    // headers: {
+    //   "Access-Control-Allow-Origin": "*"
+    // }
+  })
+);
+
+app.use(express.static(path.join(__dirname, "public")));
+
 app.get("/auth/twitter", passport.authenticate("twitter"));
 app.get(
   "/auth/twitter/callback",
@@ -74,20 +88,6 @@ app.get(
 app.options("/graphql", (req, res) => {
   res.status(200).send("OK");
 });
-
-app.use(
-  "/graphql",
-  graphqlHTTP({
-    schema: graph.schema,
-    rootValue: graph.root,
-    graphiql: true
-    // headers: {
-    //   "Access-Control-Allow-Origin": "*"
-    // }
-  })
-);
-
-app.use(express.static(path.join(__dirname, "public")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/public/index.html"));
