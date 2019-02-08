@@ -33,6 +33,11 @@
     "ssig-renderer": "^1.0.0",
     "unistore": "^3.2.1"
   },
+  "browserslist": [
+    "> 3%",
+    "IE >= 11",
+    "last 2 versions"
+  ],
   "jest": {
     "verbose": true,
     "setupFiles": [
