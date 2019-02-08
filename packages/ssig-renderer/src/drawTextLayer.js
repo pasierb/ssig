@@ -47,5 +47,5 @@ export default function drawTextLayer(canvas, layer) {
     });
   });
 
-  return canvas
+  return Promise.resolve(canvas);
 }

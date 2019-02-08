@@ -125,43 +125,7 @@
         ctx.fillText(row, x, y + (index + 1) * lineHeight);
       });
     });
-    return canvas;
-  }
-
-  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-    try {
-      var info = gen[key](arg);
-      var value = info.value;
-    } catch (error) {
-      reject(error);
-      return;
-    }
-
-    if (info.done) {
-      resolve(value);
-    } else {
-      Promise.resolve(value).then(_next, _throw);
-    }
-  }
-
-  function _asyncToGenerator(fn) {
-    return function () {
-      var self = this,
-          args = arguments;
-      return new Promise(function (resolve, reject) {
-        var gen = fn.apply(self, args);
-
-        function _next(value) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-        }
-
-        function _throw(err) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-        }
-
-        _next(undefined);
-      });
-    };
+    return Promise.resolve(canvas);
   }
 
   /**
@@ -171,62 +135,43 @@
    * @param {Promise<HTMLImageElement>} getImage
    */
 
-  function drawImageLayer(_x, _x2, _x3) {
-    return _drawImageLayer.apply(this, arguments);
-  }
-
-  function _drawImageLayer() {
-    _drawImageLayer = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee(canvas, layer, getImage) {
-      var x, y, typeData, imageUri, imageData, repeat, shadow, borderRadius, image, width, height;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              x = layer.x, y = layer.y, typeData = layer.typeData;
-              imageUri = typeData.imageUri, imageData = typeData.imageData, repeat = typeData.repeat, shadow = typeData.shadow, borderRadius = typeData.borderRadius;
-              _context.next = 4;
-              return getImage(imageData || imageUri);
-
-            case 4:
-              image = _context.sent;
-              // TODO
-              image.name = layer.name;
-              width = typeData.width || image.width;
-              height = typeData.height || image.height;
-              setupCanvas(canvas, function (ctx) {
-                if (repeat && repeat !== "no-repeat") {
-                  var pattern = ctx.createPattern(image, repeat);
-                  ctx.fillStyle = pattern;
-                  ctx.fillRect(x, y, canvas.width, canvas.height);
-                } else {
-                  if (borderRadius) {
-                    roundedCornersPath(ctx, x, y, width, height, borderRadius);
-                  }
-
-                  if (shadow) {
-                    setShadow(ctx, layer);
-                    ctx.fill();
-                  }
-
-                  if (borderRadius) {
-                    ctx.clip();
-                  }
-
-                  ctx.drawImage(image, x, y, width, height);
-                }
-              });
-              return _context.abrupt("return", canvas);
-
-            case 10:
-            case "end":
-              return _context.stop();
+  function drawImageLayer(canvas, layer, getImage) {
+    var x = layer.x,
+        y = layer.y,
+        typeData = layer.typeData;
+    var imageUri = typeData.imageUri,
+        imageData = typeData.imageData,
+        repeat = typeData.repeat,
+        shadow = typeData.shadow,
+        borderRadius = typeData.borderRadius;
+    return getImage(imageData || imageUri).then(function (image) {
+      image.name = layer.name;
+      var width = typeData.width || image.width;
+      var height = typeData.height || image.height;
+      setupCanvas(canvas, function (ctx) {
+        if (repeat && repeat !== "no-repeat") {
+          var pattern = ctx.createPattern(image, repeat);
+          ctx.fillStyle = pattern;
+          ctx.fillRect(x, y, canvas.width, canvas.height);
+        } else {
+          if (borderRadius) {
+            roundedCornersPath(ctx, x, y, width, height, borderRadius);
           }
+
+          if (shadow) {
+            setShadow(ctx, layer);
+            ctx.fill();
+          }
+
+          if (borderRadius) {
+            ctx.clip();
+          }
+
+          ctx.drawImage(image, x, y, width, height);
         }
-      }, _callee, this);
-    }));
-    return _drawImageLayer.apply(this, arguments);
+      });
+      return canvas;
+    });
   }
 
   /**
@@ -251,7 +196,7 @@
       ctx.fillStyle = color;
       ctx.fillRect(x, y, width, height);
     });
-    return canvas;
+    return Promise.resolve(canvas);
   }
 
   exports.drawTextLayer = drawTextLayer;

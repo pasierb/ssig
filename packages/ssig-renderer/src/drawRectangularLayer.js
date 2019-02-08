@@ -18,5 +18,5 @@ export default function drawRectangularLayer(canvas, layer) {
     ctx.fillRect(x, y, width, height);
   });
 
-  return canvas;
+  return Promise.resolve(canvas);
 }
