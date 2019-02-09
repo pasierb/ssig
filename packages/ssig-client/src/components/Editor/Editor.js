@@ -5,7 +5,7 @@ import LayerForm from "../LayerForm";
 import VersionPreview from "../VersionPreview";
 import VersionForm from "../VersionForm";
 import NewLayerForm from "../NewLayerForm";
-import styles from './Editor.scss';
+import styles from "./Editor.scss";
 
 export default class Editor extends Component {
   state = {
@@ -31,7 +31,14 @@ export default class Editor extends Component {
   };
 
   render(props, state) {
-    const { version, layers, onLayerChange, onVersionPublish } = props;
+    const {
+      version,
+      layers,
+      onLayerChange,
+      onVersionPublish,
+      onLayerPromote,
+      onLayerDemote
+    } = props;
 
     return (
       <div className={styles.Editor}>
@@ -56,7 +63,31 @@ export default class Editor extends Component {
           <LayerList
             layers={layers}
             renderItem={layer => (
-              <LayerForm key={layer.id} onChange={onLayerChange} layer={layer} />
+              <div>
+                <LayerForm
+                  key={layer.id}
+                  onChange={onLayerChange}
+                  layer={layer}
+                />
+                <div>
+                  {onLayerPromote && (
+                    <button
+                      className="button"
+                      onClick={() => onLayerPromote(layer)}
+                    >
+                      Promote
+                    </button>
+                  )}
+                  {onLayerDemote && (
+                    <button
+                      className="button"
+                      onClick={() => onLayerDemote(layer)}
+                    >
+                      Demote
+                    </button>
+                  )}
+                </div>
+              </div>
             )}
           />
         </div>

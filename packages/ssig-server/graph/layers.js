@@ -3,6 +3,10 @@
 const fetch = require("node-fetch");
 const models = require("../db/models");
 const { versionResolver } = require("./versions");
+const {
+  promoteLayer: promoteLayerInteractor,
+  demoteLayer: demoteLayerInteractor
+} = require("../interactors");
 
 function layerResolver(model) {
   return Object.assign({}, model.dataValues, {
@@ -51,7 +55,10 @@ const mutations = {
     const version = await models.Version.findByPk(versionId);
     const maxZ = await models.Layer.max("z", { where: { versionId } });
     const layer = await version.createLayer({
-      code: layerInput.name.trim().toLowerCase().replace(/\W+/g, '_'),
+      code: layerInput.name
+        .trim()
+        .toLowerCase()
+        .replace(/\W+/g, "_"),
       ...layerInput,
       z: (maxZ || 0) + 1
     });
@@ -70,7 +77,7 @@ const mutations = {
           const buffer = await res.buffer();
 
           return {
-            contentType: res.headers.get('content-type'),
+            contentType: res.headers.get("content-type"),
             buffer
           };
         });
@@ -88,16 +95,11 @@ const mutations = {
 
     return layerResolver(layer);
   },
-  async promoteLayer({ id }) {
-    const layer = await models.Layer.findByPk(id);
-    // models.Layer.find({ where: { versionId: layer.versionId, z: { '>': layer.z }, order: '' }})
-
-    return layerResolver(layer);
+  promoteLayer({ id }) {
+    return promoteLayerInteractor(id).then(layers => layers.map(layerResolver));
   },
-  async demoteLayer({ id }) {
-    const layer = await models.Layer.findByPk(id);
-
-    return layerResolver(layer);
+  demoteLayer({ id }) {
+    return demoteLayerInteractor(id).then(layers => layers.map(layerResolver));
   }
 };
 

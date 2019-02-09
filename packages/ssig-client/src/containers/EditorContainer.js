@@ -28,6 +28,14 @@ const VERSION_QUERY = `
   }
 `;
 
+const CREATE_LAYER_MUTATION = `
+  mutation createNewLayer($layerInput: LayerInput!, $versionId: String!) {
+    createLayer(versionId: $versionId, layerInput: $layerInput) {
+      id
+    }
+  }
+`;
+
 const UPDATE_LAYER_MUTATION = `
   mutation updateLayer($id: String!, $layerInput: LayerInput!) {
     updateLayer(id: $id, layerInput: $layerInput) {
@@ -36,9 +44,17 @@ const UPDATE_LAYER_MUTATION = `
   }
 `;
 
-const CREATE_LAYER_MUTATION = `
-  mutation createNewLayer($layerInput: LayerInput!, $versionId: String!) {
-    createLayer(versionId: $versionId, layerInput: $layerInput) {
+const PROMOTE_LAYER_MUTATION = `
+  mutation promoteLayer($id: String!) {
+    promoteLayer(id: $id) {
+      id
+    }
+  }
+`;
+
+const DEMOTE_LAYER_MUTATION = `
+  mutation demoteLayer($id: String!) {
+    demoteLayer(id: $id) {
       id
     }
   }
@@ -108,6 +124,18 @@ export default class EditorContainer extends Component {
       .then(this.fetchData);
   };
 
+  handleLayerPromote = layer => {
+    client
+      .request(PROMOTE_LAYER_MUTATION, { id: layer.id })
+      .then(this.fetchData);
+  };
+
+  handleLayerDemote = layer => {
+    client
+      .request(DEMOTE_LAYER_MUTATION, { id: layer.id })
+      .then(this.fetchData);
+  };
+
   componentWillMount() {
     this.fetchData();
   }
@@ -124,6 +152,8 @@ export default class EditorContainer extends Component {
         onVersionPublish={this.handleVersionPublish}
         onLayerChange={this.handleLayerChange}
         onLayerCreate={this.handleLayerCreate}
+        onLayerPromote={this.handleLayerPromote}
+        onLayerDemote={this.handleLayerDemote}
       />
     );
   }
