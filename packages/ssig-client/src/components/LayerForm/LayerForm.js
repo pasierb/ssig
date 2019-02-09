@@ -74,6 +74,11 @@ export default class LayerForm extends Component {
           value={layer.name}
           onInput={this.handleChange("name")}
         />
+        <InputField
+          label="code"
+          value={layer.code}
+          onInput={this.handleChange("code")}
+        />
         <div className="columns">
           <div className="column">
             <InputField

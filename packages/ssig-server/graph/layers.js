@@ -18,6 +18,7 @@ const typeSchema = `
   input LayerInput {
     type: String
     name: String
+    code: String
     x: Int
     y: Int
     typeData: JSON
@@ -27,6 +28,7 @@ const typeSchema = `
     id: String!
     type: String!
     name: String!
+    code: String!
     versionId: String!
     version: Version!
     x: Int!
@@ -49,6 +51,7 @@ const mutations = {
     const version = await models.Version.findByPk(versionId);
     const maxZ = await models.Layer.max("z", { where: { versionId } });
     const layer = await version.createLayer({
+      code: layerInput.name.trim().toLowerCase().replace(/\W+/g, '_'),
       ...layerInput,
       z: (maxZ || 0) + 1
     });

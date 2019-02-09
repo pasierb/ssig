@@ -16,6 +16,7 @@ const VERSION_QUERY = `
         layers {
           id
           name
+          code
           type
           typeData
           x
@@ -61,16 +62,18 @@ export default class EditorContainer extends Component {
   fetchData = () => {
     const { versionId, projectId } = this.props;
 
-    client.request(VERSION_QUERY, { projectId, versionId }).then(({ project }) => {
-      const { version } = project;
-      const { layers, ...rest } = version;
+    client
+      .request(VERSION_QUERY, { projectId, versionId })
+      .then(({ project }) => {
+        const { version } = project;
+        const { layers, ...rest } = version;
 
-      this.setState({
-        project,
-        layers,
-        version: rest
+        this.setState({
+          project,
+          layers,
+          version: rest
+        });
       });
-    });
   };
 
   handleVersionPublish = () => {
@@ -85,13 +88,13 @@ export default class EditorContainer extends Component {
   };
 
   handleLayerChange = layer => {
-    const { id, x, y, name, typeData } = layer;
+    const { id, x, y, name, typeData, code } = layer;
 
     // TODO: make an optimistic UI update first, then persist
     client
       .request(UPDATE_LAYER_MUTATION, {
         id,
-        layerInput: { x, y, name, typeData }
+        layerInput: { x, y, name, typeData, code }
       })
       .then(this.fetchData);
   };
@@ -100,8 +103,10 @@ export default class EditorContainer extends Component {
     const { versionId } = this.props;
     const { type, name } = layer;
 
-    client.request(CREATE_LAYER_MUTATION, { versionId, layerInput: { type, name }}).then(this.fetchData)
-  }
+    client
+      .request(CREATE_LAYER_MUTATION, { versionId, layerInput: { type, name } })
+      .then(this.fetchData);
+  };
 
   componentWillMount() {
     this.fetchData();
