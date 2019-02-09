@@ -11,7 +11,7 @@ export default function drawRectangularLayer(canvas, layer) {
 
   setupCanvas(canvas, ctx => {
     if (shadow) {
-      setShadow(ctx, layer);
+      setShadow(ctx, layer.typeData);
     }
 
     ctx.fillStyle = color;

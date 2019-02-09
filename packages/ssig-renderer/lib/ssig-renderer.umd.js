@@ -159,7 +159,7 @@
           }
 
           if (shadow) {
-            setShadow(ctx, layer);
+            setShadow(ctx, layer.typeData);
             ctx.fill();
           }
 
@@ -190,7 +190,7 @@
         shadow = typeData.shadow;
     setupCanvas(canvas, function (ctx) {
       if (shadow) {
-        setShadow(ctx, layer);
+        setShadow(ctx, layer.typeData);
       }
 
       ctx.fillStyle = color;

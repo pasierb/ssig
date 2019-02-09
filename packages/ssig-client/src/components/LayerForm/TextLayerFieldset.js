@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { InputField } from "./elements";
+import ShadowFieldset from './ShadowFieldset';
 
 const TextLayerFieldset = props => {
   const { data, onChange } = props;
@@ -28,6 +29,7 @@ const TextLayerFieldset = props => {
         value={data.fontSize}
         onInput={handleChange("fontSize", Number)}
       />
+      <ShadowFieldset {...props} />
     </div>
   );
 };

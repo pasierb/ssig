@@ -5,15 +5,29 @@ const Label = props => (
   <label className="label is-small">{props.children}</label>
 );
 
+function Checkbox(props) {
+  const { label, ...rest } = props;
+  return (
+    <label className="checkbox">
+      <input type="checkbox" {...rest} />
+      {label}
+    </label>
+  );
+}
+
 const InputField = props => {
   const { label, ...rest } = props;
 
   return (
     <Field>
       <Label>{props.label}</Label>
-      <input className="input is-small" {...rest} />
+      <div className="control">
+        <input className="input is-small" {...rest} />
+      </div>
     </Field>
   );
 };
 
-export { Field, Label, InputField };
+const ColorField = InputField;
+
+export { Field, Label, InputField, ColorField, Checkbox };

@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { InputField } from "./elements";
+import ShadowFieldset from './ShadowFieldset';
 
 const ImageLayerFieldset = props => {
   const { data, onChange } = props;
@@ -12,23 +13,14 @@ const ImageLayerFieldset = props => {
   };
 
   return (
-    <div>
+    <fieldset>
       <InputField
         label="Image"
         value={data.imageUri}
         onInput={handleChange("imageUri")}
       />
-      {/* <InputField
-        label="color"
-        value={data.color}
-        onInput={handleChange("color")}
-      />
-      <InputField
-        label="font size"
-        value={data.fontSize}
-        onInput={handleChange("fontSize", Number)}
-      /> */}
-    </div>
+      <ShadowFieldset {...props} />
+    </fieldset>
   );
 };
 

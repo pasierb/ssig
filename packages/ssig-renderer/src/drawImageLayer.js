@@ -27,7 +27,7 @@ export default function drawImageLayer(canvas, layer, getImage) {
         }
 
         if (shadow) {
-          setShadow(ctx, layer);
+          setShadow(ctx, layer.typeData);
           ctx.fill();
         }
 

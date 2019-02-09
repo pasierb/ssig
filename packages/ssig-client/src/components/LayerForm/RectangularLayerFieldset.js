@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { InputField } from "./elements";
+import ShadowFieldset from './ShadowFieldset';
 
 export default function RectangularLayerFieldset(props) {
   const { data, onChange } = props;
@@ -12,7 +13,7 @@ export default function RectangularLayerFieldset(props) {
   };
 
   return (
-    <div>
+    <fieldset>
       <div className="columns">
         <div className="column">
           <InputField type="number" required value={data.width} label="Width" onInput={handleChange("width", Number)} />
@@ -22,6 +23,7 @@ export default function RectangularLayerFieldset(props) {
         </div>
       </div>
       <InputField type="string" value={data.color} label="Color" onInput={handleChange("color")} />
-    </div>
+      <ShadowFieldset data={data} onChange={onChange} />
+    </fieldset>
   );
 }
