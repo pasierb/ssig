@@ -29,20 +29,26 @@ class Header extends Component {
             {/* <Link activeClassName={style.active} href="/">Home</Link> */}
           </div>
           <div className="navbar-end">
-            <div class="navbar-item">
-              <div class="buttons">
-                {currentUser ? (
-                  <p>{currentUser.username}</p>
-                ) : (
+            {currentUser ? (
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">{currentUser.username}</a>
+
+                <div class="navbar-dropdown">
+                  <a class="navbar-item" href="/auth/signOut">Logout</a>
+                </div>
+              </div>
+            ) : (
+              <div class="navbar-item">
+                <div class="buttons">
                   <button
                     className="button"
                     onClick={this.handleToggleSignInModal}
                   >
                     Sign in
                   </button>
-                )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

@@ -84,6 +84,7 @@ app.get(
 );
 
 app.post("/auth/signUp", auth.signUp);
+app.get("/auth/signOut", auth.signOut);
 
 app.get(
   "/api/v1/projects/:projectId/versions/:versionId/preview",

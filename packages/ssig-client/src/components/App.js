@@ -1,6 +1,7 @@
 import { h, Component } from "preact";
 import { Router } from "preact-router";
 
+import PrivateRoute from './PrivateRoute';
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -24,7 +25,7 @@ export default class App extends Component {
         <Header />
         <Router onChange={this.handleRoute}>
           <ProjectsPage path="/" />
-          <VersionPage path="/projects/:projectId/versions/:versionId/edit" />
+          <PrivateRoute path="/projects/:projectId/versions/:versionId/edit" component={VersionPage}/>
         </Router>
         <Footer />
       </div>
