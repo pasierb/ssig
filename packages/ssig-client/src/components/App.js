@@ -6,6 +6,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 // Code-splitting is automated for routes
+import HomePage from "../routes/HomePage";
 import ProjectsPage from "../routes/ProjectsPage";
 import VersionPage from "../routes/VersionPage";
 
@@ -24,7 +25,8 @@ export default class App extends Component {
       <div id="app">
         <Header />
         <Router onChange={this.handleRoute}>
-          <ProjectsPage path="/" />
+          <HomePage path="/" />
+          <PrivateRoute path="/projects" component={ProjectsPage }/>
           <PrivateRoute path="/projects/:projectId/versions/:versionId/edit" component={VersionPage}/>
         </Router>
         <Footer />

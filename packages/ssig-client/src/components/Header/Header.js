@@ -26,7 +26,11 @@ class Header extends Component {
 
         <div className="navbar-menu">
           <div className="navbar-start">
-            {/* <Link activeClassName={style.active} href="/">Home</Link> */}
+            {currentUser && (
+              <Link className="navbar-item" href="/projects">
+                Projects
+              </Link>
+            )}
           </div>
           <div className="navbar-end">
             {currentUser ? (
@@ -34,7 +38,9 @@ class Header extends Component {
                 <a class="navbar-link">{currentUser.username}</a>
 
                 <div class="navbar-dropdown">
-                  <a class="navbar-item" href="/auth/signOut">Logout</a>
+                  <a class="navbar-item" href="/auth/signOut">
+                    Logout
+                  </a>
                 </div>
               </div>
             ) : (
