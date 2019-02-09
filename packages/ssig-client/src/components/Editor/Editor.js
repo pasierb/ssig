@@ -1,7 +1,7 @@
 import { h, Component } from "preact";
 import Modal from "../Modal";
 import LayerList from "../LayerList";
-import LayerForm from "../LayerForm";
+import LayerListItem from "./LayerListItem";
 import VersionPreview from "../VersionPreview";
 import VersionForm from "../VersionForm";
 import NewLayerForm from "../NewLayerForm";
@@ -41,6 +41,8 @@ export default class Editor extends Component {
       onLayerDelete
     } = props;
 
+    const reversedLayers = [...layers].reverse();
+
     return (
       <div className={styles.Editor}>
         <div>
@@ -62,41 +64,16 @@ export default class Editor extends Component {
           </button>
           <h4 className="title is-4">Layers</h4>
           <LayerList
-            layers={layers}
-            renderItem={layer => (
-              <div>
-                <LayerForm
-                  key={layer.id}
-                  onChange={onLayerChange}
-                  layer={layer}
-                />
-                <div>
-                  {onLayerPromote && (
-                    <button
-                      className="button"
-                      onClick={() => onLayerPromote(layer)}
-                    >
-                      Promote
-                    </button>
-                  )}
-                  {onLayerDemote && (
-                    <button
-                      className="button"
-                      onClick={() => onLayerDemote(layer)}
-                    >
-                      Demote
-                    </button>
-                  )}
-                  {onLayerDelete && (
-                    <button
-                      className="button is-danger"
-                      onClick={() => onLayerDelete(layer)}
-                    >
-                      Demote
-                    </button>
-                  )}
-                </div>
-              </div>
+            layers={reversedLayers}
+            renderItem={(layer, i) => (
+              <LayerListItem
+                key={layer.id}
+                layer={layer}
+                onChange={onLayerChange}
+                onDelete={onLayerDelete}
+                onPromote={i > 0 && onLayerPromote}
+                onDemote={i < reversedLayers.length - 1 && onLayerDemote}
+              />
             )}
           />
         </div>

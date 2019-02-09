@@ -19,26 +19,16 @@ export default class LayerList extends Component {
 
     return (
       <div>
-        {layers.map(layer => {
-          return (
-            <nav className="panel">
-              <a
-                className="panel-block"
-                onClick={this.layerToggleHandler(layer)}
-              >
-                {layer.name}
-              </a>
-              <div
-                className="panel-block"
-                style={{
-                  display: activeLayerId === layer.id ? "block" : "none"
-                }}
-              >
-                {renderItem(layer)}
-              </div>
-            </nav>
-          );
-        })}
+        {layers.map((layer, i) => (
+          <nav className="panel">
+            <a className="panel-block" onClick={this.layerToggleHandler(layer)}>
+              {layer.name}
+            </a>
+            {activeLayerId === layer.id && (
+              <div className="panel-block">{renderItem(layer, i)}</div>
+            )}
+          </nav>
+        ))}
       </div>
     );
   }
