@@ -7,6 +7,7 @@ import "./style";
 import graph from "./graph";
 
 const initialState = {
+  isAuthenticating: true,
   currentUser: undefined
 };
 
@@ -24,7 +25,7 @@ const LOGGED_USER_QUERY = `
 `;
 
 graph.request(LOGGED_USER_QUERY).then(({ me }) => {
-  store.setState({ currentUser: me });
+  store.setState({ currentUser: me, isAuthenticating: false });
 });
 
 export default () => (
