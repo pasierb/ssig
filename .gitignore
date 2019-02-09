@@ -4,3 +4,5 @@
 .vscode
 .env
 .env.production
+.DS_Store
+/packages/*/.DS_Store

@@ -5,25 +5,36 @@ const {
 } = require("ssig-renderer");
 const { createCanvas, loadImage } = require("canvas");
 
-async function versionCanvasRenderer(version) {
+const LAYER_TYPE_RENDERER = {
+  text: drawTextLayer,
+  rectangular: drawRectangularLayer,
+  image: drawImageLayer
+};
+
+async function versionCanvasRenderer(version, variables = {}) {
   const layers = await version.getLayers();
   const { width, height, backgroundColor } = version;
   const base = createCanvas(width, height);
   const ctx = base.getContext("2d");
 
   const canvasLayers = await Promise.all(
-    layers.map(async layer => {
+    layers.map(layer => {
       const canvas = createCanvas(width, height);
+      const renderer = LAYER_TYPE_RENDERER[layer.type];
+
+      if (!renderer) {
+        // LOG ME!
+        return canvas;
+      }
+
+      Object.assign(layer.typeData, variables[layer.code] || {});
 
       switch (layer.type) {
-        case "text": {
-          return drawTextLayer(canvas, layer);
-        }
         case "image": {
-          return await drawImageLayer(canvas, layer, loadImage);
+          return renderer(canvas, layer, loadImage);
         }
-        case "rectangular": {
-          return drawRectangularLayer(canvas, layer);
+        default: {
+          return renderer(canvas, layer);
         }
       }
     })
