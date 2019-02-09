@@ -6,11 +6,16 @@ const expressSession = require("express-session");
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter").Strategy;
 const graphqlHTTP = require("express-graphql");
+const SequelizeStore = require("connect-session-sequelize")(
+  expressSession.Store
+);
+
 const graph = require("./graph");
 const { api, auth } = require("./routes");
 const { twitterAuthenticator } = require("./interactors");
-const { User } = require("./db/models");
+const { User, sequelize } = require("./db/models");
 
+const sessionStore = new SequelizeStore({ db: sequelize });
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
 
@@ -48,10 +53,13 @@ passport.use(
 app.use(
   expressSession({
     secret: "keyboard cat",
-    resave: true,
-    saveUninitialized: true
+    store: sessionStore,
+    resave: false, // we support the touch method so per the express-session docs this should be set to false
+    proxy: true // if you do SSL outside of node.
   })
 );
+sessionStore.sync();
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -61,9 +69,6 @@ app.use(
     schema: graph.schema,
     rootValue: graph.root,
     graphiql: process.env.NODE_ENV !== "production"
-    // headers: {
-    //   "Access-Control-Allow-Origin": "*"
-    // }
   })
 );
 
