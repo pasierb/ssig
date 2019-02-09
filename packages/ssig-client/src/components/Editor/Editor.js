@@ -37,7 +37,8 @@ export default class Editor extends Component {
       onLayerChange,
       onVersionPublish,
       onLayerPromote,
-      onLayerDemote
+      onLayerDemote,
+      onLayerDelete
     } = props;
 
     return (
@@ -82,6 +83,14 @@ export default class Editor extends Component {
                     <button
                       className="button"
                       onClick={() => onLayerDemote(layer)}
+                    >
+                      Demote
+                    </button>
+                  )}
+                  {onLayerDelete && (
+                    <button
+                      className="button is-danger"
+                      onClick={() => onLayerDelete(layer)}
                     >
                       Demote
                     </button>

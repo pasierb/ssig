@@ -59,6 +59,11 @@ const DEMOTE_LAYER_MUTATION = `
     }
   }
 `;
+const DELETE_LAYER_MUTATION = `
+  mutation deleteLayer($id: String!) {
+    deleteLayer(id: $id)
+  }
+`;
 
 const PUBLISH_VERSION_MUTATION = `
   mutation publishVersion($projectId: String!, $versionId: String!) {
@@ -136,6 +141,12 @@ export default class EditorContainer extends Component {
       .then(this.fetchData);
   };
 
+  handleLayerDelete = layer => {
+    client
+      .request(DELETE_LAYER_MUTATION, { id: layer.id })
+      .then(this.fetchData);
+  };
+
   componentWillMount() {
     this.fetchData();
   }
@@ -154,6 +165,7 @@ export default class EditorContainer extends Component {
         onLayerCreate={this.handleLayerCreate}
         onLayerPromote={this.handleLayerPromote}
         onLayerDemote={this.handleLayerDemote}
+        onLayerDelete={this.handleLayerDelete}
       />
     );
   }
