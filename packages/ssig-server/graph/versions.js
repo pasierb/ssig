@@ -1,14 +1,15 @@
 "use strict";
 
-const models = require("../db/models");
+const { Layer, Version, Project } = require("../db/models");
 const { layerResolver } = require("./layers");
 
 function versionResolver(model) {
   return Object.assign({}, model.dataValues, {
-    async layers() {
-      const layers = await model.getLayers();
-
-      return layers.map(layerResolver);
+    layers() {
+      return Layer.findAll({
+        where: { versionId: model.id },
+        order: [["z", "ASC"]]
+      }).then(layers => layers.map(layerResolver));
     }
   });
 }
@@ -40,7 +41,7 @@ const querySchema = `
 
 const queries = {
   async version({ id }) {
-    const version = await models.Version.findByPk(id);
+    const version = await Version.findByPk(id);
 
     return versionResolver(version);
   }
@@ -53,7 +54,7 @@ const mutationSchema = `
 
 const mutations = {
   async createVersion({ projectId }) {
-    const project = await models.Project.findByPk(projectId);
+    const project = await Project.findByPk(projectId);
     const version = await project.createVersion();
 
     return versionResolver(version);
