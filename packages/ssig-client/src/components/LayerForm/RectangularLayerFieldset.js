@@ -23,6 +23,7 @@ export default function RectangularLayerFieldset(props) {
         </div>
       </div>
       <InputField type="string" value={data.color} label="Color" onInput={handleChange("color")} />
+      <InputField type="number" required value={data.borderRadius} label="Border radius" onInput={handleChange("borderRadius", Number)} />
       <ShadowFieldset data={data} onChange={onChange} />
     </fieldset>
   );

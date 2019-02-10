@@ -1,21 +1,24 @@
-import { setupCanvas, setShadow } from "./helpers";
+import { setupCanvas, setShadow, roundedCornersPath } from "./helpers";
 
 /**
- * 
- * @param {HTMLCanvasElement} canvas 
- * @param {object} layer 
+ *
+ * @param {HTMLCanvasElement} canvas
+ * @param {object} layer
  */
 export default function drawRectangularLayer(canvas, layer) {
   const { x, y, typeData } = layer;
-  const { width, height, color, shadow } = typeData;
+  const { width, height, color, shadow, borderRadius } = typeData;
 
   setupCanvas(canvas, ctx => {
     if (shadow) {
       setShadow(ctx, layer.typeData);
     }
 
+    roundedCornersPath(ctx, x, y, width, height, borderRadius || 0);
+
     ctx.fillStyle = color;
-    ctx.fillRect(x, y, width, height);
+    ctx.fill();
+    ctx.clip();
   });
 
   return Promise.resolve(canvas);

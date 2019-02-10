@@ -54,7 +54,9 @@ export function setShadow(ctx, attrs) {
  * @param {number} height
  * @param {number} radius
  */
-export function roundedCornersPath(ctx, x, y, width, height, radius) {
+export function roundedCornersPath(ctx, x, y, width, height, r) {
+  const radius = Number(r);
+
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
   ctx.lineTo(x + width - radius, y);

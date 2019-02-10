@@ -59,7 +59,8 @@
    * @param {number} radius
    */
 
-  function roundedCornersPath(ctx, x, y, width, height, radius) {
+  function roundedCornersPath(ctx, x, y, width, height, r) {
+    var radius = Number(r);
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius, y);
@@ -175,9 +176,9 @@
   }
 
   /**
-   * 
-   * @param {HTMLCanvasElement} canvas 
-   * @param {object} layer 
+   *
+   * @param {HTMLCanvasElement} canvas
+   * @param {object} layer
    */
 
   function drawRectangularLayer(canvas, layer) {
@@ -187,14 +188,17 @@
     var width = typeData.width,
         height = typeData.height,
         color = typeData.color,
-        shadow = typeData.shadow;
+        shadow = typeData.shadow,
+        borderRadius = typeData.borderRadius;
     setupCanvas(canvas, function (ctx) {
       if (shadow) {
         setShadow(ctx, layer.typeData);
       }
 
+      roundedCornersPath(ctx, x, y, width, height, borderRadius || 0);
       ctx.fillStyle = color;
-      ctx.fillRect(x, y, width, height);
+      ctx.fill();
+      ctx.clip();
     });
     return Promise.resolve(canvas);
   }

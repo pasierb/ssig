@@ -14,9 +14,14 @@ async function preview(req, res) {
     const [code, attr] = key.split(".");
 
     if (code && attr) {
+
       acc[code] = Object.assign({}, acc[code] || {}, {
         [attr]: req.query[key]
       });
+
+      if (attr === 'imageUri') {
+        acc[code].imageData = undefined;
+      }
     }
 
     return acc;

@@ -1,3 +1,4 @@
+const { Layer } = require("../db/models");
 const {
   drawImageLayer,
   drawTextLayer,
@@ -12,19 +13,20 @@ const LAYER_TYPE_RENDERER = {
 };
 
 async function versionCanvasRenderer(version, variables = {}) {
-  const layers = await version.getLayers();
+  const layers = await version.getLayers({ order: [["z", "ASC"]] });
   const { width, height, backgroundColor } = version;
   const base = createCanvas(width, height);
   const ctx = base.getContext("2d");
 
   const canvasLayers = await Promise.all(
-    layers.map(layer => {
+    layers.map(l => {
+      const layer = l.dataValues;
       const canvas = createCanvas(width, height);
       const renderer = LAYER_TYPE_RENDERER[layer.type];
 
       if (!renderer) {
         // LOG ME!
-        return canvas;
+        throw new Error("Unknown layer type");
       }
 
       Object.assign(layer.typeData, variables[layer.code] || {});

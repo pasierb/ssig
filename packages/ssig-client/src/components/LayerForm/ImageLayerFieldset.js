@@ -39,6 +39,7 @@ const ImageLayerFieldset = props => {
           </select>
         </div>
       </Field>
+      <InputField type="number" required value={data.borderRadius} label="Border radius" onInput={handleChange("borderRadius", Number)} />
       <ShadowFieldset {...props} />
     </fieldset>
   );
