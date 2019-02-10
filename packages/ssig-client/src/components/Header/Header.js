@@ -35,11 +35,19 @@ class Header extends Component {
           <div className="navbar-end">
             {currentUser ? (
               <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">{currentUser.username}</a>
+                <a class="navbar-link">
+                  <span className="icon">
+                    <i className="fas fa-user" />
+                  </span>
+                  <span>{currentUser.username}</span>
+                </a>
 
                 <div class="navbar-dropdown">
                   <a class="navbar-item" href="/auth/signOut">
-                    Logout
+                    <span className="icon">
+                      <i className="fas fa-sign-out-alt" />
+                    </span>
+                    <span>Sign out</span>
                   </a>
                 </div>
               </div>
@@ -50,7 +58,10 @@ class Header extends Component {
                     className="button"
                     onClick={this.handleToggleSignInModal}
                   >
-                    Sign in
+                    <span className="icon">
+                      <i className="fas fa-sign-in-alt" />
+                    </span>
+                    <span>Sign in</span>
                   </button>
                 </div>
               </div>
