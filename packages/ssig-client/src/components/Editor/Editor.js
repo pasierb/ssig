@@ -51,19 +51,27 @@ export default class Editor extends Component {
           </div>
         </div>
         <div>
-          <button className="button" onClick={this.toggleVersionModal}>
-            Version setting
-          </button>
-          <button
-            className="button"
-            disabled={version.publishedAt}
-            onClick={onVersionPublish}
-          >
-            Version publish
-          </button>
-          <button className="button" onClick={this.toggleNewLayerModal}>
-            Add layer
-          </button>
+          <div className="buttons">
+            <button className="button" onClick={this.toggleVersionModal}>
+              <span className="icon">
+                <i className="fas fa-cog" />
+              </span>
+            </button>
+            <button
+              className="button"
+              disabled={version.publishedAt}
+              onClick={onVersionPublish}
+            >
+              <span className="icon">
+                <i className="fas fa-upload" />
+              </span>
+            </button>
+            <button className="button" onClick={this.toggleNewLayerModal}>
+              <span className="icon">
+                <i className="fas fa-plus" />
+              </span>
+            </button>
+          </div>
           <h4 className="title is-4">Layers</h4>
           <LayerList
             layers={reversedLayers}
