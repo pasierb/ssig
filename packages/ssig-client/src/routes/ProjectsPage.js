@@ -31,7 +31,7 @@ export default class ProjectsPage extends Component {
     client.request(query).then(res => {
       this.setState({ projects: res.projects });
     });
-  }
+  };
 
   handleToggleNewProjectModal = () => {
     this.setState(state => ({
@@ -42,7 +42,7 @@ export default class ProjectsPage extends Component {
   handleCreateNewProject = () => {
     this.handleToggleNewProjectModal();
     this.fetchData();
-  }
+  };
 
   render(props, state) {
     const { isNewProjectModalOpen } = state;
@@ -56,7 +56,15 @@ export default class ProjectsPage extends Component {
             <div className="card">
               <div className="card-content">
                 <div className="content">
-                  <button className="button" onClick={this.handleToggleNewProjectModal}>Add new project</button>
+                  <button
+                    className="button"
+                    onClick={this.handleToggleNewProjectModal}
+                  >
+                    <span className="icon">
+                      <i className="fas fa-plus" />
+                    </span>
+                    <span>Create new project</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -66,7 +74,10 @@ export default class ProjectsPage extends Component {
           )}
         />
 
-        <Modal isOpen={isNewProjectModalOpen} onClose={this.handleToggleNewProjectModal}>
+        <Modal
+          isOpen={isNewProjectModalOpen}
+          onClose={this.handleToggleNewProjectModal}
+        >
           <NewProjectFormContainer onSubmit={this.handleCreateNewProject} />
         </Modal>
       </div>
