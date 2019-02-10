@@ -1,13 +1,13 @@
 import { h, Component } from "preact";
+import LayerPanel from "./LayerPanel";
+import styles from "./LayerList.scss";
 
 export default class LayerList extends Component {
   state = {
     activeLayerId: null
   };
 
-  layerToggleHandler = layer => e => {
-    e.preventDefault();
-
+  layerToggleHandler = layer => {
     this.setState(state => ({
       activeLayerId: layer.id === state.activeLayerId ? null : layer.id
     }));
@@ -18,16 +18,15 @@ export default class LayerList extends Component {
     const { activeLayerId } = state;
 
     return (
-      <div>
+      <div className={styles.LayerList}>
         {layers.map((layer, i) => (
-          <nav className="panel">
-            <a className="panel-block" onClick={this.layerToggleHandler(layer)}>
-              {layer.name}
-            </a>
-            {activeLayerId === layer.id && (
-              <div className="panel-block">{renderItem(layer, i)}</div>
-            )}
-          </nav>
+          <LayerPanel
+            layer={layer}
+            isActive={activeLayerId === layer.id}
+            onClick={this.layerToggleHandler}
+          >
+            {renderItem(layer, i)}
+          </LayerPanel>
         ))}
       </div>
     );

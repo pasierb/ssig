@@ -1,3 +1,6 @@
+import envVars from 'preact-cli-plugin-env-vars';
+
+
 /**
  * Function that mutates original webpack config.
  * Supports asynchronous changes when promise is returned.
@@ -16,4 +19,6 @@ export default function(config, env, helpers) {
       "/graphql": "http://localhost:3000"
     }
   });
+
+  envVars(config, env, helpers);
 }

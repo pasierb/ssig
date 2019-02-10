@@ -45,8 +45,10 @@ export default class Editor extends Component {
 
     return (
       <div className={styles.Editor}>
-        <div>
-          <VersionPreview layers={layers} version={version} />
+        <div className={styles["Editor__preview-container"]}>
+          <div>
+            <VersionPreview layers={layers} version={version} />
+          </div>
         </div>
         <div>
           <button className="button" onClick={this.toggleVersionModal}>

@@ -1,0 +1,12 @@
+.LayerPanel.LayerPanel {
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.LayerPanel__content {
+  display: none;
+}
+
+.LayerPanel__content--active {
+  display: block;
+}
