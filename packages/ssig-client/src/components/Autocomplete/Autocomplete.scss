@@ -1,0 +1,14 @@
+.Autocomplete__list-container {
+  position: relative;
+}
+
+.Autocomplete__list {
+  background-color: #fff;
+  position: absolute;
+  display: none;
+  z-index: 100;
+}
+
+.Autocomplete__list--active {
+  display: block;
+}

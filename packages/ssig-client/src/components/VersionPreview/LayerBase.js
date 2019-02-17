@@ -5,7 +5,7 @@ export const layerProvider = renderer => props => (
 );
 
 export default class LayerBase extends Component {
-  componentWillReceiveProps(props) {
+  componentDidUpdate() {
     this.drawLayer();
   }
 
@@ -14,8 +14,10 @@ export default class LayerBase extends Component {
   }
 
   drawLayer = () => {
+    const { renderer, layer } = this.props;
+
     try {
-      this.props.renderer(this.canvasEl, this.props.layer);
+      renderer(this.canvasEl, layer);
     } catch (e) {
       console.log(e);
     }
