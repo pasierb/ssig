@@ -15,6 +15,17 @@ function Checkbox(props) {
   );
 }
 
+const Input = props => {
+  const { className, ...rest } = props;
+
+  return (
+    <input
+      {...rest}
+      className={[className || "", "input", "is-small"].join(" ")}
+    />
+  );
+};
+
 const InputField = props => {
   const { label, ...rest } = props;
 
@@ -30,4 +41,4 @@ const InputField = props => {
 
 const ColorField = InputField;
 
-export { Field, Label, InputField, ColorField, Checkbox };
+export { Field, Label, InputField, ColorField, Checkbox, Input };
