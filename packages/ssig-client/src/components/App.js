@@ -10,7 +10,6 @@ import HomePage from "../routes/HomePage";
 import ProjectsPage from "../routes/ProjectsPage";
 import VersionPage from "../routes/VersionPage";
 
-import "bulma";
 export default class App extends Component {
   /** Gets fired when the route changes.
    *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)

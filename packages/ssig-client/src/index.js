@@ -3,8 +3,10 @@ import App from "./components/App";
 import createStore from "unistore";
 import devtools from "unistore/devtools";
 import { Provider } from "unistore/preact";
-import "./style";
 import graph from "./graph";
+
+import "bulma";
+import "./style";
 
 const initialState = {
   isAuthenticating: true,
