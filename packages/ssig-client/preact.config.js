@@ -13,6 +13,7 @@ export default function(config, env, helpers) {
   const { devServer } = config;
 
   config.devServer = Object.assign({}, devServer, {
+    https: true,
     proxy: {
       "/api": "http://localhost:3000",
       "/auth": "http://localhost:3000",
