@@ -15,6 +15,13 @@ const { api, auth } = require("./routes");
 const { twitterAuthenticator } = require("./interactors");
 const { User, sequelize } = require("./db/models");
 
+const twitterToken = process.env["TWITTER_TOKEN"];
+const twitterTokenSecret = process.env["TWITTER_TOKEN_SECRET"];
+
+if (!twitterToken || !twitterTokenSecret) {
+  throw new Error("Twitter tokens not provided. Check your env");
+}
+
 const sessionStore = new SequelizeStore({ db: sequelize });
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -38,14 +45,15 @@ passport.use(
     {
       consumerKey: process.env["TWITTER_TOKEN"],
       consumerSecret: process.env["TWITTER_TOKEN_SECRET"],
-      callbackURL: "/auth/twitter/callback"
+      callbackURL: "http://localhost:3001/auth/twitter/callback",
+      proxy: true
     },
-    function(token, tokenSecret, profile, cb) {
+    function(token, tokenSecret, profile, cb, ...rest) {
       return twitterAuthenticator(profile)
         .then(user => {
           cb(null, user);
         })
-        .catch((err) => {
+        .catch(err => {
           cb(err);
         });
     }
