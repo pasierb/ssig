@@ -1,10 +1,12 @@
 import { h } from "preact";
 
 export default function Footer() {
+  const year = (new Date()).getFullYear();
+
   return (
     <footer className="footer">
       <div className="content has-text-centered">
-        <p>ssig</p>
+        <p>ssig &copy; {year}</p>
       </div>
     </footer>
   );

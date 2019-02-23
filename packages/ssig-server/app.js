@@ -45,7 +45,9 @@ passport.use(
         .then(user => {
           cb(null, user);
         })
-        .catch(cb);
+        .catch((err) => {
+          cb(err);
+        });
     }
   )
 );
