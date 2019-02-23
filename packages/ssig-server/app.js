@@ -45,7 +45,7 @@ passport.use(
     {
       consumerKey: process.env["TWITTER_TOKEN"],
       consumerSecret: process.env["TWITTER_TOKEN_SECRET"],
-      callbackURL: "http://localhost:3001/auth/twitter/callback",
+      callbackURL: "/auth/twitter/callback",
       proxy: true
     },
     function(token, tokenSecret, profile, cb, ...rest) {
