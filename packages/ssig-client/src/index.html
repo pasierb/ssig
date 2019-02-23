@@ -33,6 +33,12 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   </head>
   <body>
+    <% if (process.env.PREACT_APP_SENTRY_DSN) { %>
+      <script src="https://browser.sentry-cdn.com/4.6.3/bundle.min.js" crossorigin="anonymous"></script>
+      <script>
+        Sentry.init({ dsn: '<%= process.env.PREACT_APP_SENTRY_DSN %>' });
+      </script>
+    <% } %>
     <%= htmlWebpackPlugin.options.ssr({ url: '/' }) %>
     <script
       defer
