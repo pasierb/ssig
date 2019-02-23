@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
+const Sentry = require("@sentry/node");
 const expressSession = require("express-session");
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter").Strategy;
@@ -17,6 +18,7 @@ const { User, sequelize } = require("./db/models");
 
 const twitterToken = process.env["TWITTER_TOKEN"];
 const twitterTokenSecret = process.env["TWITTER_TOKEN_SECRET"];
+const sentryDsn = process.env["SENTRY_DSN"];
 
 if (!twitterToken || !twitterTokenSecret) {
   throw new Error("Twitter tokens not provided. Check your env");
@@ -25,6 +27,11 @@ if (!twitterToken || !twitterTokenSecret) {
 const sessionStore = new SequelizeStore({ db: sequelize });
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
+
+if (sentryDsn) {
+  Sentry.init({ dsn: sentryDsn });
+  app.use(Sentry.Handlers.requestHandler());
+}
 
 passport.serializeUser(({ id }, done) => {
   return done(null, id);
@@ -108,6 +115,8 @@ app.options("/graphql", (req, res) => {
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/public/index.html"));
 });
+
+app.use(Sentry.Handlers.errorHandler());
 
 app.listen(port, err => {
   if (err) {

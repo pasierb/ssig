@@ -86,7 +86,6 @@ const mutations = {
           "base64"
         )}`;
       } catch (e) {
-        console.log(e);
         updateData.typeData.imageData = undefined;
       }
     }

@@ -3,7 +3,6 @@ const sequelize = require("sequelize");
 const { User } = require("../../db/models");
 
 function signUp(req, res) {
-  console.log(req);
   const { email, password } = req.data;
 
   sequelize
