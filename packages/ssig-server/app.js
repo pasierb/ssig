@@ -16,9 +16,10 @@ const { api, auth } = require("./routes");
 const { twitterAuthenticator } = require("./interactors");
 const { User, sequelize } = require("./db/models");
 
-const twitterToken = process.env["TWITTER_TOKEN"];
-const twitterTokenSecret = process.env["TWITTER_TOKEN_SECRET"];
-const sentryDsn = process.env["SENTRY_DSN"];
+const twitterToken = process.env.TWITTER_TOKEN;
+const twitterTokenSecret = process.env.TWITTER_TOKEN_SECRET;
+const sentryDsn = process.env.SENTRY_DSN;
+const isDev = process.env.NODE_ENV !== 'production';
 
 if (!twitterToken || !twitterTokenSecret) {
   throw new Error("Twitter tokens not provided. Check your env");
@@ -52,7 +53,7 @@ passport.use(
     {
       consumerKey: process.env["TWITTER_TOKEN"],
       consumerSecret: process.env["TWITTER_TOKEN_SECRET"],
-      callbackURL: "/auth/twitter/callback",
+      callbackURL: `${isDev ? "https://localhost:3001" : ""}/auth/twitter/callback`,
       proxy: true
     },
     function(token, tokenSecret, profile, cb, ...rest) {
@@ -60,9 +61,7 @@ passport.use(
         .then(user => {
           cb(null, user);
         })
-        .catch(err => {
-          cb(err);
-        });
+        .catch(cb);
     }
   )
 );
@@ -85,7 +84,7 @@ app.use(
   graphqlHTTP({
     schema: graph.schema,
     rootValue: graph.root,
-    graphiql: process.env.NODE_ENV !== "production"
+    graphiql: isDev
   })
 );
 
@@ -96,7 +95,7 @@ app.get(
   "/auth/twitter/callback",
   passport.authenticate("twitter", { failureRedirect: "/login" }),
   function(req, res) {
-    res.redirect("/");
+    res.redirect("/projects");
   }
 );
 

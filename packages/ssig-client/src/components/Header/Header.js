@@ -15,6 +15,10 @@ class Header extends Component {
     }));
   };
 
+  handleSignOut = () => {
+    window.location = '/auth/signOut';
+  }
+
   render({ currentUser }, state) {
     return (
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -43,7 +47,7 @@ class Header extends Component {
                 </a>
 
                 <div class="navbar-dropdown">
-                  <a class="navbar-item" href="/auth/signOut">
+                  <a class="navbar-item" onClick={this.handleSignOut}>
                     <span className="icon">
                       <i className="fas fa-sign-out-alt" />
                     </span>
