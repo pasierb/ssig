@@ -9,6 +9,7 @@ import Footer from "./Footer";
 import HomePage from "../routes/HomePage";
 import ProjectsPage from "../routes/ProjectsPage";
 import VersionPage from "../routes/VersionPage";
+import NotFoundPage from "../routes/NotFoundPage";
 
 export default class App extends Component {
   /** Gets fired when the route changes.
@@ -27,6 +28,7 @@ export default class App extends Component {
           <HomePage path="/" />
           <PrivateRoute path="/projects" component={ProjectsPage }/>
           <PrivateRoute path="/projects/:projectId/versions/:versionId/edit" component={VersionPage}/>
+          <NotFoundPage default />
         </Router>
         <Footer />
       </div>
