@@ -101,7 +101,7 @@ export default class TextLayerFieldset extends Component {
               />
             </p>
             <p className="control">
-              <span className="select">
+              <span className="select is-small">
                 <select onChange={this.handleFontVariantChange}>
                   {selectedFont.variants.map(variant => (
                     <option value={variant}>{variant}</option>
