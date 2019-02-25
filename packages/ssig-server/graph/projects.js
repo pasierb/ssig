@@ -80,7 +80,7 @@ const mutations = {
       return null;
     }
 
-    const project = await Project.findIne({
+    const project = await Project.findOne({
       where: { id: projectId, userId: req.user.id }
     });
     const version = await Version.findByPk(versionId, {
