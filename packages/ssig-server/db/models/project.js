@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   Project.associate = function({ Version }) {
     Project.hasMany(Version, { foreignKey: "projectId", sourceKey: "id" });
     Project.belongsTo(Version, {
+      as: "publishedVersion",
       foreignKey: "publishedVersionId",
       sourceKey: "id"
     });

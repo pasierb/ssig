@@ -103,6 +103,11 @@ app.post("/auth/signUp", auth.signUp);
 app.get("/auth/signOut", auth.signOut);
 
 app.get(
+  "/api/v1/projects/:projectId",
+  api.v1.projects.project
+)
+
+app.get(
   "/api/v1/projects/:projectId/versions/:versionId/preview",
   api.v1.projects.versions.preview
 );

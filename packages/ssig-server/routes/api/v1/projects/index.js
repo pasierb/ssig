@@ -1,3 +1,4 @@
 const versions = require("./versions");
+const project = require("./project");
 
-module.exports = { versions };
+module.exports = { versions, project };
