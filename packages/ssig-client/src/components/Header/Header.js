@@ -4,6 +4,8 @@ import { Link } from "preact-router/match";
 import Modal from "../Modal";
 import SignIn from "../SignIn";
 
+import styles from "./Header.scss";
+
 class Header extends Component {
   state = {
     signInModalOpen: false
@@ -16,14 +18,21 @@ class Header extends Component {
   };
 
   handleSignOut = () => {
-    window.location = '/auth/signOut';
-  }
+    window.location = "/auth/signOut";
+  };
 
   render({ currentUser }, state) {
     return (
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav
+        className="navbar is-primary"
+        role="navigation"
+        aria-label="main navigation"
+      >
         <div className="navbar-brand">
-          <Link href="/" className="navbar-item">
+          <Link
+            href="/"
+            className={["navbar-item", styles.Header__brand, "brand"].join(" ")}
+          >
             Ssig
           </Link>
         </div>

@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="content has-text-centered">
-        <p>ssig &copy; {year}</p>
+        <p><span className="brand">Ssig</span> &copy; {year}</p>
       </div>
     </footer>
   );

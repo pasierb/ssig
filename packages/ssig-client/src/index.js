@@ -5,8 +5,7 @@ import devtools from "unistore/devtools";
 import { Provider } from "unistore/preact";
 import graph from "./graph";
 
-import "bulma";
-import "./style";
+import "./style/index.scss";
 
 const initialState = {
   isAuthenticating: true,
