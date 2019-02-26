@@ -18,7 +18,7 @@ class Header extends Component {
   };
 
   handleSignOut = () => {
-    window.location = "/auth/signOut";
+    window.location = "/api/auth/signOut";
   };
 
   render({ currentUser }, state) {

@@ -2,7 +2,7 @@ import { h, Component } from "preact";
 
 export default class SignIn extends Component {
   hadleTwitterSignIn = () => {
-    window.location = '/auth/twitter';
+    window.location = '/api/auth/twitter';
   }
 
   render() {

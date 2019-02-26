@@ -19,7 +19,7 @@ const { User, sequelize } = require("./db/models");
 const twitterToken = process.env.TWITTER_TOKEN;
 const twitterTokenSecret = process.env.TWITTER_TOKEN_SECRET;
 const sentryDsn = process.env.SENTRY_DSN;
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== "production";
 
 if (!twitterToken || !twitterTokenSecret) {
   throw new Error("Twitter tokens not provided. Check your env");
@@ -53,7 +53,9 @@ passport.use(
     {
       consumerKey: process.env["TWITTER_TOKEN"],
       consumerSecret: process.env["TWITTER_TOKEN_SECRET"],
-      callbackURL: `${isDev ? "https://localhost:3001" : ""}/auth/twitter/callback`,
+      callbackURL: `${
+        isDev ? "https://localhost:3001" : ""
+      }/api/auth/twitter/callback`,
       proxy: true
     },
     function(token, tokenSecret, profile, cb, ...rest) {
@@ -78,7 +80,7 @@ sessionStore.sync();
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -88,33 +90,28 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "public")));
+app.options("/graphql", (req, res) => {
+  res.status(200).send("OK");
+});
 
-app.get("/auth/twitter", passport.authenticate("twitter"));
+app.get("/api/auth/twitter", passport.authenticate("twitter"));
 app.get(
-  "/auth/twitter/callback",
+  "/api/auth/twitter/callback",
   passport.authenticate("twitter", { failureRedirect: "/login" }),
   function(req, res) {
     res.redirect("/projects");
   }
 );
 
-app.post("/auth/signUp", auth.signUp);
-app.get("/auth/signOut", auth.signOut);
+app.post("/api/auth/signUp", auth.signUp);
+app.get("/api/auth/signOut", auth.signOut);
 
-app.get(
-  "/api/v1/projects/:projectId",
-  api.v1.projects.project
-)
+app.get("/api/v1/projects/:projectId", api.v1.projects.project);
 
 app.get(
   "/api/v1/projects/:projectId/versions/:versionId/preview",
   api.v1.projects.versions.preview
 );
-
-app.options("/graphql", (req, res) => {
-  res.status(200).send("OK");
-});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/public/index.html"));
