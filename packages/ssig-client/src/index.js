@@ -1,11 +1,13 @@
 import { h } from "preact";
+
+import "./style/index.scss";
+
 import App from "./components/App";
 import createStore from "unistore";
 import devtools from "unistore/devtools";
 import { Provider } from "unistore/preact";
 import graph from "./graph";
 
-import "./style/index.scss";
 
 const initialState = {
   isAuthenticating: true,
