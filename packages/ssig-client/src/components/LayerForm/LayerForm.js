@@ -63,7 +63,7 @@ export default class LayerForm extends Component {
   };
 
   render(props, state) {
-    const { onSubmit } = props;
+    const { onSubmit, disabled } = props;
     const { layer } = state;
     const TypeFieldsetComponent = TYPE_FIELDSET[layer.type];
 
@@ -71,11 +71,13 @@ export default class LayerForm extends Component {
       <form onSubmit={e => onSubmit && this.handleSubmit(e)}>
         <InputField
           label="name"
+          disabled={disabled}
           value={layer.name}
           onInput={this.handleChange("name")}
         />
         <InputField
           label="code"
+          disabled={disabled}
           value={layer.code}
           onInput={this.handleChange("code")}
         />
@@ -83,6 +85,7 @@ export default class LayerForm extends Component {
           <div className="column">
             <InputField
               label="x"
+              disabled={disabled}
               type="number"
               value={layer.x}
               onInput={this.handleChange("x", Number)}
@@ -91,6 +94,7 @@ export default class LayerForm extends Component {
           <div className="column">
             <InputField
               label="y"
+              disabled={disabled}
               type="number"
               value={layer.y}
               onInput={this.handleChange("y", Number)}
@@ -99,6 +103,7 @@ export default class LayerForm extends Component {
         </div>
         <TypeFieldsetComponent
           data={layer.typeData}
+          disabled={disabled}
           onChange={this.handleTypeDataChange}
         />
         {onSubmit && (

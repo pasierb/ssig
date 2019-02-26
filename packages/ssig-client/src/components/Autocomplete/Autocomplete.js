@@ -44,7 +44,7 @@ export default class Autocomplete extends Component {
   };
 
   render(props, state) {
-    const AsComponent = props.as;
+    const { disabled, as: AsComponent } = props;
     const listClass = [
       "menu-list",
       styles["Autocomplete__list"],
@@ -57,6 +57,7 @@ export default class Autocomplete extends Component {
       <div className={styles.Autocomplete}>
         {AsComponent ? (
           <AsComponent
+            disabled={disabled}
             onInput={this.handleInput}
             onBlur={this.handleBlur}
             onFocus={this.handleFocus}
@@ -65,6 +66,7 @@ export default class Autocomplete extends Component {
         ) : (
           <input
             className="input"
+            disabled={disabled}
             value={state.searchTerm}
             onInput={this.handleInput}
             onBlur={this.handleBlur}

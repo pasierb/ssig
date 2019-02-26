@@ -68,7 +68,7 @@ export default class TextLayerFieldset extends Component {
   };
 
   render(props, state) {
-    const { data, onChange } = props;
+    const { data, onChange, disabled } = props;
     const { selectedFont } = state;
 
     const handleChange = (attribute, cast = a => a) => event => {
@@ -82,11 +82,13 @@ export default class TextLayerFieldset extends Component {
       <div>
         <InputField
           label="text"
+          disabled={disabled}
           value={data.text}
           onInput={handleChange("text")}
         />
         <InputField
           label="color"
+          disabled={disabled}
           value={data.color}
           onInput={handleChange("color")}
         />
@@ -96,13 +98,14 @@ export default class TextLayerFieldset extends Component {
             <p className="control">
               <FontSelectContainer
                 as={Input}
+                disabled={disabled}
                 onChange={this.handleFontChange}
                 value={data.fontFamily}
               />
             </p>
             <p className="control">
               <span className="select is-small">
-                <select onChange={this.handleFontVariantChange}>
+                <select onChange={this.handleFontVariantChange} disabled={disabled}>
                   {selectedFont.variants.map(variant => (
                     <option value={variant}>{variant}</option>
                   ))}
@@ -113,6 +116,7 @@ export default class TextLayerFieldset extends Component {
         </div>
         <InputField
           label="font size"
+          disabled={disabled}
           value={data.fontSize}
           onInput={handleChange("fontSize", Number)}
         />

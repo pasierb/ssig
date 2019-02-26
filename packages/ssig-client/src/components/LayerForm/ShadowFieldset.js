@@ -2,7 +2,7 @@ import { h } from "preact";
 import { InputField, ColorField, Checkbox } from "./elements";
 
 export default function ShadowFieldset(props) {
-  const { data, onChange } = props;
+  const { data, onChange, disabled } = props;
 
   const handleChange = (attribute, cast = a => a) => event => {
     onChange({
@@ -22,6 +22,7 @@ export default function ShadowFieldset(props) {
     <fieldset>
       <div className="control">
         <Checkbox
+          disabled={disabled}
           onChange={handleCheckboxChange("shadow")}
           label="shadow"
           checked={data.shadow}
@@ -33,6 +34,7 @@ export default function ShadowFieldset(props) {
             <div className="column">
               <InputField
                 type="number"
+                disabled={disabled}
                 label="offset x"
                 value={data.shadowOffsetX}
                 onInput={handleChange("shadowOffsetX", Number)}
@@ -41,6 +43,7 @@ export default function ShadowFieldset(props) {
             <div className="column">
               <InputField
                 type="number"
+                disabled={disabled}
                 label="offset y"
                 value={data.shadowOffsetY}
                 onInput={handleChange("shadowOffsetY", Number)}
@@ -51,6 +54,7 @@ export default function ShadowFieldset(props) {
             <div className="column">
               <ColorField
                 label="color"
+                disabled={disabled}
                 onInput={handleChange("shadowColor")}
                 value={data.shadowColor}
               />
@@ -59,6 +63,7 @@ export default function ShadowFieldset(props) {
               <InputField
                 type="number"
                 label="blur"
+                disabled={disabled}
                 value={data.shadowBlur}
                 onInput={handleChange("shadowBlur", Number)}
               />

@@ -4,6 +4,7 @@ import LayerForm from "../LayerForm";
 export default function LayerListItem(props) {
   const {
     layer,
+    version,
     onChange,
     onPromote,
     onDemote,
@@ -12,7 +13,7 @@ export default function LayerListItem(props) {
 
   return (
     <div>
-      <LayerForm onChange={onChange} layer={layer} />
+      <LayerForm onChange={onChange} layer={layer} disabled={version.publishedAt} />
       <p className="buttons">
         <button
           disabled={!onPromote}

@@ -79,6 +79,7 @@ export default class Editor extends Component {
               <LayerListItem
                 key={layer.id}
                 layer={layer}
+                version={version}
                 onChange={onLayerChange}
                 onDelete={onLayerDelete}
                 onPromote={i > 0 && onLayerPromote}
