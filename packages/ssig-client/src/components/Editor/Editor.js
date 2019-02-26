@@ -42,6 +42,7 @@ export default class Editor extends Component {
     } = props;
 
     const reversedLayers = [...layers].reverse();
+    const disabled = !!version.publishedAt;
 
     return (
       <div className={styles.Editor}>
@@ -52,21 +53,29 @@ export default class Editor extends Component {
         </div>
         <div>
           <div className="buttons">
-            <button className="button" onClick={this.toggleVersionModal}>
+            <button
+              className="button"
+              onClick={this.toggleVersionModal}
+              disabled={disabled}
+            >
               <span className="icon">
                 <i className="fas fa-cog" />
               </span>
             </button>
             <button
               className="button"
-              disabled={version.publishedAt}
+              disabled={disabled}
               onClick={onVersionPublish}
             >
               <span className="icon">
                 <i className="fas fa-upload" />
               </span>
             </button>
-            <button className="button" onClick={this.toggleNewLayerModal}>
+            <button
+              className="button"
+              onClick={this.toggleNewLayerModal}
+              disabled={disabled}
+            >
               <span className="icon">
                 <i className="fas fa-plus" />
               </span>
@@ -80,10 +89,10 @@ export default class Editor extends Component {
                 key={layer.id}
                 layer={layer}
                 version={version}
-                onChange={onLayerChange}
-                onDelete={onLayerDelete}
-                onPromote={i > 0 && onLayerPromote}
-                onDemote={i < reversedLayers.length - 1 && onLayerDemote}
+                onChange={!disabled && onLayerChange}
+                onDelete={!disabled && onLayerDelete}
+                onPromote={!disabled && i > 0 && onLayerPromote}
+                onDemote={!disabled && i < reversedLayers.length - 1 && onLayerDemote}
               />
             )}
           />

@@ -2,18 +2,15 @@ import { h } from "preact";
 import LayerForm from "../LayerForm";
 
 export default function LayerListItem(props) {
-  const {
-    layer,
-    version,
-    onChange,
-    onPromote,
-    onDemote,
-    onDelete
-  } = props;
+  const { layer, version, onChange, onPromote, onDemote, onDelete } = props;
 
   return (
     <div>
-      <LayerForm onChange={onChange} layer={layer} disabled={version.publishedAt} />
+      <LayerForm
+        onChange={onChange}
+        layer={layer}
+        disabled={version.publishedAt}
+      />
       <p className="buttons">
         <button
           disabled={!onPromote}
@@ -34,6 +31,7 @@ export default function LayerListItem(props) {
           </span>
         </button>
         <button
+          disabled={!onDelete}
           className="button is-small is-danger"
           onClick={() => onDelete(layer)}
         >
