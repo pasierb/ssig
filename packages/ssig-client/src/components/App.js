@@ -28,7 +28,7 @@ export default class App extends Component {
           <HomePage path="/" />
           <PrivateRoute path="/projects" component={ProjectsPage }/>
           <PrivateRoute path="/projects/:projectId/versions/:versionId/edit" component={VersionPage}/>
-          <NotFoundPage default />
+          {/* <NotFoundPage default /> */}
         </Router>
         <Footer />
       </div>
