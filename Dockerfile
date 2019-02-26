@@ -1,7 +1,10 @@
 FROM node:8.15-jessie
 
+ARG PREACT_APP_SENTRY_DSN
+
 ENV APP_HOME /app
 ENV NODE_ENV "production"
+ENV PREACT_APP_SENTRY_DSN ${PREACT_APP_SENTRY_DSN}
 
 WORKDIR ${APP_HOME}
 
@@ -10,8 +13,6 @@ COPY . ${APP_HOME}
 RUN npm i -g lerna
 RUN lerna bootstrap
 RUN lerna run build
-
-RUN ls ./packages/ssig-client/build
 
 RUN cp -r ./packages/ssig-client/build ./packages/ssig-server/public
 
