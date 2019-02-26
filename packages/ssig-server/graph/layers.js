@@ -66,8 +66,12 @@ const mutations = {
     return layerResolver(layer);
   },
   async updateLayer({ id, layerInput }) {
-    const layer = await Layer.findByPk(id);
+    const layer = await Layer.findByPk(id, { include: [{ model: Version }] });
     const updateData = { ...layerInput };
+
+    if (layer.Version.publishedAt) {
+      throw new Error("Can not update published version");
+    }
 
     if (layer.type === "image") {
       try {
@@ -101,7 +105,7 @@ const mutations = {
     return demoteLayerInteractor(id).then(layers => layers.map(layerResolver));
   },
   deleteLayer({ id }) {
-    return Layer.destroy({ where: { id }});
+    return Layer.destroy({ where: { id } });
   }
 };
 
