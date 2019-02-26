@@ -15,6 +15,27 @@ const LAYER_TYPE_RENDERER = {
   image: drawImageLayer
 };
 
+const WATERMARK_LAYERS = [
+  {
+    type: "text",
+    typeData: {
+      text: "Ssig.io",
+      fontSize: 22,
+      fontFamily: "Arial black",
+      // fontFamily: "Nanum Brush Script",
+      // fontVariant: "regular",
+      // fontFile: "nanum_brush_script.ttf",
+      color: "rgba(255, 255, 255, 0.5)"
+    }
+  }
+];
+
+function getWatermarkLayers({ width, height }) {
+  return WATERMARK_LAYERS.map(layer => {
+    return { ...layer, x: width - 100, y: height - 50 };
+  });
+}
+
 async function loadLayerFont(layer) {
   const { fontFile = "" } = layer.typeData;
 
@@ -46,43 +67,49 @@ async function versionCanvasRenderer(version, variables = {}) {
   const { width, height, backgroundColor } = version;
   const base = createCanvas(width, height);
   const ctx = base.getContext("2d");
+  const watermarkLayers = getWatermarkLayers(version);
 
-  const canvasLayers = await Promise.all(
-    layers.map(async l => {
-      const layer = l.dataValues;
-      const canvas = createCanvas(width, height);
-      const renderer = LAYER_TYPE_RENDERER[layer.type];
+  async function renderLayer(layer) {
+    const canvas = createCanvas(width, height);
+    const renderer = LAYER_TYPE_RENDERER[layer.type];
 
-      if (!renderer) {
-        // LOG ME!
-        throw new Error("Unknown layer type");
+    if (!renderer) {
+      // LOG ME!
+      throw new Error("Unknown layer type");
+    }
+
+    Object.assign(layer.typeData, variables[layer.code] || {});
+
+    switch (layer.type) {
+      case "image": {
+        return renderer(canvas, layer, loadImage);
       }
+      case "text": {
+        const { typeData } = layer;
 
-      Object.assign(layer.typeData, variables[layer.code] || {});
-
-      switch (layer.type) {
-        case "image": {
-          return renderer(canvas, layer, loadImage);
-        }
-        case "text": {
-          const { typeData } = layer;
+        if (typeData.fontFile) {
           const fontPath = await loadLayerFont(layer);
           const { fontFamily, fontVariant } = typeData;
           const fullFontFamily = [fontFamily, fontVariant].join("--");
 
           registerFont(fontPath, { family: fullFontFamily });
           Object.assign(layer.typeData, { fontFamily: fullFontFamily });
+        }
 
-          return renderer(canvas, layer);
-        }
-        default: {
-          return renderer(canvas, layer);
-        }
+        return renderer(canvas, layer);
       }
-    })
+      default: {
+        return renderer(canvas, layer);
+      }
+    }
+  }
+
+  const watermark = await Promise.all(watermarkLayers.map(renderLayer));
+  const canvasLayers = await Promise.all(
+    layers.map(l => renderLayer(l.dataValues))
   );
 
-  canvasLayers.forEach(canvas => {
+  [...canvasLayers, ...watermark].forEach(canvas => {
     ctx.drawImage(canvas, 0, 0, width, height);
   });
 
