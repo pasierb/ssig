@@ -24,6 +24,8 @@ async function project(req, res) {
     include: [{ association: "publishedVersion" }]
   });
 
+  project.publishedVersion.increment("invocationsCount")
+
   const canvas = await versionCanvasRenderer(
     project.publishedVersion,
     variables
