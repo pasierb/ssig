@@ -24,6 +24,10 @@ async function project(req, res) {
     include: [{ association: "publishedVersion" }]
   });
 
+  if (!project || !project.publishedVersion) {
+    return res.status(404).send('Project does not exist or has no published version')
+  }
+
   project.publishedVersion.increment("invocationsCount")
 
   const canvas = await versionCanvasRenderer(
