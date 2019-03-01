@@ -39,6 +39,6 @@ const InputField = props => {
   );
 };
 
-const ColorField = InputField;
+const ColorField = props => <InputField {...props} type="color" />;
 
 export { Field, Label, InputField, ColorField, Checkbox, Input };

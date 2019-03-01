@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { InputField } from "./elements";
+import { InputField, ColorField } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 
 export default function RectangularLayerFieldset(props) {
@@ -36,8 +36,7 @@ export default function RectangularLayerFieldset(props) {
           />
         </div>
       </div>
-      <InputField
-        type="string"
+      <ColorField
         value={data.color}
         label="Color"
         disabled={disabled}
