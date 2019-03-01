@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import { InputField, ColorField, Label, Input } from "./elements";
+import { InputField, ColorField, Label, Input, Field } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 import FontSelectContainer from "../../containers/FontSelectContainer";
 
@@ -80,12 +80,15 @@ export default class TextLayerFieldset extends Component {
 
     return (
       <div>
-        <InputField
-          label="text"
-          disabled={disabled}
-          value={data.text}
-          onInput={handleChange("text")}
-        />
+        <Field>
+          <Label>text</Label>
+          <textarea
+            className="textarea is-small"
+            disabled={disabled}
+            value={data.text}
+            onInput={handleChange("text")}
+          />
+        </Field>
         <ColorField
           label="color"
           disabled={disabled}
