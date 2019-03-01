@@ -75,13 +75,13 @@
   }
 
   /**
-   * 
-   * @param {HTMLCanvasElement} canvas 
-   * @param {object} layer 
+   *
+   * @param {HTMLCanvasElement} canvas
+   * @param {object} layer
    */
 
   function drawTextLayer(canvas, layer) {
-    var breakCharCount = 20;
+    // const maxLineLength = 20;
     var x = layer.x,
         y = layer.y,
         typeData = layer.typeData;
@@ -93,7 +93,9 @@
         color = _typeData$color === void 0 ? "#000" : _typeData$color,
         shadow = typeData.shadow,
         _typeData$text = typeData.text,
-        text = _typeData$text === void 0 ? "" : _typeData$text;
+        text = _typeData$text === void 0 ? "" : _typeData$text,
+        _typeData$maxLineLeng = typeData.maxLineLength,
+        maxLineLength = _typeData$maxLineLeng === void 0 ? Infinity : _typeData$maxLineLeng;
 
     if (!lineHeight) {
       lineHeight = fontSize;
@@ -107,7 +109,7 @@
         return acc;
       }
 
-      if (row.length + word.length > breakCharCount) {
+      if (row.length + word.length > maxLineLength) {
         acc.push(row, word);
       } else {
         acc.push([row, word].join(" "));

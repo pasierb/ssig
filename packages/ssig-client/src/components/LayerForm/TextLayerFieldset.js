@@ -105,7 +105,10 @@ export default class TextLayerFieldset extends Component {
             </p>
             <p className="control">
               <span className="select is-small">
-                <select onChange={this.handleFontVariantChange} disabled={disabled}>
+                <select
+                  onChange={this.handleFontVariantChange}
+                  disabled={disabled}
+                >
                   {selectedFont.variants.map(variant => (
                     <option value={variant}>{variant}</option>
                   ))}
@@ -114,12 +117,24 @@ export default class TextLayerFieldset extends Component {
             </p>
           </div>
         </div>
-        <InputField
-          label="font size"
-          disabled={disabled}
-          value={data.fontSize}
-          onInput={handleChange("fontSize", Number)}
-        />
+        <div className="columns">
+          <div className="column">
+            <InputField
+              label="font size"
+              disabled={disabled}
+              value={data.fontSize}
+              onInput={handleChange("fontSize", Number)}
+            />
+          </div>
+          <div className="column">
+            <InputField
+              label="max line length"
+              disabled={disabled}
+              value={data.maxLineLength}
+              onInput={handleChange("maxLineLength", Number)}
+            />
+          </div>
+        </div>
         <ShadowFieldset {...props} />
       </div>
     );
