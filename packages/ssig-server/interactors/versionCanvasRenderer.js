@@ -6,7 +6,7 @@ const {
   drawImageLayer,
   drawTextLayer,
   drawRectangularLayer
-} = require("ssig-renderer");
+} = require("@ssig/renderer");
 const { createCanvas, registerFont, loadImage } = require("canvas");
 
 const LAYER_TYPE_RENDERER = {

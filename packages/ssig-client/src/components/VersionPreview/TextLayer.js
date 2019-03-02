@@ -1,6 +1,6 @@
 import { h } from "preact";
 import LayerBase from "./LayerBase";
-import { drawTextLayer } from "ssig-renderer";
+import { drawTextLayer } from "@ssig/renderer";
 
 export default class TextLayer extends LayerBase {
   componentWillMount() {

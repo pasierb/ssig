@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import { layerProvider } from "./LayerBase";
-import { drawImageLayer } from "ssig-renderer";
+import { drawImageLayer } from "@ssig/renderer";
 
 function getImage(src) {
   return new Promise((resolve, reject) => {

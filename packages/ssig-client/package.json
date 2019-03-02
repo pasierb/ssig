@@ -16,6 +16,7 @@
     "build/*"
   ],
   "dependencies": {
+    "@ssig/renderer": "^1.0.1",
     "bulma": "^0.7.2",
     "eslint": "^4.9.0",
     "graphql-request": "^1.8.2",
@@ -31,7 +32,6 @@
     "preact-render-spy": "^1.2.1",
     "preact-router": "^2.5.7",
     "sass-loader": "^7.1.0",
-    "ssig-renderer": "^1.0.0",
     "unistore": "^3.2.1"
   },
   "browserslist": [
