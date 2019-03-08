@@ -5,9 +5,7 @@ export default class VersionPage extends Component {
   render({ versionId, projectId }) {
     return (
       <div>
-        <div>
-          <EditorContainer projectId={projectId} versionId={versionId} />
-        </div>
+        <EditorContainer projectId={projectId} versionId={versionId} />
       </div>
     );
   }

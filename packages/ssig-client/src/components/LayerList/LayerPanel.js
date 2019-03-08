@@ -15,7 +15,11 @@ export default function LayerPanel(props) {
     onClick(layer);
   };
 
-  const titleClass = ["panel-block", isActive ? "is-active" : null]
+  const titleClass = [
+    "panel-block",
+    styles.LayerPanel__header,
+    isActive ? "is-active" : null
+  ]
     .filter(i => i)
     .join(" ");
 

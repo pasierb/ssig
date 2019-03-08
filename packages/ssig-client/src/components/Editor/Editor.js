@@ -6,11 +6,13 @@ import VersionPreview from "../VersionPreview";
 import VersionForm from "../VersionForm";
 import NewLayerForm from "../NewLayerForm";
 import styles from "./Editor.scss";
+import ZoomControl from "./ZoomControl";
 
 export default class Editor extends Component {
   state = {
     isVersionModalOpen: false,
-    isNewLayerModalOpen: false
+    isNewLayerModalOpen: false,
+    zoom: 100
   };
 
   toggleVersionModal = () => {
@@ -30,6 +32,10 @@ export default class Editor extends Component {
     this.props.onLayerCreate(layer);
   };
 
+  handleZoomChange = zoom => {
+    this.setState({ zoom });
+  };
+
   render(props, state) {
     const {
       version,
@@ -45,14 +51,20 @@ export default class Editor extends Component {
     const disabled = !!version.publishedAt;
 
     return (
-      <div className={styles.Editor}>
+      <div className={styles.Editor} ref={el => (this._rootEl = el)}>
         <div className={styles["Editor__preview-container"]}>
-          <div>
-            <VersionPreview layers={layers} version={version} />
-          </div>
+          <VersionPreview
+            scale={state.zoom / 100}
+            layers={layers}
+            version={version}
+            onLayerChange={onLayerChange}
+          />
         </div>
-        <div>
+        <div className={styles["Editor__controls-container"]}>
           <div className="buttons">
+            <button className="button is-medium">
+              <i className="fas fa-arrow-left" />
+            </button>
             <button
               className="button"
               onClick={this.toggleVersionModal}
@@ -80,8 +92,10 @@ export default class Editor extends Component {
                 <i className="fas fa-plus" />
               </span>
             </button>
+            <ZoomControl value={state.zoom} onChange={this.handleZoomChange} />
           </div>
-          <h4 className="title is-4">Layers</h4>
+        </div>
+        <div className={styles["Editor__layers-container"]}>
           <LayerList
             layers={reversedLayers}
             renderItem={(layer, i) => (
@@ -92,7 +106,9 @@ export default class Editor extends Component {
                 onChange={!disabled && onLayerChange}
                 onDelete={!disabled && onLayerDelete}
                 onPromote={!disabled && i > 0 && onLayerPromote}
-                onDemote={!disabled && i < reversedLayers.length - 1 && onLayerDemote}
+                onDemote={
+                  !disabled && i < reversedLayers.length - 1 && onLayerDemote
+                }
               />
             )}
           />

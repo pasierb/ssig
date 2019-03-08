@@ -3,6 +3,8 @@
 }
 
 .VersionPreview__layerContainer {
+  transition: transform 0.2s;
+  transform: scale(var(--scale));
   position: absolute;
   top: 0;
   left: 0;

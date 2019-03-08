@@ -10,9 +10,7 @@ export default class TextLayerFieldset extends Component {
     const { fontFamily, fontVariant, fontFile } = props.data;
 
     this.state = {
-      fontFamily,
-      fontVariant,
-      fontFile,
+      ...props.data,
       selectedFont: {
         family: fontFamily,
         variants: [fontVariant],

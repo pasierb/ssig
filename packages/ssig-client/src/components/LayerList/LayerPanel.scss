@@ -1,9 +1,36 @@
 .LayerPanel.LayerPanel {
-  margin-bottom: 8px;
+  margin-bottom: 0px;
+  border: 0;
+  opacity: .9;
+}
+
+a.LayerPanel__header {
+  background-color: rgba(0, 0, 0, 1);
+  border: 0;
+  color: #fff;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 1);
+  }
 }
 
 .LayerPanel__content {
   display: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 0;
+  --text-color: #fff;
+
+  form {
+    label {
+      color: var(--text-color);
+    }
+
+    input {
+      background-color: rgba(0, 0, 0, 0.9);
+      color: var(--text-color);
+      border: none;
+    }
+  }
 }
 
 .LayerPanel__content--active {
