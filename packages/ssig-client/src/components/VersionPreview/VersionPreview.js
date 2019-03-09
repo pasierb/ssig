@@ -72,22 +72,8 @@ export default class VersionPreview extends Component {
     this.updateLayerPosition(event);
   };
 
-  componentDidMount() {
-    this.setScale();
-  }
-
-  setScale() {
-    const { scale = 1 } = this.props;
-
-    if (this.rootEl) {
-      this.rootEl.style.setProperty("--scale", scale);
-    }
-  }
-
   render(props) {
     const { version, layers } = props;
-
-    this.setScale();
 
     return (
       <div
@@ -95,7 +81,10 @@ export default class VersionPreview extends Component {
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleMouseUp}
-        ref={el => (this.rootEl = el)}
+            style={{
+              width: version.width,
+              height: version.height
+            }}
       >
         <VersionBackdrop
           version={version}
@@ -103,7 +92,9 @@ export default class VersionPreview extends Component {
         />
 
         {layers.map(layer => (
-          <div className={styles.VersionPreview__layerContainer}>
+          <div
+            className={styles.VersionPreview__layerContainer}
+          >
             <Layer layer={layer} version={version} />
           </div>
         ))}

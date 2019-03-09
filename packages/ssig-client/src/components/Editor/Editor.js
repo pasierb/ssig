@@ -1,4 +1,5 @@
 import { h, Component } from "preact";
+import { throttle } from "lodash";
 import Modal from "../Modal";
 import LayerList from "../LayerList";
 import LayerListItem from "./LayerListItem";
@@ -34,12 +35,24 @@ export default class Editor extends Component {
 
   handleZoomChange = zoom => {
     this.setState({ zoom });
+    this._pinchZoom.scaleTo(zoom / 100);
   };
+
+  handlePinchZoomChange = throttle(event => {
+    this.setState({
+      zoom: Math.round(event.target.scale * 100)
+    });
+  }, 100);
+
+  componentDidMount() {
+    this._pinchZoom.addEventListener("change", this.handlePinchZoomChange);
+  }
 
   render(props, state) {
     const {
       version,
       layers,
+      onBack,
       onLayerChange,
       onVersionPublish,
       onLayerPromote,
@@ -52,19 +65,30 @@ export default class Editor extends Component {
 
     return (
       <div className={styles.Editor} ref={el => (this._rootEl = el)}>
-        <div className={styles["Editor__preview-container"]}>
+        <pinch-zoom
+          className={styles["Editor__preview-container"]}
+          ref={el => (this._pinchZoom = el)}
+        >
           <VersionPreview
             scale={state.zoom / 100}
             layers={layers}
             version={version}
             onLayerChange={onLayerChange}
           />
+        </pinch-zoom>
+        <button
+          className={`button is-medium is-primary ${
+            styles["Editor__back-button"]
+          }`}
+          onClick={onBack}
+        >
+          <i className="fas fa-arrow-left" />
+        </button>
+        <div className={styles["Editor__zoom-container"]}>
+          <ZoomControl value={state.zoom} onChange={this.handleZoomChange} />
         </div>
         <div className={styles["Editor__controls-container"]}>
           <div className="buttons">
-            <button className="button is-medium">
-              <i className="fas fa-arrow-left" />
-            </button>
             <button
               className="button"
               onClick={this.toggleVersionModal}
@@ -92,7 +116,6 @@ export default class Editor extends Component {
                 <i className="fas fa-plus" />
               </span>
             </button>
-            <ZoomControl value={state.zoom} onChange={this.handleZoomChange} />
           </div>
         </div>
         <div className={styles["Editor__layers-container"]}>

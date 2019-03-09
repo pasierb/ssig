@@ -179,8 +179,15 @@ export default function activeVersionActions(store) {
     );
   }
 
+  function clearActiveVersion() {
+    return {
+      activeVersion: null
+    };
+  }
+
   return {
     fetchVersion,
+    clearActiveVersion,
     publishVersion,
     createLayer,
     deleteLayer,

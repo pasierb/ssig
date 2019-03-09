@@ -1,16 +1,26 @@
+@import "../../style/variables.scss";
+
 .LayerPanel.LayerPanel {
   margin-bottom: 0px;
-  border: 0;
-  opacity: .9;
+  opacity: 0.9;
 }
 
 a.LayerPanel__header {
   background-color: rgba(0, 0, 0, 1);
-  border: 0;
+  border-color: #111 !important;
   color: #fff;
 
   &:hover {
     background-color: rgba(0, 0, 0, 1);
+    font-weight: bold;
+  }
+}
+
+a.LayerPanel__header--is-active {
+  font-weight: bold;
+
+  :global(.panel-icon) {
+    color: currentColor;
   }
 }
 
@@ -23,9 +33,11 @@ a.LayerPanel__header {
   form {
     label {
       color: var(--text-color);
+      text-transform: capitalize;
     }
 
-    input {
+    input,
+    textarea {
       background-color: rgba(0, 0, 0, 0.9);
       color: var(--text-color);
       border: none;

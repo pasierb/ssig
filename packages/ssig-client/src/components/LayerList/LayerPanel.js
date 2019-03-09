@@ -7,6 +7,8 @@ const LAYER_TYPE_ICON_CLASS = {
   rectangular: "fas fa-square"
 };
 
+console.log(styles);
+
 export default function LayerPanel(props) {
   const { layer, onClick, isActive, children } = props;
 
@@ -17,8 +19,8 @@ export default function LayerPanel(props) {
 
   const titleClass = [
     "panel-block",
-    styles.LayerPanel__header,
-    isActive ? "is-active" : null
+    styles["LayerPanel__header"],
+    isActive ? styles["LayerPanel__header--is-active"] : null,
   ]
     .filter(i => i)
     .join(" ");

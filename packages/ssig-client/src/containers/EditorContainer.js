@@ -22,14 +22,17 @@ export default connect(
       this.props.updateLayer(layer);
     }, 100);
 
-    render({
-      activeVersion,
-      deleteLayer,
-      createLayer,
-      promoteLayer,
-      demoteLayer,
-      publishVersion
-    }) {
+    render(props) {
+      const {
+        activeVersion,
+        deleteLayer,
+        createLayer,
+        promoteLayer,
+        demoteLayer,
+        publishVersion,
+        ...rest
+      } = props;
+
       if (!activeVersion) {
         return <p>Loading</p>;
       }
@@ -44,6 +47,7 @@ export default connect(
           onLayerPromote={promoteLayer}
           onLayerDemote={demoteLayer}
           onLayerDelete={deleteLayer}
+          {...rest}
         />
       );
     }

@@ -1,4 +1,5 @@
 import { h, Component } from "preact";
+import styles from "./ZoomControl.scss";
 
 export default class ZoomControl extends Component {
   constructor(props) {
@@ -48,14 +49,20 @@ export default class ZoomControl extends Component {
     );
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      value: nextProps.value
+    });
+  }
+
   render(props, state) {
     const { value } = state;
 
     return (
-      <div className="field has-addons">
+      <div className={`${styles.ZoomControl} field has-addons`}>
         <div className="control">
           <button className="button" onClick={this.handleDecrement()}>
-            <i className="fas fa-minus" />
+            <i className="fas fa-search-minus" />
           </button>
         </div>
         <div className="control">
@@ -68,7 +75,7 @@ export default class ZoomControl extends Component {
         </div>
         <div className="control">
           <button className="button" onClick={this.handleIncrement()}>
-            <i className="fas fa-plus" />
+            <i className="fas fa-search-plus" />
           </button>
         </div>
       </div>
