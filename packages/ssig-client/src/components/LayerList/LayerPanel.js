@@ -7,8 +7,6 @@ const LAYER_TYPE_ICON_CLASS = {
   rectangular: "fas fa-square"
 };
 
-console.log(styles);
-
 export default function LayerPanel(props) {
   const { layer, onClick, isActive, children } = props;
 
