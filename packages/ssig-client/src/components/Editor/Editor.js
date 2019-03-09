@@ -1,4 +1,5 @@
 import { h, Component } from "preact";
+import { throttle } from "lodash";
 import Modal from "../Modal";
 import LayerList from "../LayerList";
 import LayerListItem from "./LayerListItem";
@@ -6,11 +7,13 @@ import VersionPreview from "../VersionPreview";
 import VersionForm from "../VersionForm";
 import NewLayerForm from "../NewLayerForm";
 import styles from "./Editor.scss";
+import ZoomControl from "./ZoomControl";
 
 export default class Editor extends Component {
   state = {
     isVersionModalOpen: false,
-    isNewLayerModalOpen: false
+    isNewLayerModalOpen: false,
+    zoom: 100
   };
 
   toggleVersionModal = () => {
@@ -30,10 +33,26 @@ export default class Editor extends Component {
     this.props.onLayerCreate(layer);
   };
 
+  handleZoomChange = zoom => {
+    this.setState({ zoom });
+    this._pinchZoom.scaleTo(zoom / 100);
+  };
+
+  handlePinchZoomChange = throttle(event => {
+    this.setState({
+      zoom: Math.round(event.target.scale * 100)
+    });
+  }, 100);
+
+  componentDidMount() {
+    this._pinchZoom.addEventListener("change", this.handlePinchZoomChange);
+  }
+
   render(props, state) {
     const {
       version,
       layers,
+      onBack,
       onLayerChange,
       onVersionPublish,
       onLayerPromote,
@@ -45,13 +64,30 @@ export default class Editor extends Component {
     const disabled = !!version.publishedAt;
 
     return (
-      <div className={styles.Editor}>
-        <div className={styles["Editor__preview-container"]}>
-          <div>
-            <VersionPreview layers={layers} version={version} />
-          </div>
+      <div className={styles.Editor} ref={el => (this._rootEl = el)}>
+        <pinch-zoom
+          className={styles["Editor__preview-container"]}
+          ref={el => (this._pinchZoom = el)}
+        >
+          <VersionPreview
+            scale={state.zoom / 100}
+            layers={layers}
+            version={version}
+            onLayerChange={onLayerChange}
+          />
+        </pinch-zoom>
+        <button
+          className={`button is-medium is-primary ${
+            styles["Editor__back-button"]
+          }`}
+          onClick={onBack}
+        >
+          <i className="fas fa-arrow-left" />
+        </button>
+        <div className={styles["Editor__zoom-container"]}>
+          <ZoomControl value={state.zoom} onChange={this.handleZoomChange} />
         </div>
-        <div>
+        <div className={styles["Editor__controls-container"]}>
           <div className="buttons">
             <button
               className="button"
@@ -81,7 +117,8 @@ export default class Editor extends Component {
               </span>
             </button>
           </div>
-          <h4 className="title is-4">Layers</h4>
+        </div>
+        <div className={styles["Editor__layers-container"]}>
           <LayerList
             layers={reversedLayers}
             renderItem={(layer, i) => (
@@ -92,7 +129,9 @@ export default class Editor extends Component {
                 onChange={!disabled && onLayerChange}
                 onDelete={!disabled && onLayerDelete}
                 onPromote={!disabled && i > 0 && onLayerPromote}
-                onDemote={!disabled && i < reversedLayers.length - 1 && onLayerDemote}
+                onDemote={
+                  !disabled && i < reversedLayers.length - 1 && onLayerDemote
+                }
               />
             )}
           />

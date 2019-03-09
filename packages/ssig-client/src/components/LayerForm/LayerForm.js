@@ -4,6 +4,8 @@ import TextLayerFieldset from "./TextLayerFieldset";
 import ImageLayerFieldset from "./ImageLayerFieldset";
 import RectangularLayerFieldset from "./RectangularLayerFieldset";
 
+import styles from "./LayerForm.scss";
+
 const TYPE_FIELDSET = {
   text: TextLayerFieldset,
   image: ImageLayerFieldset,
@@ -68,7 +70,7 @@ export default class LayerForm extends Component {
     const TypeFieldsetComponent = TYPE_FIELDSET[layer.type];
 
     return (
-      <form onSubmit={e => onSubmit && this.handleSubmit(e)}>
+      <form onSubmit={e => onSubmit && this.handleSubmit(e)} className={styles.LayerForm}>
         <InputField
           label="name"
           disabled={disabled}

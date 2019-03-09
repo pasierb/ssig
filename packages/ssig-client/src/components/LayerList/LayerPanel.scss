@@ -1,9 +1,48 @@
+@import "../../style/variables.scss";
+
 .LayerPanel.LayerPanel {
-  margin-bottom: 8px;
+  margin-bottom: 0px;
+  opacity: 0.9;
+}
+
+a.LayerPanel__header {
+  background-color: rgba(0, 0, 0, 1);
+  border-color: #111 !important;
+  color: #fff;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 1);
+    font-weight: bold;
+  }
+}
+
+a.LayerPanel__header--is-active {
+  font-weight: bold;
+
+  :global(.panel-icon) {
+    color: currentColor;
+  }
 }
 
 .LayerPanel__content {
   display: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 0;
+  --text-color: #fff;
+
+  form {
+    label {
+      color: var(--text-color);
+      text-transform: capitalize;
+    }
+
+    input,
+    textarea {
+      background-color: rgba(0, 0, 0, 0.9);
+      color: var(--text-color);
+      border: none;
+    }
+  }
 }
 
 .LayerPanel__content--active {
