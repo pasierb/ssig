@@ -2,9 +2,10 @@ import graph from "../graph";
 import debounce from "lodash/debounce";
 
 export default function activeVersionActions(store) {
-  async function fetchVersion(state, { projectId, versionId }) {
-    const { project } = await graph.request(
-      `
+  function fetchVersion(state, { projectId, versionId }) {
+    return graph
+      .request(
+        `
         query getProjectVersion($projectId: String!, $versionId: String!) {
           project(id: $projectId) {
             version(id: $versionId) {
@@ -29,17 +30,17 @@ export default function activeVersionActions(store) {
           }
         }
       `,
-      { projectId, versionId }
-    );
-
-    return {
-      activeVersion: project.version
-    };
+        { projectId, versionId }
+      )
+      .then(({ project }) => ({
+        activeVersion: project.version
+      }));
   }
 
-  async function createLayer(state, { type, name }) {
-    const { createLayer } = await graph.request(
-      `
+  function createLayer(state, { type, name }) {
+    return graph
+      .request(
+        `
           mutation createNewLayer($layerInput: LayerInput!, $versionId: String!) {
             createLayer(versionId: $versionId, layerInput: $layerInput) {
               id
@@ -53,18 +54,17 @@ export default function activeVersionActions(store) {
             }
           }
         `,
-      {
-        layerInput: { type, name },
-        versionId: state.activeVersion.id
-      }
-    );
-
-    return {
-      activeVersion: {
-        ...state.activeVersion,
-        layers: [...state.activeVersion.layers, createLayer]
-      }
-    };
+        {
+          layerInput: { type, name },
+          versionId: state.activeVersion.id
+        }
+      )
+      .then(({ createLayer }) => ({
+        activeVersion: {
+          ...state.activeVersion,
+          layers: [...state.activeVersion.layers, createLayer]
+        }
+      }));
   }
 
   function deleteLayer(state, { id }) {
@@ -126,44 +126,48 @@ export default function activeVersionActions(store) {
       }
     };
   }
-  async function promoteLayer(state, { id }) {
-    await graph.request(
-      `
+  function promoteLayer(state, { id }) {
+    return graph
+      .request(
+        `
           mutation promoteLayer($id: String!) {
             promoteLayer(id: $id) {
               id
             }
           }
         `,
-      { id }
-    );
-
-    return fetchVersion(state, {
-      versionId: state.activeVersion.id,
-      projectId: state.activeVersion.projectId
-    });
+        { id }
+      )
+      .then(() =>
+        fetchVersion(state, {
+          versionId: state.activeVersion.id,
+          projectId: state.activeVersion.projectId
+        })
+      );
   }
 
-  async function demoteLayer(state, { id }) {
-    await graph.request(
-      `
+  function demoteLayer(state, { id }) {
+    return graph
+      .request(
+        `
           mutation demoteLayer($id: String!) {
             demoteLayer(id: $id) {
               id
             }
           }
         `,
-      { id }
-    );
-
-    return fetchVersion(state, {
-      versionId: state.activeVersion.id,
-      projectId: state.activeVersion.projectId
-    });
+        { id }
+      )
+      .then(() =>
+        fetchVersion(state, {
+          versionId: state.activeVersion.id,
+          projectId: state.activeVersion.projectId
+        })
+      );
   }
 
   function publishVersion(state) {
-    graph.request(
+    return graph.request(
       `
         mutation publishVersion($projectId: String!, $versionId: String!) {
           publishProjectVersion(projectId: $projectId, versionId: $versionId) {

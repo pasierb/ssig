@@ -2,9 +2,10 @@ import graph from "../graph";
 
 export default function projects(store) {
   return {
-    async createProject(state, { name }) {
-      const { createProject } = await graph.request(
-        `
+    createProject(state, { name }) {
+      return graph
+        .request(
+          `
           mutation createProject($name: String!) {
             createProject(name: $name) {
               id
@@ -15,16 +16,16 @@ export default function projects(store) {
             }
           }
         `,
-        { name }
-      );
-
-      return {
-        projects: [createProject, ...state.projects]
-      };
+          { name }
+        )
+        .then(({ createProject }) => ({
+          projects: [createProject, ...state.projects]
+        }));
     },
-    async fetchProjects() {
-      const { projects } = await graph.request(
-        `
+    fetchProjects() {
+      return graph
+        .request(
+          `
           query {
             projects {
               id
@@ -35,11 +36,10 @@ export default function projects(store) {
             }
           }
         `
-      );
-
-      return {
-        projects
-      };
+        )
+        .then(({ projects }) => ({
+          projects
+        }));
     }
   };
 }
