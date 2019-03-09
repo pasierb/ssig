@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import { throttle } from "lodash";
+import throttle from "lodash/throttle";
 import Modal from "../Modal";
 import LayerList from "../LayerList";
 import LayerListItem from "./LayerListItem";

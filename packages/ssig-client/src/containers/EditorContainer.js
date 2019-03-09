@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import { connect } from "unistore/preact";
-import { throttle } from "lodash";
+import throttle from "lodash/throttle";
 
 import activeVersionActions from "../actions/activeVersion";
 import Editor from "../components/Editor/Editor";

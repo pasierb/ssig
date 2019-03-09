@@ -1,5 +1,5 @@
 import graph from "../graph";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 
 export default function activeVersionActions(store) {
   async function fetchVersion(state, { projectId, versionId }) {
