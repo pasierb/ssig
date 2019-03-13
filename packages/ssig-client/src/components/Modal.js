@@ -1,5 +1,4 @@
 import { h, Component } from "preact";
-import Portal from "preact-portal";
 
 export default class Modal extends Component {
   listenClose = e => {
@@ -20,19 +19,17 @@ export default class Modal extends Component {
     if (!this.props.isOpen) return null;
 
     return (
-      <Portal into="body">
-        <div className="modal is-active">
-          <div class="modal-background" />
-          <div class="modal-content">
-            <div className="box">{this.props.children}</div>
-          </div>
-          <button
-            class="modal-close is-large"
-            aria-label="close"
-            onClick={props.onClose}
-          />
+      <div className="modal is-active">
+        <div class="modal-background" />
+        <div class="modal-content">
+          <div className="box">{this.props.children}</div>
         </div>
-      </Portal>
+        <button
+          class="modal-close is-large"
+          aria-label="close"
+          onClick={props.onClose}
+        />
+      </div>
     );
   }
 }
