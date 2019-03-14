@@ -1,12 +1,41 @@
 import { h, Component } from "preact";
-import { Link, route } from "preact-router";
+import { route, Link } from "preact-router";
 
 import graph from "../graph";
+import Icon from "../components/Icon";
+import Button from "../components/Button";
 import Page from "../components/Page";
 import VersionCard from "../components/VersionCard";
 import ProjectForm from "../components/ProjectForm";
+import PageSectionTitle from "../components/PageSectionTitle";
 
 import styles from "./ProjectPage.scss";
+
+const PROJECT_FRAGMENT = `
+  id
+  name
+  publishedVersionId
+  publishedVersion {
+    id
+    projectId
+    updatedAt
+    publishedAt
+  }
+  versions {
+    id
+    projectId
+    updatedAt
+    publishedAt
+  }`;
+
+function getProject(id) {
+  return graph.request(
+    `query getProject($id: String!) {
+      project(id: $id) { ${PROJECT_FRAGMENT} }
+    }`,
+    { id }
+  );
+}
 
 function updateProject({ id, name }) {
   return graph.request(
@@ -43,6 +72,15 @@ function deleteProject(id) {
   return graph.request(
     `mutation deleteProject($id: String!) {
       deleteProject(id: $id)
+    }`,
+    { id }
+  );
+}
+
+function unpublishProject(id) {
+  return graph.request(
+    `mutation unpublishProject($id: String!) {
+      unpublishProject(id: $id) { ${PROJECT_FRAGMENT} }
     }`,
     { id }
   );
@@ -86,34 +124,18 @@ export default class ProjectPage extends Component {
     copyVersion(versionId).then(this.fetchProjectData);
   };
 
+  handleUnpublishProject = event => {
+    event.preventDefault();
+
+    unpublishProject(this.props.projectId).then(({ unpublishProject }) => {
+      this.setState({ project: unpublishProject });
+    });
+  };
+
   fetchProjectData = () => {
     const { projectId } = this.props;
 
-    graph
-      .request(
-        `
-        query getProject($id: String!) {
-          project(id: $id) {
-            id
-            name
-            publishedVersionId
-            publishedVersion {
-              id
-              projectId
-              updatedAt
-              publishedAt
-            }
-            versions {
-              id
-              projectId
-              updatedAt
-              publishedAt
-            }
-          }
-        }
-        `,
-        { id: projectId }
-      )
+    getProject(projectId)
       .then(({ project }) => {
         this.setState({ project });
       })
@@ -144,6 +166,8 @@ export default class ProjectPage extends Component {
             <h1 className="title">{project.name}</h1>
           </section>
           <section className={styles["ProjectPage__published-version"]}>
+            <PageSectionTitle>Edit</PageSectionTitle>
+
             <ProjectForm
               {...project}
               onSubmit={this.handleUpdateProject}
@@ -153,66 +177,53 @@ export default class ProjectPage extends Component {
             <div className="box">
               {project.publishedVersion && (
                 <VersionCard {...project.publishedVersion}>
+                  <VersionCard.DeleteButton
+                    onClick={this.handleUnpublishProject}
+                  />
+                  <VersionCard.Details />
                   <div className="buttons">
-                    <Link
+                    <Button
+                      as={Link}
                       href={`/projects/${
                         project.publishedVersion.projectId
                       }/versions/${project.publishedVersion.id}/edit`}
-                      className="button"
-                    >
-                      <span className="icon">
-                        <i className="fas fa-edit" />
-                      </span>
-                    </Link>
-                    <button
-                      className="button"
+                      icon={Icon.Edit}
+                    />
+                    <Button
                       onClick={this.handleCopyVersion(
                         project.publishedVersion.id
                       )}
-                    >
-                      <span className="icon">
-                        <i className="fas fa-copy" />
-                      </span>
-                    </button>
+                      icon={Icon.Copy}
+                    />
                   </div>
                 </VersionCard>
               )}
             </div>
           </section>
           <section className={styles["ProjectPage__versions"]}>
-            <h4 className="title is-4">Versions</h4>
+            <PageSectionTitle>Versions</PageSectionTitle>
 
             <div className="box">
               {project.versions.map(version => (
                 <VersionCard {...version} key={version.id}>
+                  <VersionCard.Details />
                   <div className="buttons">
-                    <Link
+                    <Button
+                      as={Link}
                       href={`/projects/${version.projectId}/versions/${
                         version.id
                       }/edit`}
-                      className="button"
-                    >
-                      <span className="icon">
-                        <i className="fas fa-edit" />
-                      </span>
-                    </Link>
-                    <button
-                      className="button"
+                      icon={Icon.Edit}
+                    />
+                    <Button
                       onClick={this.handleCopyVersion(version.id)}
-                    >
-                      <span className="icon">
-                        <i className="fas fa-copy" />
-                      </span>
-                    </button>
-                    <button
-                      disabled={project.publishedVersionId === version.id}
-                      className="button is-danger"
+                      icon={Icon.Copy}
+                    />
+                    <Button
+                      className="is-danger"
                       onClick={this.handleDeleteVersion(version.id)}
-                    >
-                      <span className="icon">
-                        <i className="fas fa-trash" />
-                      </span>
-                    </button>
+                      icon={Icon.Delete}
+                    />
                   </div>
                 </VersionCard>
               ))}

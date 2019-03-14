@@ -1,4 +1,5 @@
 import { h, Component } from "preact";
+import Button from "./Button";
 
 export default class ProjectForm extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export default class ProjectForm extends Component {
     const { id } = this.props;
 
     this.props.onDelete(id);
-  }
+  };
 
   handleChange = field => event => {
     this.setState({
@@ -50,13 +51,11 @@ export default class ProjectForm extends Component {
           </div>
         </div>
         <div className="field">
-          <button type="submit" className="button">
-            Save
-          </button>
+          <Button type="submit">Save</Button>
           {onDelete && (
-            <button className="button is-danger" onClick={this.handleDelete}>
+            <Button is={"danger"} onClick={this.handleDelete}>
               Delete
-            </button>
+            </Button>
           )}
         </div>
       </form>

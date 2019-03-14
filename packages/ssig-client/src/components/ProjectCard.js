@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { Link } from "preact-router";
+import Icon from "./Icon";
 
 export default function ProjectCard(props) {
   const { project, version, children, renderFooter } = props;
@@ -28,12 +29,12 @@ export default function ProjectCard(props) {
           title="preview"
         >
           <span className="icon">
-            <i className="fas fa-eye" />
+            <Icon.Preview />
           </span>
         </a>
         <Link href={`/projects/${project.id}`} className="card-footer-item">
           <span className="icon">
-            <i className="fas fa-edit" />
+            <Icon.Edit />
           </span>
         </Link>
       </footer>

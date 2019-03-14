@@ -70,6 +70,7 @@ const mutationSchema = `
   deleteProject(id: String!): String
   updateProject(id: String!, input: ProjectInput!): Project
   publishProjectVersion(projectId: String!, versionId: String!): Project
+  unpublishProject(id: String!): Project
 `;
 
 const mutations = {
@@ -129,6 +130,32 @@ const mutations = {
     await project.update({ publishedVersionId: version.id });
 
     return projectResolver(project);
+  },
+  async unpublishProject({ id }, req) {
+    const project = await Project.findByPk(id, {
+      include: [{ association: "publishedVersion" }]
+    });
+
+    if (!req.user || !project || req.user.id !== project.userId) {
+      throw new Error("Unauthorized");
+    }
+
+    if (!project.publishedVersionId) {
+      throw new Error("Project has no published version");
+    }
+
+    return sequelize.transaction(async transaction => {
+      await project.publishedVersion.update(
+        { publishedAt: null },
+        { transaction }
+      );
+      await project.update(
+        { publishedAt: null, publishedVersionId: null },
+        { transaction }
+      );
+
+      return projectResolver(project);
+    });
   }
 };
 
