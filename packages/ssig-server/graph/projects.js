@@ -1,6 +1,6 @@
 "use strict";
 
-const { Project, Version } = require("../db/models");
+const { Project, Version, sequelize } = require("../db/models");
 const { versionResolver } = require("./versions");
 
 function projectResolver(model) {
@@ -14,6 +14,9 @@ function projectResolver(model) {
       const versions = await model.getVersions({ where: { id }, limit: 1 });
 
       return versionResolver(versions[0]);
+    },
+    publishedVersion() {
+      return model.getPublishedVersion();
     }
   });
 }
@@ -24,8 +27,13 @@ const typeSchema = `
     name: String!
     createdAt: String!
     publishedVersionId: String
+    publishedVersion: Version
     versions(limit: Int): [Version]
     version(id: String!): Version
+  }
+
+  input ProjectInput {
+    name: String
   }
 `;
 
@@ -59,7 +67,10 @@ const queries = {
 
 const mutationSchema = `
   createProject(name: String!): Project
+  deleteProject(id: String!): String
+  updateProject(id: String!, input: ProjectInput!): Project
   publishProjectVersion(projectId: String!, versionId: String!): Project
+  unpublishProject(id: String!): Project
 `;
 
 const mutations = {
@@ -74,6 +85,34 @@ const mutations = {
     await project.createVersion();
 
     return projectResolver(project);
+  },
+  async updateProject({ id, input }, req) {
+    const project = await Project.findByPk(id);
+
+    if (!req.user || req.user.id !== project.userId) {
+      throw new Error("Unauthorized");
+    }
+
+    await project.update(input);
+
+    return projectResolver(project);
+  },
+  async deleteProject({ id }, req) {
+    const project = await Project.findByPk(id);
+
+    if (!req.user || req.user.id !== project.userId) {
+      throw new Error("Unauthorized");
+    }
+
+    return sequelize.transaction(async transaction => {
+      if (project.publishedVersionId) {
+        await project.update({ publishedVersionId: null }, { transaction });
+      }
+
+      await project.destroy({ transaction });
+
+      return id;
+    });
   },
   async publishProjectVersion({ projectId, versionId }, req) {
     if (!req.user) {
@@ -91,6 +130,32 @@ const mutations = {
     await project.update({ publishedVersionId: version.id });
 
     return projectResolver(project);
+  },
+  async unpublishProject({ id }, req) {
+    const project = await Project.findByPk(id, {
+      include: [{ association: "publishedVersion" }]
+    });
+
+    if (!req.user || !project || req.user.id !== project.userId) {
+      throw new Error("Unauthorized");
+    }
+
+    if (!project.publishedVersionId) {
+      throw new Error("Project has no published version");
+    }
+
+    return sequelize.transaction(async transaction => {
+      await project.publishedVersion.update(
+        { publishedAt: null },
+        { transaction }
+      );
+      await project.update(
+        { publishedAt: null, publishedVersionId: null },
+        { transaction }
+      );
+
+      return projectResolver(project);
+    });
   }
 };
 

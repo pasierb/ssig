@@ -1,6 +1,6 @@
 "use strict";
 
-const { Layer, Version, Project } = require("../db/models");
+const { Layer, Version, Project, sequelize } = require("../db/models");
 const { layerResolver } = require("./layers");
 
 function versionResolver(model) {
@@ -50,6 +50,8 @@ const queries = {
 const mutationSchema = `
   createVersion(projectId: String!): Version
   updateVersion(id: String!, input: VersionInput!): Version
+  copyVersion(id: String!): Version
+  deleteVersion(id: String!): String
 `;
 
 const mutations = {
@@ -60,10 +62,65 @@ const mutations = {
     return versionResolver(version);
   },
   async updateVersion({ id, input }) {
-    const version = await models.Version.findByPk(id);
+    const version = await Version.findByPk(id);
     await version.update(input);
 
     return versionResolver(version);
+  },
+  async copyVersion({ id }, req) {
+    const version = await Version.findByPk(id, {
+      include: [{ association: "layers" }, { association: "project" }]
+    });
+    const {
+      id: versionId,
+      publishedAt,
+      status,
+      invocationsCount,
+      updatedAt,
+      createdAt,
+      ...copyVersionData
+    } = version.dataValues;
+
+    if (!req.user || req.user.id !== version.project.userId) {
+      throw new Error("Unauthorized");
+    }
+
+    return sequelize.transaction(async transaction => {
+      const copyVersion = await Version.create(copyVersionData, {
+        transaction
+      });
+
+      await Promise.all(
+        version.layers.map(layer => {
+          const {
+            id: layerId,
+            updatedAt,
+            createdAt,
+            ...layerData
+          } = layer.dataValues;
+
+          return Layer.create(
+            { ...layerData, versionId: copyVersion.id },
+            { transaction }
+          );
+        })
+      );
+
+      return versionResolver(copyVersion);
+    });
+  },
+  async deleteVersion({ id }, req) {
+    const version = await Version.findByPk(id, {
+      include: [{ association: "project" }]
+    });
+
+    if (!req.user || req.user.id !== version.project.userId) {
+      throw new Error("Unauthorized");
+    }
+
+    await version.destroy();
+
+    return id;
   }
 };
 

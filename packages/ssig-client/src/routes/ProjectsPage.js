@@ -58,7 +58,9 @@ export default connect(
                 </div>
               )}
               renderItem={project => (
-                <ProjectCard project={project} version={project.versions[0]} />
+                <ProjectCard project={project} version={project.versions[0]}>
+                  <p className="title is-4">{project.name}</p>
+                </ProjectCard>
               )}
             />
 

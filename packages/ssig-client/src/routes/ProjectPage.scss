@@ -1,0 +1,21 @@
+.ProjectPage {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-areas:
+    "header header"
+    "published versions"
+    "form versions";
+  grid-template-columns: 3fr 2fr;
+}
+
+.ProjectPage__header {
+  grid-area: header;
+}
+
+.ProjectPage__published-version {
+  grid-area: published;
+}
+
+.ProjectPage__versions {
+  grid-area: versions;
+}
