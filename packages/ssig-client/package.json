@@ -68,5 +68,8 @@
       "^create-react-class$": "preact-compat/lib/create-react-class",
       "^react-addons-css-transition-group$": "preact-css-transition-group"
     }
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3"
   }
 }
