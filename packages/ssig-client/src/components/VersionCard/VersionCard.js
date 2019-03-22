@@ -1,6 +1,7 @@
 import { h } from "preact";
-import helpers from "../../helpers";
+
 import styles from "./VersionCard.scss";
+import VersionImage from "../VersionImage";
 
 export default function VersionCard(props) {
   const { id, projectId, children, updatedAt, publishedAt } = props;
@@ -13,10 +14,7 @@ export default function VersionCard(props) {
         <figure
           class={`image is-128x128 ${styles["VersionCard__preview-image"]}`}
         >
-          <img
-            src={helpers.versionPreviewUrl({ versionId: id, projectId })}
-            alt="Image"
-          />
+          <VersionImage versionId={id} projectId={projectId} />
         </figure>
       </div>
       <div class="media-content">

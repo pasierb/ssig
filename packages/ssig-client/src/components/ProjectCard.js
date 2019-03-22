@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { Link } from "preact-router";
+import VersionImage from './VersionImage';
 
 export default function ProjectCard(props) {
   const { project, version, children, renderFooter } = props;
@@ -9,11 +10,7 @@ export default function ProjectCard(props) {
       {version && (
         <div className="card-image">
           <figure className="image">
-            <img
-              src={`/api/v1/projects/${project.id}/versions/${
-                version.id
-              }/preview`}
-            />
+            <VersionImage versionId={version.id} projectId={project.id} />
           </figure>
         </div>
       )}
