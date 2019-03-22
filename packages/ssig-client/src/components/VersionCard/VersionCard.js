@@ -14,7 +14,7 @@ function VersionInfo() {
         const publishedAtDate = publishedAt && new Date(+publishedAt);
 
         return (
-          <div>
+          <div className="has-text-right">
             {publishedAtDate && (
               <p>
                 <strong>published at</strong>{" "}
@@ -51,7 +51,7 @@ function VersionMedia() {
 }
 
 function VersionActions(props) {
-  return <div className="buttons">{props.children}</div>;
+  return <div className="buttons is-right">{props.children}</div>;
 }
 
 function VersionContent(props) {

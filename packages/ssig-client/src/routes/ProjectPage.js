@@ -5,6 +5,7 @@ import graph from "../graph";
 import Button from "../components/Button";
 import Icon from "../components/Icon";
 import Page from "../components/Page";
+import Modal from "../components/Modal";
 import VersionCard from "../components/VersionCard";
 import ProjectForm from "../components/ProjectForm";
 
@@ -53,10 +54,18 @@ function deleteProject(id) {
 export default class ProjectPage extends Component {
   state = {
     project: undefined,
-    error: undefined
+    error: undefined,
+    isEditModalOpen: false
+  };
+
+  toggleEditModal = () => {
+    this.setState(state => ({
+      isEditModalOpen: !state.isEditModalOpen
+    }));
   };
 
   handleUpdateProject = result => {
+    this.toggleEditModal();
     updateProject(result).then(this.fetchProjectData);
   };
 
@@ -129,7 +138,7 @@ export default class ProjectPage extends Component {
   }
 
   render(props, state) {
-    const { project, error } = state;
+    const { project, error, isEditModalOpen } = state;
 
     if (error) {
       return <p>{error}</p>;
@@ -142,16 +151,23 @@ export default class ProjectPage extends Component {
     return (
       <Page>
         <div className={`container ${styles.ProjectPage}`}>
-          <section className={styles["ProjectPage__header"]}>
-            <h1 className="title">{project.name}</h1>
+          <section className={`${styles["ProjectPage__header"]} level`}>
+            <h1 className="title level-left">{project.name}</h1>
+            <div className="buttons level-right">
+              <Button
+                icon={Icon.Edit}
+                className="is-text"
+                onClick={this.toggleEditModal}
+              />
+              <Button
+                icon={Icon.Delete}
+                className="is-text is-danger"
+                onClick={this.handleDeleteProject}
+              />
+            </div>
           </section>
           <section className={styles["ProjectPage__published-version"]}>
-            <ProjectForm
-              {...project}
-              onSubmit={this.handleUpdateProject}
-              onDelete={this.handleDeleteProject}
-            />
-
+            <h4 className="title is-4">Published version</h4>
             <div className="box">
               {project.publishedVersion && (
                 <VersionCard
@@ -207,6 +223,14 @@ export default class ProjectPage extends Component {
             </div>
           </section>
         </div>
+
+        <Modal isOpen={isEditModalOpen} onClose={this.toggleEditModal}>
+          <ProjectForm
+            {...project}
+            onSubmit={this.handleUpdateProject}
+            onDelete={this.handleDeleteProject}
+          />
+        </Modal>
       </Page>
     );
   }

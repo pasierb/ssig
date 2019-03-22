@@ -3,7 +3,8 @@ import { h } from "preact";
 const icons = {
   Edit: "edit",
   Copy: "copy",
-  Delete: "trash"
+  Delete: "trash",
+  Add: "plus"
 };
 
 function Icon(props) {

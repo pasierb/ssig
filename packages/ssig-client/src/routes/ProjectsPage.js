@@ -5,6 +5,8 @@ import Page from "../components/Page";
 import ProjectsGrid from "../components/ProjectsGrid";
 import ProjectCard from "../components/ProjectCard";
 import Modal from "../components/Modal";
+import Button from "../components/Button";
+import Icon from "../components/Icon";
 import NewProjectFormContainer from "../containers/NewProjectFormContainer";
 
 export default connect(
@@ -32,45 +34,39 @@ export default connect(
     };
 
     render(props, state) {
+      const { projects } = props;
       const { isNewProjectModalOpen } = state;
+
       return (
         <Page>
-          <div className="container">
-            <h1 className="title">Projects</h1>
+          <h1 className="title">Projects</h1>
 
-            <ProjectsGrid
-              projects={props.projects}
-              renderBefore={() => (
-                <div className="card">
-                  <div className="card-content">
-                    <div className="content">
-                      <button
-                        className="button"
-                        onClick={this.handleToggleNewProjectModal}
-                      >
-                        <span className="icon">
-                          <i className="fas fa-plus" />
-                        </span>
-                        <span>Create new project</span>
-                      </button>
-                    </div>
-                  </div>
+          <ProjectsGrid>
+            <div className="card">
+              <div className="card-content">
+                <div className="content">
+                  <Button
+                    onClick={this.handleToggleNewProjectModal}
+                    icon={Icon.Add}
+                  >
+                    Create new project
+                  </Button>
                 </div>
-              )}
-              renderItem={project => (
-                <ProjectCard project={project} version={project.versions[0]}>
-                  <p className="title is-4">{project.name}</p>
-                </ProjectCard>
-              )}
-            />
+              </div>
+            </div>
+            {projects.map(project => (
+              <ProjectCard project={project} version={project.versions[0]}>
+                <p className="title is-4">{project.name}</p>
+              </ProjectCard>
+            ))}
+          </ProjectsGrid>
 
-            <Modal
-              isOpen={isNewProjectModalOpen}
-              onClose={this.handleToggleNewProjectModal}
-            >
-              <NewProjectFormContainer onSubmit={this.handleCreateNewProject} />
-            </Modal>
-          </div>
+          <Modal
+            isOpen={isNewProjectModalOpen}
+            onClose={this.handleToggleNewProjectModal}
+          >
+            <NewProjectFormContainer onSubmit={this.handleCreateNewProject} />
+          </Modal>
         </Page>
       );
     }

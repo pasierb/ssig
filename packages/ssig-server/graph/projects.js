@@ -6,7 +6,7 @@ const { versionResolver } = require("./versions");
 function projectResolver(model) {
   return Object.assign({}, model.dataValues, {
     async versions({ limit = 10 }, obj) {
-      const versions = await model.getVersions({ limit });
+      const versions = await model.getVersions({ limit, order: [['updatedAt', 'DESC']] });
 
       return versions.map(versionResolver);
     },
