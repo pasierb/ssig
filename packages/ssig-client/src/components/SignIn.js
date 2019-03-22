@@ -1,22 +1,23 @@
 import { h, Component } from "preact";
+import Button from "./Button";
+import Icon from "./Icon";
 
 export default class SignIn extends Component {
   hadleTwitterSignIn = () => {
-    window.location = '/api/auth/twitter';
-  }
+    window.location = "/api/auth/twitter";
+  };
 
   render() {
     return (
       <div>
         <h3 className="title is-3">Sign in</h3>
 
-        {/* <a className="button" href="/auth/twitter"> */}
-        <button className="button" onClick={this.hadleTwitterSignIn}>
-          <span className="icon">
-            <i className="fab fa-twitter" />
-          </span>
-          <span>Twitter</span>
-        </button>
+        <Button
+          onClick={this.hadleTwitterSignIn}
+          icon={() => <i className="fab fa-twitter" />}
+        >
+          Twitter
+        </Button>
       </div>
     );
   }

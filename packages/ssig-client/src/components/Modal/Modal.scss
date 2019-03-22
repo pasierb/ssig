@@ -1,0 +1,25 @@
+.Modal__content {
+  animation: modalReveal 0.2s ease;
+}
+
+.Modal__backdrop {
+  animation: backdropReveal 0.2s ease;
+}
+
+@keyframes backdropReveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalReveal {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

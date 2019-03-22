@@ -1,6 +1,8 @@
 import { h, Component } from "preact";
 import Portal from "preact-portal";
 
+import styles from "./Modal.scss";
+
 export default class Modal extends Component {
   listenClose = e => {
     if (this.props.isOpen && e.code === "Escape") {
@@ -21,13 +23,13 @@ export default class Modal extends Component {
 
     return (
       <Portal into="body">
-        <div className="modal is-active">
-          <div class="modal-background" />
-          <div class="modal-content">
+        <div className={`modal is-active ${styles.Modal}`}>
+          <div className={`modal-background ${styles.Modal__backdrop}`} />
+          <div className={`modal-content ${styles.Modal__content}`}>
             <div className="box">{this.props.children}</div>
           </div>
           <button
-            class="modal-close is-large"
+            className="modal-close is-large"
             aria-label="close"
             onClick={props.onClose}
           />
