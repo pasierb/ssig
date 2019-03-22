@@ -2,6 +2,8 @@ import { h, Component } from "preact";
 import { Link, route } from "preact-router";
 
 import graph from "../graph";
+import Button from "../components/Button";
+import Icon from "../components/Icon";
 import Page from "../components/Page";
 import VersionCard from "../components/VersionCard";
 import ProjectForm from "../components/ProjectForm";
@@ -152,30 +154,24 @@ export default class ProjectPage extends Component {
 
             <div className="box">
               {project.publishedVersion && (
-                <VersionCard {...project.publishedVersion}>
-                  <div className="buttons">
-                    <Link
+                <VersionCard
+                  {...project.publishedVersion}
+                  actions={[
+                    <Button
+                      component={Link}
+                      icon={Icon.Edit}
                       href={`/projects/${
                         project.publishedVersion.projectId
                       }/versions/${project.publishedVersion.id}/edit`}
-                      className="button"
-                    >
-                      <span className="icon">
-                        <i className="fas fa-edit" />
-                      </span>
-                    </Link>
-                    <button
-                      className="button"
+                    />,
+                    <Button
+                      icon={Icon.Copy}
                       onClick={this.handleCopyVersion(
                         project.publishedVersion.id
                       )}
-                    >
-                      <span className="icon">
-                        <i className="fas fa-copy" />
-                      </span>
-                    </button>
-                  </div>
-                </VersionCard>
+                    />
+                  ]}
+                />
               )}
             </div>
           </section>
@@ -184,37 +180,29 @@ export default class ProjectPage extends Component {
 
             <div className="box">
               {project.versions.map(version => (
-                <VersionCard {...version} key={version.id}>
-                  <div className="buttons">
-                    <Link
+                <VersionCard
+                  {...version}
+                  key={version.id}
+                  actions={[
+                    <Button
+                      component={Link}
                       href={`/projects/${version.projectId}/versions/${
                         version.id
                       }/edit`}
-                      className="button"
-                    >
-                      <span className="icon">
-                        <i className="fas fa-edit" />
-                      </span>
-                    </Link>
-                    <button
-                      className="button"
+                      icon={Icon.Edit}
+                    />,
+                    <Button
                       onClick={this.handleCopyVersion(version.id)}
-                    >
-                      <span className="icon">
-                        <i className="fas fa-copy" />
-                      </span>
-                    </button>
-                    <button
+                      icon={Icon.Copy}
+                    />,
+                    <Button
                       disabled={project.publishedVersionId === version.id}
-                      className="button is-danger"
+                      className="is-danger"
                       onClick={this.handleDeleteVersion(version.id)}
-                    >
-                      <span className="icon">
-                        <i className="fas fa-trash" />
-                      </span>
-                    </button>
-                  </div>
-                </VersionCard>
+                      icon={Icon.Delete}
+                    />
+                  ]}
+                />
               ))}
             </div>
           </section>
