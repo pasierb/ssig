@@ -17,9 +17,9 @@
 
 @keyframes modalReveal {
   from {
-    transform: translateY(-100%);
+    transform: translateY(-50%) scale(.7);
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }

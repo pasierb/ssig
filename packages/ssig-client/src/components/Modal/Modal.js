@@ -24,7 +24,7 @@ export default class Modal extends Component {
     return (
       <Portal into="body">
         <div className={`modal is-active ${styles.Modal}`}>
-          <div className={`modal-background ${styles.Modal__backdrop}`} />
+          <div className={`modal-background ${styles.Modal__backdrop}`} onClick={props.onClose} />
           <div className={`modal-content ${styles.Modal__content}`}>
             <div className="box">{this.props.children}</div>
           </div>
