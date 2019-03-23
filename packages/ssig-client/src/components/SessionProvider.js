@@ -38,12 +38,12 @@ export default class SessionProvider extends Component {
     this.authenticate();
   }
 
-  authenticate = async () => {
+  authenticate = () => {
     this.setState({ store: { isAuthenticating: true, currentUser: null } });
 
-    const { me } = await authenticateQuery();
-
-    this.setState({ store: { isAuthenticating: false, currentUser: me } });
+    authenticateQuery().then(({ me }) => {
+      this.setState({ store: { isAuthenticating: false, currentUser: me } });
+    });
   };
 
   render(props) {
