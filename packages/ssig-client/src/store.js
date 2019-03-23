@@ -2,8 +2,6 @@ import createStore from "unistore";
 import devtools from "unistore/devtools";
 
 const initialState = {
-  isAuthenticating: false,
-  currentUser: undefined,
   projects: []
 };
 

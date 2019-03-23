@@ -1,9 +1,7 @@
 import { h, Component } from "preact";
 import { Router } from "preact-router";
-import { connect } from "unistore/preact";
 import PrivateRoute from "./PrivateRoute";
 import SessionProvider from "./SessionProvider";
-import auth from "../actions/auth";
 
 // Code-splitting is automated for routes
 import HomePage from "../routes/HomePage";
