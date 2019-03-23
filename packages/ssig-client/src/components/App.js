@@ -2,6 +2,7 @@ import { h, Component } from "preact";
 import { Router } from "preact-router";
 import { connect } from "unistore/preact";
 import PrivateRoute from "./PrivateRoute";
+import SessionProvider from "./SessionProvider";
 import auth from "../actions/auth";
 
 // Code-splitting is automated for routes
@@ -12,26 +13,19 @@ import VersionEditPage from "../routes/VersionEditPage";
 import VersionPage from "../routes/VersionPage";
 import NotFoundPage from "../routes/NotFoundPage";
 
-export default connect(
-  "currentUser",
-  auth
-)(
-  class App extends Component {
-    componentWillMount() {
-      this.props.authenticateUser();
-    }
+export default class App extends Component {
+  /** Gets fired when the route changes.
+   *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
+   *	@param {string} event.url	The newly routed URL
+   */
+  handleRoute = e => {
+    this.currentUrl = e.url;
+  };
 
-    /** Gets fired when the route changes.
-     *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
-     *	@param {string} event.url	The newly routed URL
-     */
-    handleRoute = e => {
-      this.currentUrl = e.url;
-    };
-
-    render() {
-      return (
-        <div id="app">
+  render() {
+    return (
+      <div id="app">
+        <SessionProvider>
           <Router onChange={this.handleRoute}>
             <HomePage path="/" />
             <PrivateRoute path="/projects" component={ProjectsPage} />
@@ -46,8 +40,8 @@ export default connect(
             />
             <NotFoundPage default />
           </Router>
-        </div>
-      );
-    }
+        </SessionProvider>
+      </div>
+    );
   }
-);
+}

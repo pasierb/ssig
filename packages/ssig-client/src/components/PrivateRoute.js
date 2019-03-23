@@ -1,19 +1,23 @@
 import { h } from "preact";
-import { connect } from "unistore/preact";
+
 import Redirect from "./Redirect";
+import { SessionConsumer } from "./SessionProvider";
+import LoadingOverlay from "./LoadingOverlay";
 
-function PrivateRoute(props) {
-  const { component: Component, isAuthenticating, currentUser, ...rest } = props;
+export default function PrivateRoute(props) {
+  const { component: Component, ...rest } = props;
 
-  if (isAuthenticating) {
-    return <div>Auth...</div>;
-  }
-
-  if (currentUser) {
-    return <Component {...rest} />;
-  }
-
-  return <Redirect to="/" />;
+  return (
+    <SessionConsumer>
+      {({ store }) => {
+        if (store.isAuthenticating) {
+          return <LoadingOverlay>Auth...</LoadingOverlay>;
+        }
+        if (store.currentUser) {
+          return <Component {...rest} />;
+        }
+        return <Redirect to="/" />;
+      }}
+    </SessionConsumer>
+  );
 }
-
-export default connect(["isAuthenticating", "currentUser"])(PrivateRoute);

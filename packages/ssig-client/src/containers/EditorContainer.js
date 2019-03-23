@@ -4,6 +4,7 @@ import throttle from "lodash/throttle";
 
 import activeVersionActions from "../actions/activeVersion";
 import Editor from "../components/Editor/Editor";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 export default connect(
   "activeVersion",
@@ -34,7 +35,7 @@ export default connect(
       } = props;
 
       if (!activeVersion) {
-        return <p>Loading</p>;
+        return <LoadingOverlay>Loading</LoadingOverlay>;
       }
 
       return (

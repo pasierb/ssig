@@ -2,6 +2,7 @@ import { h, Component } from "preact";
 import { Link, route } from "preact-router";
 
 import graph from "../graph";
+import LoadingOverlay from "../components/LoadingOverlay";
 import Button from "../components/Button";
 import Icon from "../components/Icon";
 import Page from "../components/Page";
@@ -145,7 +146,7 @@ export default class ProjectPage extends Component {
     }
 
     if (!project) {
-      return <p>Loading</p>;
+      return <LoadingOverlay>Loading</LoadingOverlay>;
     }
 
     return (
