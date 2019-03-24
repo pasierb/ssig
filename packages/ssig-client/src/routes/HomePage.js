@@ -30,10 +30,10 @@ export default class HomePage extends Component {
                           <TextCarousel
                             interval={1500}
                             items={[
-                              "meetup",
                               "social media",
-                              "email campaing",
-                              "blog"
+                              "blog",
+                              "meetup",
+                              "email campaing"
                             ]}
                           />
                         </strong>
@@ -44,7 +44,7 @@ export default class HomePage extends Component {
                           className="is-link"
                           onClick={
                             store.currentUser
-                              ? () => route('/projects')
+                              ? () => route("/projects")
                               : actions.toggleSignInModal
                           }
                         >
