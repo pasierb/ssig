@@ -1,8 +1,12 @@
 import { h, Component } from "preact";
 import { createContext } from "preact-context";
+
 import graph from "../graph";
+import Modal from "./Modal";
+import SignIn from "./SignIn";
 
 const SessionContext = createContext({
+  signInModalOpen: false,
   store: {},
   actions: {}
 });
@@ -24,12 +28,14 @@ export default class SessionProvider extends Component {
     super(props);
 
     this.state = {
+      signInModalOpen: false,
       store: {
         isAuthenticating: false,
         currentUser: null
       },
       actions: {
-        authenticate: this.authenticate
+        authenticate: this.authenticate,
+        toggleSignInModal: this.handleToggleSignInModal
       }
     };
   }
@@ -37,6 +43,13 @@ export default class SessionProvider extends Component {
   componentWillMount() {
     this.authenticate();
   }
+
+  handleToggleSignInModal = () => {
+    this.setState(state => ({
+      signInModalOpen: !state.signInModalOpen
+    }));
+  };
+
 
   authenticate = () => {
     this.setState({ store: { isAuthenticating: true, currentUser: null } });
@@ -46,10 +59,19 @@ export default class SessionProvider extends Component {
     });
   };
 
-  render(props) {
+  render(props, state) {
+    const { store, actions } = state;
+
     return (
-      <SessionContext.Provider value={this.state}>
+      <SessionContext.Provider value={{ store, actions }}>
         {props.children}
+
+        <Modal
+          isOpen={state.signInModalOpen}
+          onClose={this.handleToggleSignInModal}
+        >
+          <SignIn />
+        </Modal>
       </SessionContext.Provider>
     );
   }

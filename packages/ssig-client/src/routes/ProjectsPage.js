@@ -46,6 +46,7 @@ export default connect(
               <div className="card-content">
                 <div className="content">
                   <Button
+                    className="is-link"
                     onClick={this.handleToggleNewProjectModal}
                     icon={Icon.Add}
                   >

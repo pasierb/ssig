@@ -1,33 +1,21 @@
 import { h, Component } from "preact";
 import { Link } from "preact-router/match";
 
-import Modal from "../Modal";
-import SignIn from "../SignIn";
 import { SessionConsumer } from "../SessionProvider";
 import Button from "../Button";
 
 import styles from "./Header.scss";
 
-export default class Header extends Component {
-  state = {
-    signInModalOpen: false
-  };
-
-  handleToggleSignInModal = () => {
-    this.setState(state => ({
-      signInModalOpen: !state.signInModalOpen
-    }));
-  };
-
-  render({ currentUser }, state) {
-    return (
-      <SessionConsumer>
-        {({ store }) => (
-          <nav
-            className="navbar is-primary"
-            role="navigation"
-            aria-label="main navigation"
-          >
+export default function Header(props) {
+  return (
+    <SessionConsumer>
+      {({ store, actions }) => (
+        <nav
+          className="navbar is-primary"
+          role="navigation"
+          aria-label="main navigation"
+        >
+          <div className="container">
             <div className="navbar-brand">
               <Link
                 href="/"
@@ -42,7 +30,11 @@ export default class Header extends Component {
             <div className="navbar-menu">
               <div className="navbar-start">
                 {store.currentUser && (
-                  <Link className="navbar-item" href="/projects">
+                  <Link
+                    className="navbar-item"
+                    href="/projects"
+                    activeClassName="is-active"
+                  >
                     Projects
                   </Link>
                 )}
@@ -72,7 +64,7 @@ export default class Header extends Component {
                       <Button
                         className="is-link"
                         icon={() => <i className="fas fa-sign-in-alt" />}
-                        onClick={this.handleToggleSignInModal}
+                        onClick={actions.toggleSignInModal}
                       >
                         Sign in
                       </Button>
@@ -81,16 +73,9 @@ export default class Header extends Component {
                 )}
               </div>
             </div>
-
-            <Modal
-              isOpen={state.signInModalOpen}
-              onClose={this.handleToggleSignInModal}
-            >
-              <SignIn />
-            </Modal>
-          </nav>
-        )}
-      </SessionConsumer>
-    );
-  }
+          </div>
+        </nav>
+      )}
+    </SessionConsumer>
+  );
 }
