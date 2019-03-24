@@ -2,6 +2,7 @@ import { h, Component } from "preact";
 import { Link, route } from "preact-router";
 
 import graph from "../graph";
+import { projectUrl } from "../helpers";
 import LoadingOverlay from "../components/LoadingOverlay";
 import Button from "../components/Button";
 import Icon from "../components/Icon";
@@ -151,7 +152,7 @@ export default class ProjectPage extends Component {
 
     return (
       <Page>
-        <div className={`container ${styles.ProjectPage}`}>
+        <div className={styles.ProjectPage}>
           <section className={`${styles["ProjectPage__header"]} level`}>
             <h1 className="title level-left">{project.name}</h1>
             <div className="buttons level-right">
@@ -167,62 +168,81 @@ export default class ProjectPage extends Component {
               />
             </div>
           </section>
-          <section className={styles["ProjectPage__published-version"]}>
-            <h4 className="title is-4">Published version</h4>
-            <div className="box">
-              {project.publishedVersion && (
-                <VersionCard
-                  {...project.publishedVersion}
-                  actions={[
-                    <Button
-                      component={Link}
-                      icon={Icon.Edit}
-                      href={`/projects/${
-                        project.publishedVersion.projectId
-                      }/versions/${project.publishedVersion.id}/edit`}
-                    />,
-                    <Button
-                      icon={Icon.Copy}
-                      onClick={this.handleCopyVersion(
-                        project.publishedVersion.id
-                      )}
-                    />
-                  ]}
-                />
-              )}
-            </div>
-          </section>
-          <section className={styles["ProjectPage__versions"]}>
-            <h4 className="title is-4">Versions</h4>
+          <div className="columns">
+            <div className="column is-7">
+              <section className={styles["ProjectPage__info"]}>
+                <h4 className="title is-4">Project info</h4>
 
-            <div className="box">
-              {project.versions.map(version => (
-                <VersionCard
-                  {...version}
-                  key={version.id}
-                  actions={[
-                    <Button
-                      component={Link}
-                      href={`/projects/${version.projectId}/versions/${
-                        version.id
-                      }/edit`}
-                      icon={Icon.Edit}
-                    />,
-                    <Button
-                      onClick={this.handleCopyVersion(version.id)}
-                      icon={Icon.Copy}
-                    />,
-                    <Button
-                      disabled={project.publishedVersionId === version.id}
-                      className="is-danger"
-                      onClick={this.handleDeleteVersion(version.id)}
-                      icon={Icon.Delete}
+                <dl>
+                  <dt>Name</dt>
+                  <dd>{project.name}</dd>
+
+                  <dt>API url</dt>
+                  <dd>
+                    <code>{projectUrl(project)}</code>
+                  </dd>
+                </dl>
+              </section>
+              <section className={styles["ProjectPage__published-version"]}>
+                <h4 className="title is-4">Published version</h4>
+                <div className="box">
+                  {project.publishedVersion && (
+                    <VersionCard
+                      {...project.publishedVersion}
+                      actions={[
+                        <Button
+                          component={Link}
+                          icon={Icon.Edit}
+                          href={`/projects/${
+                            project.publishedVersion.projectId
+                          }/versions/${project.publishedVersion.id}/edit`}
+                        />,
+                        <Button
+                          icon={Icon.Copy}
+                          onClick={this.handleCopyVersion(
+                            project.publishedVersion.id
+                          )}
+                        />
+                      ]}
                     />
-                  ]}
-                />
-              ))}
+                  )}
+                </div>
+              </section>
             </div>
-          </section>
+            <div className="column is-5">
+              <section className={styles["ProjectPage__versions"]}>
+                <h4 className="title is-4">Versions</h4>
+
+                <div className="box">
+                  {project.versions.map(version => (
+                    <VersionCard
+                      {...version}
+                      key={version.id}
+                      actions={[
+                        <Button
+                          component={Link}
+                          href={`/projects/${version.projectId}/versions/${
+                            version.id
+                          }/edit`}
+                          icon={Icon.Edit}
+                        />,
+                        <Button
+                          onClick={this.handleCopyVersion(version.id)}
+                          icon={Icon.Copy}
+                        />,
+                        <Button
+                          disabled={project.publishedVersionId === version.id}
+                          className="is-danger"
+                          onClick={this.handleDeleteVersion(version.id)}
+                          icon={Icon.Delete}
+                        />
+                      ]}
+                    />
+                  ))}
+                </div>
+              </section>
+            </div>
+          </div>
         </div>
 
         <Modal isOpen={isEditModalOpen} onClose={this.toggleEditModal}>
