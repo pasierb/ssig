@@ -1,0 +1,19 @@
+.TextCarousel {
+  display: inline-block;
+  position: relative;
+}
+
+.TextCarousel__item {
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+}
+
+.TextCarousel__item--active {
+  opacity: 1;
+}
+
+.TextCarousel__item--inactive {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}

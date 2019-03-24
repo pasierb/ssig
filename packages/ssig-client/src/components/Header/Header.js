@@ -70,6 +70,7 @@ export default class Header extends Component {
                   <div class="navbar-item">
                     <div class="buttons">
                       <Button
+                        className="is-link"
                         icon={() => <i className="fas fa-sign-in-alt" />}
                         onClick={this.handleToggleSignInModal}
                       >

@@ -1,0 +1,13 @@
+.HomePage {
+  section {
+    margin: 1em 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    > :global(.title) {
+      margin: 2em 1em;
+    }
+  }
+}
