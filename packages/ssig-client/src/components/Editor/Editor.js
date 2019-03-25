@@ -90,7 +90,7 @@ export default class Editor extends Component {
         <div className={styles["Editor__controls-container"]}>
           <div className="buttons">
             <button
-              className="button"
+              className="button is-link"
               onClick={this.toggleVersionModal}
               disabled={disabled}
             >
@@ -99,7 +99,7 @@ export default class Editor extends Component {
               </span>
             </button>
             <button
-              className="button"
+              className="button is-link"
               disabled={disabled}
               onClick={onVersionPublish}
             >
@@ -108,7 +108,7 @@ export default class Editor extends Component {
               </span>
             </button>
             <button
-              className="button"
+              className="button is-link"
               onClick={this.toggleNewLayerModal}
               disabled={disabled}
             >

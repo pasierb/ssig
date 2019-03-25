@@ -43,7 +43,7 @@ export default connect(
         <Page>
           <h1 className="title">Projects</h1>
 
-          <div className="columns">
+          <div className="columns is-multiline">
             <div className={cardColumnClassName}>
               <div className="card">
                 <div className="card-content">
@@ -59,9 +59,13 @@ export default connect(
                 </div>
               </div>
             </div>
-            {projects.map(project => (
-              <div className={cardColumnClassName}>
-                <ProjectCard project={project} version={project.versions[0]}>
+            {projects.map((project, i) => (
+              <div className={cardColumnClassName} key={project.id}>
+                <ProjectCard
+                  project={project}
+                  version={project.versions[0]}
+                  style={`--reveal-delay: ${i * 50}ms;`}
+                >
                   <p className="title is-4">{project.name}</p>
                 </ProjectCard>
               </div>

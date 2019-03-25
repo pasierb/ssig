@@ -81,7 +81,7 @@ export default class ProjectPage extends Component {
         }? All data will be lost.`
       )
     ) {
-      deleteProject(id).then(() => {
+      deleteProject(project.id).then(() => {
         route("/projects");
       });
     }

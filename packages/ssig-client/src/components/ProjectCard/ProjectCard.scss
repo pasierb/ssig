@@ -1,3 +1,18 @@
 .ProjectCard {
   min-width: 200px;
+  opacity: 0;
+  animation: revealProjectCard 0.5s ease;
+  animation-delay: var(--reveal-delay);
+  animation-fill-mode: forwards;
+}
+
+@keyframes revealProjectCard {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
