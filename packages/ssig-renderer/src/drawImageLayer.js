@@ -1,4 +1,10 @@
-import { setupCanvas, setShadow, roundedCornersPath } from "./helpers";
+import {
+  setupCanvas,
+  setShadow,
+  roundedCornersPath,
+  getAbsolutePosition,
+  getAbsoluteSize
+} from "./helpers";
 import { cover, contain } from "intrinsic-scale";
 
 function getImageRect(
@@ -25,7 +31,7 @@ function getImageRect(
  * @param {Promise<HTMLImageElement>} getImage
  */
 export default function drawImageLayer(canvas, layer, getImage) {
-  const { x, y, typeData } = layer;
+  const { x, xUnit, y, yUnit, typeData } = layer;
   const {
     imageUri,
     imageData,
@@ -44,14 +50,27 @@ export default function drawImageLayer(canvas, layer, getImage) {
 
     setupCanvas(canvas, ctx => {
       ctx.globalAlpha = Number(opacity) / 100;
+      const absX = getAbsolutePosition({
+        value: x,
+        size: width,
+        scale: ctx.canvas.width,
+        unit: xUnit
+      });
+      const absY = getAbsolutePosition({
+        value: y,
+        size: height,
+        scale: ctx.canvas.height,
+        unit: yUnit
+      });
 
       if (repeat && repeat !== "no-repeat") {
         const pattern = ctx.createPattern(image, repeat);
 
         ctx.fillStyle = pattern;
-        ctx.fillRect(x, y, canvas.width, canvas.height);
+        ctx.fillRect(absX, absY, canvas.width, canvas.height);
       } else {
-        roundedCornersPath(ctx, x, y, width, height, borderRadius);
+        // roundedCornersPath(ctx, x, y, width, height, borderRadius);
+        roundedCornersPath(ctx, absX, absY, width, height, borderRadius);
 
         if (shadow) {
           setShadow(ctx, layer.typeData);
@@ -59,7 +78,13 @@ export default function drawImageLayer(canvas, layer, getImage) {
         }
 
         ctx.clip();
-        ctx.drawImage(image, x + rect.x, y + rect.y, rect.width, rect.height);
+        ctx.drawImage(
+          image,
+          absX + rect.x,
+          absY + rect.y,
+          rect.width,
+          rect.height
+        );
       }
     });
 

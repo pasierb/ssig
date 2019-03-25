@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 
-import { InputField, ColorField, Label, Input, Field } from "./elements";
+import { ColorField, Label, Input, Field, NumberField } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 import FontSelectContainer from "../../containers/FontSelectContainer";
 import Icon from "../Icon";
@@ -135,18 +135,20 @@ export default class TextLayerFieldset extends Component {
         </div>
         <div className="columns">
           <div className="column">
-            <InputField
+            <NumberField
               label="font size"
               disabled={disabled}
+              unit="px"
               value={data.fontSize}
               onInput={handleChange("fontSize", Number)}
             />
           </div>
           <div className="column">
-            <InputField
+            <NumberField
               label="max line length"
               disabled={disabled}
               value={data.maxLineLength}
+              unit="chars"
               onInput={handleChange("maxLineLength", Number)}
             />
           </div>

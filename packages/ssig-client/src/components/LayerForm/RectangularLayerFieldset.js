@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { InputField, ColorField } from "./elements";
+import { NumberField, ColorField, NumberUnitSelectField } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 
 export default function RectangularLayerFieldset(props) {
@@ -16,22 +16,24 @@ export default function RectangularLayerFieldset(props) {
     <fieldset>
       <div className="columns">
         <div className="column">
-          <InputField
-            type="number"
+          <NumberUnitSelectField
             required
             value={data.width}
+            unit={data.widthUnit}
             label="Width"
             disabled={disabled}
+            onUnitChange={handleChange("widthUnit")}
             onInput={handleChange("width", Number)}
           />
         </div>
         <div className="column">
-          <InputField
-            type="number"
+          <NumberUnitSelectField
             required
             value={data.height}
+            unit={data.heightUnit}
             label="Height"
             disabled={disabled}
+            onUnitChange={handleChange("heightUnit")}
             onInput={handleChange("height", Number)}
           />
         </div>
@@ -42,23 +44,26 @@ export default function RectangularLayerFieldset(props) {
         disabled={disabled}
         onInput={handleChange("color")}
       />
-      <InputField
-        type="number"
-        required
-        value={data.borderRadius}
-        label="Border radius"
-        disabled={disabled}
-        onInput={handleChange("borderRadius", Number)}
-      />
-      <InputField
-        label="Opacity"
-        type="number"
-        min="0"
-        max="100"
-        value={data.opacity || 100}
-        disabled={disabled}
-        onInput={handleChange("opacity", Number)}
-      />
+      <div className="columns">
+        <div className="column">
+          <NumberField
+            label="Border radius"
+            value={data.borderRadius || 0}
+            unit="px"
+            disabled={disabled}
+            onInput={handleChange("borderRadius", Number)}
+          />
+        </div>
+        <div className="column">
+          <NumberField
+            label="Opacity"
+            unit="%"
+            value={data.opacity || 100}
+            disabled={disabled}
+            onInput={handleChange("opacity", Number)}
+          />
+        </div>
+      </div>
       <ShadowFieldset {...props} />
     </fieldset>
   );

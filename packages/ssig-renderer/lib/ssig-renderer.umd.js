@@ -73,6 +73,42 @@
     ctx.quadraticCurveTo(x, y, x + radius, y);
     ctx.closePath();
   }
+  function getAbsolutePosition(_ref) {
+    var value = _ref.value,
+        _ref$size = _ref.size,
+        size = _ref$size === void 0 ? 0 : _ref$size,
+        scale = _ref.scale,
+        unit = _ref.unit;
+
+    switch (unit) {
+      case "percentage":
+        {
+          return scale * (value / 100) - size / 2;
+        }
+
+      default:
+        {
+          return value;
+        }
+    }
+  }
+  function getAbsoluteSize(_ref2) {
+    var value = _ref2.value,
+        scale = _ref2.scale,
+        unit = _ref2.unit;
+
+    switch (unit) {
+      case "percentage":
+        {
+          return scale * (value / 100);
+        }
+
+      default:
+        {
+          return value;
+        }
+    }
+  }
 
   /**
    *
@@ -82,7 +118,9 @@
 
   function drawTextLayer(canvas, layer) {
     var x = layer.x,
+        xUnit = layer.xUnit,
         y = layer.y,
+        yUnit = layer.yUnit,
         typeData = layer.typeData;
     var lineHeight = typeData.lineHeight;
     var _typeData$fontSize = typeData.fontSize,
@@ -123,6 +161,17 @@
       return acc.concat(row);
     }, []);
     setupCanvas(canvas, function (ctx) {
+      var xAbs = getAbsolutePosition({
+        value: x,
+        scale: ctx.canvas.width,
+        unit: xUnit
+      });
+      var yAbs = getAbsolutePosition({
+        value: y,
+        scale: ctx.canvas.height,
+        unit: yUnit
+      });
+
       if (shadow) {
         setShadow(ctx, typeData);
       }
@@ -131,7 +180,7 @@
       ctx.fillStyle = color;
       ctx.font = "".concat(fontSize, "px ").concat(fontFamily);
       rows.forEach(function (row, index) {
-        ctx.fillText(row, x, y + (index + 1) * lineHeight);
+        ctx.fillText(row, xAbs, yAbs + (index + 1) * lineHeight);
       });
     });
     return Promise.resolve(canvas);
@@ -223,7 +272,9 @@
 
   function drawImageLayer(canvas, layer, getImage) {
     var x = layer.x,
+        xUnit = layer.xUnit,
         y = layer.y,
+        yUnit = layer.yUnit,
         typeData = layer.typeData;
     var imageUri = typeData.imageUri,
         imageData = typeData.imageData,
@@ -240,13 +291,26 @@
       var rect = getImageRect(image, typeData);
       setupCanvas(canvas, function (ctx) {
         ctx.globalAlpha = Number(opacity) / 100;
+        var absX = getAbsolutePosition({
+          value: x,
+          size: width,
+          scale: ctx.canvas.width,
+          unit: xUnit
+        });
+        var absY = getAbsolutePosition({
+          value: y,
+          size: height,
+          scale: ctx.canvas.height,
+          unit: yUnit
+        });
 
         if (repeat && repeat !== "no-repeat") {
           var pattern = ctx.createPattern(image, repeat);
           ctx.fillStyle = pattern;
-          ctx.fillRect(x, y, canvas.width, canvas.height);
+          ctx.fillRect(absX, absY, canvas.width, canvas.height);
         } else {
-          roundedCornersPath(ctx, x, y, width, height, borderRadius);
+          // roundedCornersPath(ctx, x, y, width, height, borderRadius);
+          roundedCornersPath(ctx, absX, absY, width, height, borderRadius);
 
           if (shadow) {
             setShadow(ctx, layer.typeData);
@@ -254,7 +318,7 @@
           }
 
           ctx.clip();
-          ctx.drawImage(image, x + rect.x, y + rect.y, rect.width, rect.height);
+          ctx.drawImage(image, absX + rect.x, absY + rect.y, rect.width, rect.height);
         }
       });
       return canvas;
@@ -269,13 +333,18 @@
 
   function drawRectangularLayer(canvas, layer) {
     var x = layer.x,
+        xUnit = layer.xUnit,
         y = layer.y,
+        yUnit = layer.yUnit,
         typeData = layer.typeData;
     var width = typeData.width,
+        widthUnit = typeData.widthUnit,
         height = typeData.height,
+        heightUnit = typeData.heightUnit,
         color = typeData.color,
         shadow = typeData.shadow,
-        borderRadius = typeData.borderRadius,
+        _typeData$borderRadiu = typeData.borderRadius,
+        borderRadius = _typeData$borderRadiu === void 0 ? 0 : _typeData$borderRadiu,
         _typeData$opacity = typeData.opacity,
         opacity = _typeData$opacity === void 0 ? 100 : _typeData$opacity;
     setupCanvas(canvas, function (ctx) {
@@ -285,7 +354,29 @@
         setShadow(ctx, layer.typeData);
       }
 
-      roundedCornersPath(ctx, x, y, width, height, borderRadius || 0);
+      var absWidth = getAbsoluteSize({
+        value: width,
+        scale: ctx.canvas.width,
+        unit: widthUnit
+      });
+      var absHeight = getAbsoluteSize({
+        value: height,
+        scale: ctx.canvas.height,
+        unit: heightUnit
+      });
+      var absX = getAbsolutePosition({
+        value: x,
+        size: absWidth,
+        scale: ctx.canvas.width,
+        unit: xUnit
+      });
+      var absY = getAbsolutePosition({
+        value: y,
+        size: absHeight,
+        scale: ctx.canvas.height,
+        unit: yUnit
+      });
+      roundedCornersPath(ctx, absX, absY, absWidth, absHeight, borderRadius);
       ctx.fillStyle = color;
       ctx.fill();
       ctx.clip();

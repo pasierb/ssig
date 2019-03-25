@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { InputField, Field, Label } from "./elements";
+import { InputField, Field, Label, NumberField } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 
 const ImageLayerFieldset = props => {
@@ -42,44 +42,55 @@ const ImageLayerFieldset = props => {
           />
         </div>
       </div>
-      <Field>
-        <Label>Repeat</Label>
-        <div className="select is-small">
-          <select
-            onChange={handleChange("repeat")}
-            value={data.repeat}
-            disabled={disabled}
-          >
-            <option value="">---</option>
-            <option value="no-repeat">no-repeat</option>
-            <option value="repeat">repeat</option>
-            <option value="repeat-x">repeat-x</option>
-            <option value="repeat-y">repeat-y</option>
-          </select>
+      <div className="columns">
+        <div className="column">
+          <Field>
+            <Label>Repeat</Label>
+            <div className="select is-small">
+              <select
+                onChange={handleChange("repeat")}
+                value={data.repeat}
+                disabled={disabled}
+              >
+                <option value="">---</option>
+                <option value="no-repeat">no-repeat</option>
+                <option value="repeat">repeat</option>
+                <option value="repeat-x">repeat-x</option>
+                <option value="repeat-y">repeat-y</option>
+              </select>
+            </div>
+          </Field>
         </div>
-      </Field>
-      <Field>
-        <Label>Size</Label>
-        <div className="select is-small">
-          <select
-            onChange={handleChange("size")}
-            value={data.size}
-            disabled={disabled}
-          >
-            <option value="">original</option>
-            <option value="contain">contain</option>
-            <option value="cover">cover</option>
-          </select>
+        <div className="column">
+          <Field>
+            <Label>Size</Label>
+            <div className="select is-small">
+              <select
+                onChange={handleChange("size")}
+                value={data.size}
+                disabled={disabled}
+              >
+                <option value="">original</option>
+                <option value="contain">contain</option>
+                <option value="cover">cover</option>
+              </select>
+            </div>
+          </Field>
         </div>
-      </Field>
-      <InputField
-        type="number"
-        required
-        value={data.borderRadius}
-        label="Border radius"
-        disabled={disabled}
-        onInput={handleChange("borderRadius", Number)}
-      />
+      </div>
+      <div className="columns">
+        <div className="column">
+          <NumberField
+            label="Border radius"
+            required
+            value={data.borderRadius}
+            unit="px"
+            disabled={disabled}
+            onInput={handleChange("borderRadius", Number)}
+          />
+        </div>
+        <div className="column" />
+      </div>
       <ShadowFieldset {...props} />
     </fieldset>
   );

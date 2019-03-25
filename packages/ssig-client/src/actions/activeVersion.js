@@ -23,7 +23,9 @@ export default function activeVersionActions(store) {
                 type
                 typeData
                 x
+                xUnit
                 y
+                yUnit
                 z
               }
             }
@@ -91,7 +93,7 @@ export default function activeVersionActions(store) {
   }
 
   function updateLayerMutation(layer) {
-    const { id, x, y, name, typeData, code } = layer;
+    const { id, x, y, xUnit, yUnit, name, typeData, code } = layer;
     const { imageData, ...restImageData } = typeData;
 
     return graph.request(
@@ -103,8 +105,8 @@ export default function activeVersionActions(store) {
         }
       `,
       {
-        id: layer.id,
-        layerInput: { x, y, name, typeData: restImageData, code }
+        id,
+        layerInput: { x, y, xUnit, yUnit, name, typeData: restImageData, code }
       }
     );
   }

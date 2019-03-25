@@ -41,4 +41,58 @@ const InputField = props => {
 
 const ColorField = props => <InputField {...props} type="color" />;
 
-export { Field, Label, InputField, ColorField, Checkbox, Input };
+const NumberField = props => {
+  const { label, unit, ...restProps } = props;
+
+  return (
+    <Field>
+      <Label>{label}</Label>
+      <div className="field has-addons">
+        <p className="control">
+          <Input {...restProps} type="number" />
+        </p>
+        <p className="control">
+          <span class="button is-static is-small">{unit}</span>
+        </p>
+      </div>
+    </Field>
+  );
+};
+
+function NumberUnitSelectField(props) {
+  const { unit, onUnitChange, label, ...rest } = props;
+
+  return (
+    <Field>
+      <Label>{label}</Label>
+      <div className="field has-addons">
+        <p className="control">
+          <Input {...rest} type="number" />
+        </p>
+        <p className="control">
+          <span className="select is-small">
+            <select
+              value={unit}
+              onChange={onUnitChange}
+              disabled={props.disabled}
+            >
+              <option value="">px</option>
+              <option value="percentage">%</option>
+            </select>
+          </span>
+        </p>
+      </div>
+    </Field>
+  );
+}
+
+export {
+  Field,
+  Label,
+  InputField,
+  ColorField,
+  Checkbox,
+  Input,
+  NumberUnitSelectField,
+  NumberField,
+};
