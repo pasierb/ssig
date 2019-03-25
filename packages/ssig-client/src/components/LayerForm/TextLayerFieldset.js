@@ -1,7 +1,10 @@
 import { h, Component } from "preact";
+
 import { InputField, ColorField, Label, Input, Field } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 import FontSelectContainer from "../../containers/FontSelectContainer";
+import Icon from "../Icon";
+import Button from "../Button";
 
 export default class TextLayerFieldset extends Component {
   constructor(props) {
@@ -45,6 +48,17 @@ export default class TextLayerFieldset extends Component {
     );
   };
 
+  handleTextAlignClick = textAlign => e => {
+    e.preventDefault();
+
+    const { onChange, data } = this.props;
+
+    onChange({
+      ...data,
+      textAlign
+    });
+  };
+
   handleFontVariantChange = e => {
     const { onChange, data } = this.props;
     const fontVariant = e.target.value;
@@ -68,6 +82,7 @@ export default class TextLayerFieldset extends Component {
   render(props, state) {
     const { data, onChange, disabled } = props;
     const { selectedFont } = state;
+    const { textAlign = "left" } = data;
 
     const handleChange = (attribute, cast = a => a) => event => {
       onChange({
@@ -134,6 +149,20 @@ export default class TextLayerFieldset extends Component {
               value={data.maxLineLength}
               onInput={handleChange("maxLineLength", Number)}
             />
+          </div>
+        </div>
+        <div className="field">
+          <Label>Text align</Label>
+          <div className="control">
+            <div className="buttons has-addons">
+              {["left", "center", "right"].map(direction => (
+                <Button
+                  className={direction === textAlign ? "is-static" : ""}
+                  icon={() => <Icon icon={`align-${direction}`} />}
+                  onClick={this.handleTextAlignClick(direction)}
+                />
+              ))}
+            </div>
           </div>
         </div>
         <ShadowFieldset {...props} />

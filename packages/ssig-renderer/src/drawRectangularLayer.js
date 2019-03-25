@@ -7,9 +7,18 @@ import { setupCanvas, setShadow, roundedCornersPath } from "./helpers";
  */
 export default function drawRectangularLayer(canvas, layer) {
   const { x, y, typeData } = layer;
-  const { width, height, color, shadow, borderRadius } = typeData;
+  const {
+    width,
+    height,
+    color,
+    shadow,
+    borderRadius,
+    opacity = 100
+  } = typeData;
 
   setupCanvas(canvas, ctx => {
+    ctx.globalAlpha = Number(opacity) / 100;
+
     if (shadow) {
       setShadow(ctx, layer.typeData);
     }

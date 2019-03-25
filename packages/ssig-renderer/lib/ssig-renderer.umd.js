@@ -4,6 +4,26 @@
   (global = global || self, factory(global['ssig-renderer'] = {}));
 }(this, function (exports) { 'use strict';
 
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+  }
+
+  function _iterableToArray(iter) {
+    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+
   /**
    *
    * @callback setupCanvasCallback
@@ -81,7 +101,6 @@
    */
 
   function drawTextLayer(canvas, layer) {
-    // const maxLineLength = 20;
     var x = layer.x,
         y = layer.y,
         typeData = layer.typeData;
@@ -95,33 +114,52 @@
         _typeData$text = typeData.text,
         text = _typeData$text === void 0 ? "" : _typeData$text,
         _typeData$maxLineLeng = typeData.maxLineLength,
-        maxLineLength = _typeData$maxLineLeng === void 0 ? Infinity : _typeData$maxLineLeng;
+        maxLineLength = _typeData$maxLineLeng === void 0 ? Infinity : _typeData$maxLineLeng,
+        _typeData$textAlign = typeData.textAlign,
+        textAlign = _typeData$textAlign === void 0 ? "left" : _typeData$textAlign;
 
     if (!lineHeight) {
       lineHeight = fontSize;
     }
 
-    var rows = text.split(/\s/).reduce(function (acc, word) {
-      var row = acc.pop() || "";
+    var rows = _toConsumableArray(text.split(/\n/).map(function (row) {
+      return row.split(/\s/).reduce(function (acc, word) {
+        var row = acc.pop() || "";
 
-      if (!row) {
-        acc.push(word);
+        if (!row) {
+          acc.push(word);
+          return acc;
+        }
+
+        if (row.length + word.length > maxLineLength) {
+          acc.push(row, word);
+        } else {
+          acc.push([row, word].join(" "));
+        }
+
         return acc;
-      }
+      }, []);
+    })); // const rows = text.split(/\s/).reduce((acc, word) => {
+    //   const row = acc.pop() || "";
+    //   if (!row) {
+    //     acc.push(word);
+    //     return acc;
+    //   }
+    //   if (row.length + word.length > maxLineLength) {
+    //     acc.push(row, word);
+    //   } else {
+    //     acc.push([row, word].join(" "));
+    //   }
+    //   return acc;
+    // }, []);
 
-      if (row.length + word.length > maxLineLength) {
-        acc.push(row, word);
-      } else {
-        acc.push([row, word].join(" "));
-      }
 
-      return acc;
-    }, []);
     setupCanvas(canvas, function (ctx) {
       if (shadow) {
         setShadow(ctx, typeData);
       }
 
+      ctx.textAlign = textAlign;
       ctx.fillStyle = color;
       ctx.font = "".concat(fontSize, "px ").concat(fontFamily);
       rows.forEach(function (row, index) {
@@ -146,12 +184,16 @@
         imageData = typeData.imageData,
         repeat = typeData.repeat,
         shadow = typeData.shadow,
-        borderRadius = typeData.borderRadius;
+        borderRadius = typeData.borderRadius,
+        _typeData$opacity = typeData.opacity,
+        opacity = _typeData$opacity === void 0 ? 100 : _typeData$opacity;
     return getImage(imageData || imageUri).then(function (image) {
       image.name = layer.name;
       var width = typeData.width || image.width;
       var height = typeData.height || image.height;
       setupCanvas(canvas, function (ctx) {
+        ctx.globalAlpha = Number(opacity) / 100;
+
         if (repeat && repeat !== "no-repeat") {
           var pattern = ctx.createPattern(image, repeat);
           ctx.fillStyle = pattern;
@@ -191,8 +233,12 @@
         height = typeData.height,
         color = typeData.color,
         shadow = typeData.shadow,
-        borderRadius = typeData.borderRadius;
+        borderRadius = typeData.borderRadius,
+        _typeData$opacity = typeData.opacity,
+        opacity = _typeData$opacity === void 0 ? 100 : _typeData$opacity;
     setupCanvas(canvas, function (ctx) {
+      ctx.globalAlpha = Number(opacity) / 100;
+
       if (shadow) {
         setShadow(ctx, layer.typeData);
       }
