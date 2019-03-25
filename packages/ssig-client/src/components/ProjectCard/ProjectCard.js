@@ -1,12 +1,14 @@
 import { h } from "preact";
 import { Link } from "preact-router";
-import VersionImage from './VersionImage';
+
+import VersionImage from '../VersionImage';
+import styles from './ProjectCard.scss';
 
 export default function ProjectCard(props) {
-  const { project, version, children, renderFooter } = props;
+  const { project, version, children } = props;
 
   return (
-    <div className="card">
+    <div className={`card ${styles.ProjectCard}`}>
       {version && (
         <div className="card-image">
           <figure className="image">

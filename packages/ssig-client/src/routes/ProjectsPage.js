@@ -1,8 +1,8 @@
 import { h, Component } from "preact";
 import { connect } from "unistore/preact";
+
 import projectsActions from "../actions/projects";
 import Page from "../components/Page";
-import ProjectsGrid from "../components/ProjectsGrid";
 import ProjectCard from "../components/ProjectCard";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
@@ -36,31 +36,37 @@ export default connect(
     render(props, state) {
       const { projects } = props;
       const { isNewProjectModalOpen } = state;
+      const cardColumnClassName =
+        "column is-12-mobile is-4-tablet is-3-desktop is-3-widescreen";
 
       return (
         <Page>
           <h1 className="title">Projects</h1>
 
-          <ProjectsGrid>
-            <div className="card">
-              <div className="card-content">
-                <div className="content">
-                  <Button
-                    className="is-link"
-                    onClick={this.handleToggleNewProjectModal}
-                    icon={Icon.Add}
-                  >
-                    Create new project
-                  </Button>
+          <div className="columns">
+            <div className={cardColumnClassName}>
+              <div className="card">
+                <div className="card-content">
+                  <div className="content">
+                    <Button
+                      className="is-link"
+                      onClick={this.handleToggleNewProjectModal}
+                      icon={Icon.Add}
+                    >
+                      Create new project
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
             {projects.map(project => (
-              <ProjectCard project={project} version={project.versions[0]}>
-                <p className="title is-4">{project.name}</p>
-              </ProjectCard>
+              <div className={cardColumnClassName}>
+                <ProjectCard project={project} version={project.versions[0]}>
+                  <p className="title is-4">{project.name}</p>
+                </ProjectCard>
+              </div>
             ))}
-          </ProjectsGrid>
+          </div>
 
           <Modal
             isOpen={isNewProjectModalOpen}
