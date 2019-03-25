@@ -43,7 +43,7 @@ const ImageLayerFieldset = props => {
         </div>
       </div>
       <Field>
-        <Label>repeat</Label>
+        <Label>Repeat</Label>
         <div className="select is-small">
           <select
             onChange={handleChange("repeat")}
@@ -55,6 +55,20 @@ const ImageLayerFieldset = props => {
             <option value="repeat">repeat</option>
             <option value="repeat-x">repeat-x</option>
             <option value="repeat-y">repeat-y</option>
+          </select>
+        </div>
+      </Field>
+      <Field>
+        <Label>Size</Label>
+        <div className="select is-small">
+          <select
+            onChange={handleChange("size")}
+            value={data.size}
+            disabled={disabled}
+          >
+            <option value="">original</option>
+            <option value="contain">contain</option>
+            <option value="cover">cover</option>
           </select>
         </div>
       </Field>

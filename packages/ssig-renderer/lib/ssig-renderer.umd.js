@@ -139,20 +139,7 @@
 
         return acc;
       }, []);
-    })); // const rows = text.split(/\s/).reduce((acc, word) => {
-    //   const row = acc.pop() || "";
-    //   if (!row) {
-    //     acc.push(word);
-    //     return acc;
-    //   }
-    //   if (row.length + word.length > maxLineLength) {
-    //     acc.push(row, word);
-    //   } else {
-    //     acc.push([row, word].join(" "));
-    //   }
-    //   return acc;
-    // }, []);
-
+    }));
 
     setupCanvas(canvas, function (ctx) {
       if (shadow) {
@@ -169,12 +156,89 @@
     return Promise.resolve(canvas);
   }
 
+  function unwrapExports (x) {
+  	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
+  }
+
+  function createCommonjsModule(fn, module) {
+  	return module = { exports: {} }, fn(module, module.exports), module.exports;
+  }
+
+  var intrinsicScale_commonJs = createCommonjsModule(function (module, exports) {
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+  function fit(contains) {
+  	return function (parentWidth, parentHeight, childWidth, childHeight) {
+  		var doRatio = childWidth / childHeight;
+  		var cRatio = parentWidth / parentHeight;
+  		var width;
+  		var height;
+
+  		if (contains ? (doRatio > cRatio) : (doRatio < cRatio)) {
+  			width = parentWidth;
+  			height = width / doRatio;
+  		} else {
+  			height = parentHeight;
+  			width = height * doRatio;
+  		}
+
+  		return {
+  			width: width,
+  			height: height,
+  			x: (parentWidth - width) / 2,
+  			y: (parentHeight - height) / 2
+  		};
+  	};
+  }
+
+  var contain = fit(true);
+  var cover = fit(false);
+
+  exports.contain = contain;
+  exports.cover = cover;
+  });
+
+  unwrapExports(intrinsicScale_commonJs);
+  var intrinsicScale_commonJs_1 = intrinsicScale_commonJs.contain;
+  var intrinsicScale_commonJs_2 = intrinsicScale_commonJs.cover;
+
+  function getImageRect(image, _ref) {
+    var size = _ref.size,
+        _ref$width = _ref.width,
+        width = _ref$width === void 0 ? image.width : _ref$width,
+        _ref$height = _ref.height,
+        height = _ref$height === void 0 ? image.height : _ref$height;
+
+    switch (size) {
+      case "cover":
+        {
+          return intrinsicScale_commonJs_2(width, height, image.width, image.height);
+        }
+
+      case "contain":
+        {
+          return intrinsicScale_commonJs_1(width, height, image.width, image.height);
+        }
+
+      default:
+        {
+          return {
+            x: 0,
+            y: 0,
+            width: image.width,
+            height: image.height
+          };
+        }
+    }
+  }
   /**
    *
    * @param {HTMLCanvasElement} canvas
    * @param {object} layer
    * @param {Promise<HTMLImageElement>} getImage
    */
+
 
   function drawImageLayer(canvas, layer, getImage) {
     var x = layer.x,
@@ -184,13 +248,15 @@
         imageData = typeData.imageData,
         repeat = typeData.repeat,
         shadow = typeData.shadow,
-        borderRadius = typeData.borderRadius,
+        _typeData$borderRadiu = typeData.borderRadius,
+        borderRadius = _typeData$borderRadiu === void 0 ? 0 : _typeData$borderRadiu,
         _typeData$opacity = typeData.opacity,
         opacity = _typeData$opacity === void 0 ? 100 : _typeData$opacity;
     return getImage(imageData || imageUri).then(function (image) {
       image.name = layer.name;
       var width = typeData.width || image.width;
       var height = typeData.height || image.height;
+      var rect = getImageRect(image, typeData);
       setupCanvas(canvas, function (ctx) {
         ctx.globalAlpha = Number(opacity) / 100;
 
@@ -199,20 +265,15 @@
           ctx.fillStyle = pattern;
           ctx.fillRect(x, y, canvas.width, canvas.height);
         } else {
-          if (borderRadius) {
-            roundedCornersPath(ctx, x, y, width, height, borderRadius);
-          }
+          roundedCornersPath(ctx, x, y, width, height, borderRadius);
 
           if (shadow) {
             setShadow(ctx, layer.typeData);
             ctx.fill();
           }
 
-          if (borderRadius) {
-            ctx.clip();
-          }
-
-          ctx.drawImage(image, x, y, width, height);
+          ctx.clip();
+          ctx.drawImage(image, x + rect.x, y + rect.y, rect.width, rect.height);
         }
       });
       return canvas;
