@@ -50,6 +50,15 @@ export default function RectangularLayerFieldset(props) {
         disabled={disabled}
         onInput={handleChange("borderRadius", Number)}
       />
+      <InputField
+        label="Opacity"
+        type="number"
+        min="0"
+        max="100"
+        value={data.opacity || 100}
+        disabled={disabled}
+        onInput={handleChange("opacity", Number)}
+      />
       <ShadowFieldset {...props} />
     </fieldset>
   );

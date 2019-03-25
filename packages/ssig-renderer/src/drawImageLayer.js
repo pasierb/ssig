@@ -8,7 +8,14 @@ import { setupCanvas, setShadow, roundedCornersPath } from "./helpers";
  */
 export default function drawImageLayer(canvas, layer, getImage) {
   const { x, y, typeData } = layer;
-  const { imageUri, imageData, repeat, shadow, borderRadius } = typeData;
+  const {
+    imageUri,
+    imageData,
+    repeat,
+    shadow,
+    borderRadius,
+    opacity = 100
+  } = typeData;
 
   return getImage(imageData || imageUri).then(image => {
     image.name = layer.name;
@@ -16,6 +23,8 @@ export default function drawImageLayer(canvas, layer, getImage) {
     const height = typeData.height || image.height;
 
     setupCanvas(canvas, ctx => {
+      ctx.globalAlpha = Number(opacity) / 100;
+
       if (repeat && repeat !== "no-repeat") {
         const pattern = ctx.createPattern(image, repeat);
 
@@ -39,6 +48,6 @@ export default function drawImageLayer(canvas, layer, getImage) {
       }
     });
 
-    return canvas
-  })
+    return canvas;
+  });
 }
