@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { InputField, Field, Label, NumberField } from "./elements";
+import { InputField, Field, Label, NumberField, NumberUnitSelectField } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 
 const ImageLayerFieldset = props => {
@@ -22,22 +22,22 @@ const ImageLayerFieldset = props => {
       />
       <div className="columns">
         <div className="column">
-          <InputField
-            type="number"
-            required
-            value={data.width}
-            label="Width"
-            onInput={handleChange("width", Number)}
+          <NumberUnitSelectField
             disabled={disabled}
+            label="Width"
+            value={data.width}
+            unit={data.widthUnit}
+            onUnitChange={handleChange("widthUnit")}
+            onInput={handleChange("width", Number)}
           />
         </div>
         <div className="column">
-          <InputField
-            type="number"
-            required
-            value={data.height}
-            label="Height"
+          <NumberUnitSelectField
             disabled={disabled}
+            label="Height"
+            value={data.height}
+            unit={data.heightUnit}
+            onUnitChange={handleChange("heightUnit")}
             onInput={handleChange("height", Number)}
           />
         </div>

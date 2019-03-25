@@ -37,6 +37,8 @@ export default function drawImageLayer(canvas, layer, getImage) {
     imageData,
     repeat,
     shadow,
+    widthUnit,
+    heightUnit,
     borderRadius = 0,
     opacity = 100
   } = typeData;
@@ -46,7 +48,29 @@ export default function drawImageLayer(canvas, layer, getImage) {
     const width = typeData.width || image.width;
     const height = typeData.height || image.height;
 
-    const rect = getImageRect(image, typeData);
+    const absWidth =
+      typeData.width !== undefined
+        ? getAbsoluteSize({
+            value: typeData.width,
+            scale: canvas.width,
+            unit: widthUnit
+          })
+        : image.width;
+
+    const absHeight =
+      typeData.height !== undefined
+        ? getAbsoluteSize({
+            value: typeData.height,
+            scale: canvas.height,
+            unit: heightUnit
+          })
+        : image.width;
+
+    const rect = getImageRect(image, {
+      ...typeData,
+      width: absWidth,
+      height: absHeight
+    });
 
     setupCanvas(canvas, ctx => {
       ctx.globalAlpha = Number(opacity) / 100;
@@ -70,7 +94,8 @@ export default function drawImageLayer(canvas, layer, getImage) {
         ctx.fillRect(absX, absY, canvas.width, canvas.height);
       } else {
         // roundedCornersPath(ctx, x, y, width, height, borderRadius);
-        roundedCornersPath(ctx, absX, absY, width, height, borderRadius);
+        // roundedCornersPath(ctx, absX, absY, width, height, borderRadius);
+        roundedCornersPath(ctx, absX, absY, absWidth, absHeight, borderRadius);
 
         if (shadow) {
           setShadow(ctx, layer.typeData);
