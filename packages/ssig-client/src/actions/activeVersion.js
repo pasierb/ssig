@@ -92,6 +92,7 @@ export default function activeVersionActions(store) {
 
   function updateLayerMutation(layer) {
     const { id, x, y, name, typeData, code } = layer;
+    const { imageData, ...restImageData } = typeData;
 
     return graph.request(
       `
@@ -101,14 +102,17 @@ export default function activeVersionActions(store) {
           }
         }
       `,
-      { id: layer.id, layerInput: { x, y, name, typeData, code } }
+      {
+        id: layer.id,
+        layerInput: { x, y, name, typeData: restImageData, code }
+      }
     );
   }
 
   const debouncedUpdateLayerMutation = debounce(updateLayerMutation, 300);
 
   function updateLayer(state, layer) {
-    const { id, x, y, name, typeData, code } = layer;
+    const { id } = layer;
     const layers = [...state.activeVersion.layers];
 
     const index = layers.findIndex(l => l.id === id);
