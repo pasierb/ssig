@@ -1,4 +1,10 @@
-import { setupCanvas, setShadow, roundedCornersPath } from "./helpers";
+import {
+  setupCanvas,
+  setShadow,
+  roundedCornersPath,
+  getAbsolutePosition,
+  getAbsoluteSize
+} from "./helpers";
 
 /**
  *
@@ -6,13 +12,15 @@ import { setupCanvas, setShadow, roundedCornersPath } from "./helpers";
  * @param {object} layer
  */
 export default function drawRectangularLayer(canvas, layer) {
-  const { x, y, typeData } = layer;
+  const { x, xUnit, y, yUnit, typeData } = layer;
   const {
     width,
+    widthUnit,
     height,
+    heightUnit,
     color,
     shadow,
-    borderRadius,
+    borderRadius = 0,
     opacity = 100
   } = typeData;
 
@@ -23,7 +31,30 @@ export default function drawRectangularLayer(canvas, layer) {
       setShadow(ctx, layer.typeData);
     }
 
-    roundedCornersPath(ctx, x, y, width, height, borderRadius || 0);
+    const absWidth = getAbsoluteSize({
+      value: width,
+      scale: ctx.canvas.width,
+      unit: widthUnit
+    });
+    const absHeight = getAbsoluteSize({
+      value: height,
+      scale: ctx.canvas.height,
+      unit: heightUnit
+    });
+    const absX = getAbsolutePosition({
+      value: x,
+      size: absWidth,
+      scale: ctx.canvas.width,
+      unit: xUnit
+    });
+    const absY = getAbsolutePosition({
+      value: y,
+      size: absHeight,
+      scale: ctx.canvas.height,
+      unit: yUnit
+    });
+
+    roundedCornersPath(ctx, absX, absY, absWidth, absHeight, borderRadius);
 
     ctx.fillStyle = color;
     ctx.fill();

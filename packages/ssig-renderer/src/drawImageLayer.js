@@ -1,4 +1,10 @@
-import { setupCanvas, setShadow, roundedCornersPath } from "./helpers";
+import {
+  setupCanvas,
+  setShadow,
+  roundedCornersPath,
+  getAbsolutePosition,
+  getAbsoluteSize
+} from "./helpers";
 import { cover, contain } from "intrinsic-scale";
 
 function getImageRect(
@@ -25,12 +31,14 @@ function getImageRect(
  * @param {Promise<HTMLImageElement>} getImage
  */
 export default function drawImageLayer(canvas, layer, getImage) {
-  const { x, y, typeData } = layer;
+  const { x, xUnit, y, yUnit, typeData } = layer;
   const {
     imageUri,
     imageData,
     repeat,
     shadow,
+    widthUnit,
+    heightUnit,
     borderRadius = 0,
     opacity = 100
   } = typeData;
@@ -40,18 +48,54 @@ export default function drawImageLayer(canvas, layer, getImage) {
     const width = typeData.width || image.width;
     const height = typeData.height || image.height;
 
-    const rect = getImageRect(image, typeData);
+    const absWidth =
+      typeData.width !== undefined
+        ? getAbsoluteSize({
+            value: typeData.width,
+            scale: canvas.width,
+            unit: widthUnit
+          })
+        : image.width;
+
+    const absHeight =
+      typeData.height !== undefined
+        ? getAbsoluteSize({
+            value: typeData.height,
+            scale: canvas.height,
+            unit: heightUnit
+          })
+        : image.width;
+
+    const rect = getImageRect(image, {
+      ...typeData,
+      width: absWidth,
+      height: absHeight
+    });
 
     setupCanvas(canvas, ctx => {
       ctx.globalAlpha = Number(opacity) / 100;
+      const absX = getAbsolutePosition({
+        value: x,
+        size: width,
+        scale: ctx.canvas.width,
+        unit: xUnit
+      });
+      const absY = getAbsolutePosition({
+        value: y,
+        size: height,
+        scale: ctx.canvas.height,
+        unit: yUnit
+      });
 
       if (repeat && repeat !== "no-repeat") {
         const pattern = ctx.createPattern(image, repeat);
 
         ctx.fillStyle = pattern;
-        ctx.fillRect(x, y, canvas.width, canvas.height);
+        ctx.fillRect(absX, absY, canvas.width, canvas.height);
       } else {
-        roundedCornersPath(ctx, x, y, width, height, borderRadius);
+        // roundedCornersPath(ctx, x, y, width, height, borderRadius);
+        // roundedCornersPath(ctx, absX, absY, width, height, borderRadius);
+        roundedCornersPath(ctx, absX, absY, absWidth, absHeight, borderRadius);
 
         if (shadow) {
           setShadow(ctx, layer.typeData);
@@ -59,7 +103,13 @@ export default function drawImageLayer(canvas, layer, getImage) {
         }
 
         ctx.clip();
-        ctx.drawImage(image, x + rect.x, y + rect.y, rect.width, rect.height);
+        ctx.drawImage(
+          image,
+          absX + rect.x,
+          absY + rect.y,
+          rect.width,
+          rect.height
+        );
       }
     });
 

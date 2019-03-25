@@ -1,4 +1,4 @@
-import { setupCanvas, setShadow } from "./helpers";
+import { setupCanvas, setShadow, getAbsolutePosition } from "./helpers";
 
 /**
  *
@@ -6,7 +6,7 @@ import { setupCanvas, setShadow } from "./helpers";
  * @param {object} layer
  */
 export default function drawTextLayer(canvas, layer) {
-  const { x, y, typeData } = layer;
+  const { x, xUnit, y, yUnit, typeData } = layer;
   let { lineHeight } = typeData;
   const {
     fontSize = "14",
@@ -45,6 +45,17 @@ export default function drawTextLayer(canvas, layer) {
     .reduce((acc, row) => acc.concat(row), []);
 
   setupCanvas(canvas, ctx => {
+    const xAbs = getAbsolutePosition({
+      value: x,
+      scale: ctx.canvas.width,
+      unit: xUnit
+    });
+    const yAbs = getAbsolutePosition({
+      value: y,
+      scale: ctx.canvas.height,
+      unit: yUnit
+    });
+
     if (shadow) {
       setShadow(ctx, typeData);
     }
@@ -53,7 +64,7 @@ export default function drawTextLayer(canvas, layer) {
     ctx.fillStyle = color;
     ctx.font = `${fontSize}px ${fontFamily}`;
     rows.forEach((row, index) => {
-      ctx.fillText(row, x, y + (index + 1) * lineHeight);
+      ctx.fillText(row, xAbs, yAbs + (index + 1) * lineHeight);
     });
   });
 

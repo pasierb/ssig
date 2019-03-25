@@ -69,3 +69,25 @@ export function roundedCornersPath(ctx, x, y, width, height, r) {
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
 }
+
+export function getAbsolutePosition({ value, size = 0, scale, unit }) {
+  switch (unit) {
+    case "percentage": {
+      return scale * (value / 100) - size / 2;
+    }
+    default: {
+      return value;
+    }
+  }
+}
+
+export function getAbsoluteSize({ value, scale, unit }) {
+  switch (unit) {
+    case "percentage": {
+      return scale * (value / 100);
+    }
+    default: {
+      return value;
+    }
+  }
+}

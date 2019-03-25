@@ -25,6 +25,8 @@ const typeSchema = `
     code: String
     x: Int
     y: Int
+    xUnit: String
+    yUnit: String
     typeData: JSON
   }
 
@@ -37,6 +39,8 @@ const typeSchema = `
     version: Version!
     x: Int!
     y: Int!
+    xUnit: String
+    yUnit: String
     z: Int!
     typeData: JSON
   }

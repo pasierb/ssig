@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { InputField, Field, Label } from "./elements";
+import { InputField, Field, Label, NumberField, NumberUnitSelectField } from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
 
 const ImageLayerFieldset = props => {
@@ -22,64 +22,75 @@ const ImageLayerFieldset = props => {
       />
       <div className="columns">
         <div className="column">
-          <InputField
-            type="number"
-            required
-            value={data.width}
-            label="Width"
-            onInput={handleChange("width", Number)}
+          <NumberUnitSelectField
             disabled={disabled}
+            label="Width"
+            value={data.width}
+            unit={data.widthUnit}
+            onUnitChange={handleChange("widthUnit")}
+            onInput={handleChange("width", Number)}
           />
         </div>
         <div className="column">
-          <InputField
-            type="number"
-            required
-            value={data.height}
-            label="Height"
+          <NumberUnitSelectField
             disabled={disabled}
+            label="Height"
+            value={data.height}
+            unit={data.heightUnit}
+            onUnitChange={handleChange("heightUnit")}
             onInput={handleChange("height", Number)}
           />
         </div>
       </div>
-      <Field>
-        <Label>Repeat</Label>
-        <div className="select is-small">
-          <select
-            onChange={handleChange("repeat")}
-            value={data.repeat}
-            disabled={disabled}
-          >
-            <option value="">---</option>
-            <option value="no-repeat">no-repeat</option>
-            <option value="repeat">repeat</option>
-            <option value="repeat-x">repeat-x</option>
-            <option value="repeat-y">repeat-y</option>
-          </select>
+      <div className="columns">
+        <div className="column">
+          <Field>
+            <Label>Repeat</Label>
+            <div className="select is-small">
+              <select
+                onChange={handleChange("repeat")}
+                value={data.repeat}
+                disabled={disabled}
+              >
+                <option value="">---</option>
+                <option value="no-repeat">no-repeat</option>
+                <option value="repeat">repeat</option>
+                <option value="repeat-x">repeat-x</option>
+                <option value="repeat-y">repeat-y</option>
+              </select>
+            </div>
+          </Field>
         </div>
-      </Field>
-      <Field>
-        <Label>Size</Label>
-        <div className="select is-small">
-          <select
-            onChange={handleChange("size")}
-            value={data.size}
-            disabled={disabled}
-          >
-            <option value="">original</option>
-            <option value="contain">contain</option>
-            <option value="cover">cover</option>
-          </select>
+        <div className="column">
+          <Field>
+            <Label>Size</Label>
+            <div className="select is-small">
+              <select
+                onChange={handleChange("size")}
+                value={data.size}
+                disabled={disabled}
+              >
+                <option value="">original</option>
+                <option value="contain">contain</option>
+                <option value="cover">cover</option>
+              </select>
+            </div>
+          </Field>
         </div>
-      </Field>
-      <InputField
-        type="number"
-        required
-        value={data.borderRadius}
-        label="Border radius"
-        disabled={disabled}
-        onInput={handleChange("borderRadius", Number)}
-      />
+      </div>
+      <div className="columns">
+        <div className="column">
+          <NumberField
+            label="Border radius"
+            required
+            value={data.borderRadius}
+            unit="px"
+            disabled={disabled}
+            onInput={handleChange("borderRadius", Number)}
+          />
+        </div>
+        <div className="column" />
+      </div>
       <ShadowFieldset {...props} />
     </fieldset>
   );

@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { InputField, ColorField, Checkbox } from "./elements";
+import { InputField, ColorField, Checkbox, NumberField } from "./elements";
 
 export default function ShadowFieldset(props) {
   const { data, onChange, disabled } = props;
@@ -32,20 +32,20 @@ export default function ShadowFieldset(props) {
         <div>
           <div className="columns">
             <div className="column">
-              <InputField
-                type="number"
+              <NumberField
                 disabled={disabled}
                 label="offset x"
                 value={data.shadowOffsetX}
+                unit="px"
                 onInput={handleChange("shadowOffsetX", Number)}
               />
             </div>
             <div className="column">
-              <InputField
-                type="number"
+              <NumberField
                 disabled={disabled}
                 label="offset y"
                 value={data.shadowOffsetY}
+                unit="px"
                 onInput={handleChange("shadowOffsetY", Number)}
               />
             </div>
@@ -60,11 +60,11 @@ export default function ShadowFieldset(props) {
               />
             </div>
             <div className="column">
-              <InputField
-                type="number"
+              <NumberField
                 label="blur"
                 disabled={disabled}
                 value={data.shadowBlur}
+                unit="px"
                 onInput={handleChange("shadowBlur", Number)}
               />
             </div>

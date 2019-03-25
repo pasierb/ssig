@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import { Field, InputField } from "./elements";
+import { Field, InputField, NumberUnitSelectField } from "./elements";
 import TextLayerFieldset from "./TextLayerFieldset";
 import ImageLayerFieldset from "./ImageLayerFieldset";
 import RectangularLayerFieldset from "./RectangularLayerFieldset";
@@ -70,7 +70,10 @@ export default class LayerForm extends Component {
     const TypeFieldsetComponent = TYPE_FIELDSET[layer.type];
 
     return (
-      <form onSubmit={e => onSubmit && this.handleSubmit(e)} className={styles.LayerForm}>
+      <form
+        onSubmit={e => onSubmit && this.handleSubmit(e)}
+        className={styles.LayerForm}
+      >
         <InputField
           label="name"
           disabled={disabled}
@@ -85,20 +88,24 @@ export default class LayerForm extends Component {
         />
         <div className="columns">
           <div className="column">
-            <InputField
+            <NumberUnitSelectField
               label="x"
               disabled={disabled}
               type="number"
               value={layer.x}
+              unit={layer.xUnit}
+              onUnitChange={this.handleChange("xUnit")}
               onInput={this.handleChange("x", Number)}
             />
           </div>
           <div className="column">
-            <InputField
+            <NumberUnitSelectField
               label="y"
               disabled={disabled}
               type="number"
               value={layer.y}
+              unit={layer.yUnit}
+              onUnitChange={this.handleChange("yUnit")}
               onInput={this.handleChange("y", Number)}
             />
           </div>
