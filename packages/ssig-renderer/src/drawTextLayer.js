@@ -22,8 +22,9 @@ export default function drawTextLayer(canvas, layer) {
     lineHeight = fontSize;
   }
 
-  const rows = [
-    ...text.split(/\n/).map(row => {
+  const rows = text
+    .split(/\n/)
+    .map(row => {
       return row.split(/\s/).reduce((acc, word) => {
         const row = acc.pop() || "";
 
@@ -41,7 +42,7 @@ export default function drawTextLayer(canvas, layer) {
         return acc;
       }, []);
     })
-  ];
+    .reduce((acc, row) => acc.concat(row), []);
 
   setupCanvas(canvas, ctx => {
     if (shadow) {
