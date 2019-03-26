@@ -80,8 +80,11 @@ const mutations = {
     if (layer.type === "image") {
       try {
         const { buffer, contentType } = await fetch(
-          layer.typeData.imageUri
+          updateData.typeData.imageUri
         ).then(async res => {
+          if (res.status !== 200) {
+            throw new Error(`${res.status} - ${updateData.typeData.imageUri}`);
+          }
           const buffer = await res.buffer();
 
           return {
@@ -94,7 +97,8 @@ const mutations = {
           "base64"
         )}`;
       } catch (e) {
-        updateData.typeData.imageData = undefined;
+        console.log(e);
+        updateData.typeData.imageData = null;
       }
     }
 

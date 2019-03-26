@@ -1,6 +1,16 @@
 import { h } from "preact";
-import { InputField, Field, Label, NumberField, NumberUnitSelectField } from "./elements";
+import {
+  InputField,
+  Field,
+  Label,
+  NumberField,
+  NumberUnitSelectField
+} from "./elements";
 import ShadowFieldset from "./ShadowFieldset";
+
+function placeholditOnError(e) {
+  e.target.src = "/assets/no_photo.jpg";
+}
 
 const ImageLayerFieldset = props => {
   const { data, onChange, disabled } = props;
@@ -20,6 +30,16 @@ const ImageLayerFieldset = props => {
         disabled={disabled}
         onInput={handleChange("imageUri")}
       />
+      {data.imageUri && (
+        <Field>
+          <figure className="image">
+            <img
+              src={data.imageUri}
+              onerror={placeholditOnError}
+            />
+          </figure>
+        </Field>
+      )}
       <div className="columns">
         <div className="column">
           <NumberUnitSelectField
