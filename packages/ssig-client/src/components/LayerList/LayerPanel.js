@@ -28,7 +28,6 @@ function expandSection(element) {
   const sectionHeight = element.scrollHeight;
 
   const transitionendListener = () => {
-    console.log(element);
     element.removeEventListener("transitionend", transitionendListener);
 
     element.style.height = null;
@@ -43,7 +42,7 @@ export default class LayerPanel extends Component {
     super(props);
 
     this.state = {
-      isActive: false
+      isActive: !!props.isActive
     };
     this.contentRef = null;
   }
