@@ -74,6 +74,12 @@ export default class LayerPanel extends Component {
     );
   };
 
+  componentDidMount() {
+    if (!this.state.isActive) {
+      this.contentRef.style.height = 0;
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isActive !== this.state.isActive) {
       this.toggle();
@@ -91,13 +97,6 @@ export default class LayerPanel extends Component {
       .filter(i => i)
       .join(" ");
 
-    const contentClass = [
-      styles.LayerPanel__content,
-      isActive ? styles["LayerPanel__content--active"] : null
-    ]
-      .filter(i => i)
-      .join(" ");
-
     return (
       <nav className={["panel", styles.LayerPanel].join(" ")}>
         <a className={titleClass} onClick={this.handleClick}>
@@ -106,7 +105,10 @@ export default class LayerPanel extends Component {
           </span>
           {layer.name}
         </a>
-        <div className={contentClass} ref={el => (this.contentRef = el)}>
+        <div
+          className={styles.LayerPanel__content}
+          ref={el => (this.contentRef = el)}
+        >
           <div className="panel-block">{children}</div>
         </div>
       </nav>

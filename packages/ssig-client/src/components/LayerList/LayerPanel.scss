@@ -25,7 +25,7 @@ a.LayerPanel__header--is-active {
 }
 
 .LayerPanel__content {
-  height: 0;
+  height: auto;
   padding: 0;
   overflow: hidden;
   transition: height 0.3s ease;
@@ -53,8 +53,4 @@ a.LayerPanel__header--is-active {
       }
     }
   }
-}
-
-.LayerPanel__content--active {
-  height: auto;
 }
