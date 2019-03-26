@@ -28,13 +28,14 @@ function expandSection(element) {
   const sectionHeight = element.scrollHeight;
 
   const transitionendListener = () => {
+    console.log(element);
     element.removeEventListener("transitionend", transitionendListener);
 
     element.style.height = null;
   };
 
+  element.addEventListener("transitionend", transitionendListener);
   element.style.height = sectionHeight + "px";
-  element.addEventListener("transitioned", transitionendListener);
 }
 
 export default class LayerPanel extends Component {
@@ -51,14 +52,6 @@ export default class LayerPanel extends Component {
     e.preventDefault();
 
     this.toggle(() => this.props.onClick(this.props.layer));
-    // this.setState(
-    //   state => ({
-    //     isActive: !state.isActive
-    //   }),
-    //   () => {
-    //     this.props.onClick(this.props.layer);
-    //   }
-    // );
   };
 
   expand = () => expandSection(this.contentRef);

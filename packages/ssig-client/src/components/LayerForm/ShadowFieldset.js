@@ -29,7 +29,7 @@ export default function ShadowFieldset(props) {
         />
       </div>
       {data.shadow && (
-        <div>
+        <div className={data.shadow ? "" : "is-invisible"}>
           <div className="columns">
             <div className="column">
               <NumberField
