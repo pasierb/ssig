@@ -25,30 +25,36 @@ a.LayerPanel__header--is-active {
 }
 
 .LayerPanel__content {
-  display: none;
-  background-color: rgba(0, 0, 0, 0.8);
-  border: 0;
-  --text-color: #fff;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
 
-  form {
-    label {
-      color: var(--text-color);
-      text-transform: capitalize;
-    }
+  :global(.panel-block) {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 0;
+    --text-color: #fff;
 
-    :global(.field) {
-      input,
-      textarea,
-      :global(.select) select,
-      :global(.has-addons .button) {
-        background-color: rgba(0, 0, 0, 0.9);
+    form {
+      label {
         color: var(--text-color);
-        border: none;
+        text-transform: capitalize;
+      }
+
+      :global(.field) {
+        input,
+        textarea,
+        :global(.select) select,
+        :global(.has-addons .button) {
+          background-color: rgba(0, 0, 0, 0.9);
+          color: var(--text-color);
+          border: none;
+        }
       }
     }
   }
 }
 
 .LayerPanel__content--active {
-  display: block;
+  height: auto;
 }
