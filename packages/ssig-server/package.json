@@ -17,6 +17,7 @@
     "@ssig/renderer": "^1.0.1",
     "canvas": "^2.3.1",
     "connect-session-sequelize": "^6.0.0",
+    "cookie-parser": "^1.4.4",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
@@ -26,6 +27,7 @@
     "mysql2": "^1.6.4",
     "node-fetch": "^2.3.0",
     "passport": "^0.4.0",
+    "passport-custom": "^1.0.5",
     "passport-twitter": "^1.0.4",
     "sequelize": "^4.42.0",
     "sequelize-cli": "^5.4.0"

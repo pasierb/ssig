@@ -4,8 +4,10 @@ const path = require("path");
 const express = require("express");
 const Sentry = require("@sentry/node");
 const expressSession = require("express-session");
+const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter").Strategy;
+const CustomStrategy = require("passport-custom");
 const graphqlHTTP = require("express-graphql");
 const SequelizeStore = require("connect-session-sequelize")(
   expressSession.Store
@@ -14,7 +16,7 @@ const SequelizeStore = require("connect-session-sequelize")(
 const graph = require("./graph");
 const { api, auth } = require("./routes");
 const { twitterAuthenticator } = require("./interactors");
-const { User, sequelize } = require("./db/models");
+const { User, Project, sequelize } = require("./db/models");
 
 const twitterToken = process.env.TWITTER_TOKEN;
 const twitterTokenSecret = process.env.TWITTER_TOKEN_SECRET;
@@ -28,6 +30,25 @@ if (!twitterToken || !twitterTokenSecret) {
 const sessionStore = new SequelizeStore({ db: sequelize });
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
+const secret = process.env.SERVER_SECRET || Date.now() + "";
+
+sessionStore.sync();
+
+async function transferAnonymousProjects(req, res, next) {
+  const anonymousUserId = req.signedCookies["ssig.aUid"];
+
+  if (anonymousUserId) {
+    await Project.update(
+      { userId: req.user.id },
+      { where: { userId: anonymousUserId } }
+    );
+    await User.destroy({ where: { id: anonymousUserId } });
+
+    res.clearCookie("ssig.aUid");
+  }
+
+  next();
+}
 
 if (sentryDsn) {
   Sentry.init({ dsn: sentryDsn });
@@ -58,7 +79,7 @@ passport.use(
       }/api/auth/twitter/callback`,
       proxy: true
     },
-    function(token, tokenSecret, profile, cb, ...rest) {
+    function(token, tokenSecret, profile, cb) {
       return twitterAuthenticator(profile)
         .then(user => {
           cb(null, user);
@@ -68,18 +89,58 @@ passport.use(
   )
 );
 
+passport.use(
+  "ensureAccount",
+  new CustomStrategy(function(req, done) {
+    if (req.user) {
+      return done(null, req.user);
+    }
+
+    return User.create({
+      isAnonymous: true,
+      username: `anonymous_${Date.now()}`
+    })
+      .then(user => done(null, user))
+      .catch(done);
+  })
+);
+
 app.use(
   expressSession({
-    secret: "keyboard cat",
+    secret,
     store: sessionStore,
     resave: false, // we support the touch method so per the express-session docs this should be set to false
     proxy: true // if you do SSL outside of node.
   })
 );
-sessionStore.sync();
-
+app.use(cookieParser(secret));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function(req, res, next) {
+  const anonymousUserId = req.signedCookies["ssig.aUid"];
+
+  if (!anonymousUserId && req.user && req.user.isAnonymous) {
+    res.cookie("ssig.aUid", req.user.id, {
+      httpOnly: true,
+      signed: true
+    });
+  }
+
+  next();
+});
+app.use(function(req, res, done) {
+  const anonymousUserId = req.signedCookies["ssig.aUid"];
+
+  if (req.user || !anonymousUserId) {
+    return done();
+  }
+
+  User.findByPk(anonymousUserId)
+    .then(user => {
+      req.login(user, () => done());
+    })
+    .catch(e => done());
+});
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   "/graphql",
@@ -98,16 +159,19 @@ app.get("/api/auth/twitter", passport.authenticate("twitter"));
 app.get(
   "/api/auth/twitter/callback",
   passport.authenticate("twitter", { failureRedirect: "/login" }),
+  transferAnonymousProjects,
   function(req, res) {
     res.redirect("/projects");
   }
 );
-
-app.post("/api/auth/signUp", auth.signUp);
 app.get("/api/auth/signOut", auth.signOut);
 
-app.get("/api/v1/projects/:projectId", api.v1.projects.project);
-
+app.get("/api/v1/projects/:projectId", api.v1.projects.getProject);
+app.post(
+  "/api/v1/projects",
+  passport.authenticate("ensureAccount", { failureRedirect: "/" }),
+  api.v1.projects.createProject
+);
 app.get(
   "/api/v1/projects/:projectId/versions/:versionId/preview",
   api.v1.projects.versions.preview

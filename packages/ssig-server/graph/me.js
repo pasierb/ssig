@@ -8,6 +8,7 @@ const typeSchema = `
   type User {
     id: String!
     username: String!
+    isAnonymous: Boolean!
   }
 `;
 
