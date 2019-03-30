@@ -42,6 +42,7 @@ async function transferAnonymousProjects(req, res, next) {
       { userId: req.user.id },
       { where: { userId: anonymousUserId } }
     );
+    await User.destroy({ where: { id: anonymousUserId } });
 
     res.clearCookie("ssig.aUid");
   }
