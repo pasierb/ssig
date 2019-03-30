@@ -5,7 +5,7 @@ const { User } = require("../../db/models");
 function signUp(req, res) {
   const { email, password } = req.data;
 
-  sequelize
+  return sequelize
     .transaction(async transaction => {
       const user = await User.create({ email }, { transaction });
 

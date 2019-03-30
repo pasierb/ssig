@@ -1,4 +1,4 @@
 const versions = require("./versions");
-const project = require("./project");
+const { getProject, createProject } = require("./projects");
 
-module.exports = { versions, project };
+module.exports = { versions, getProject, createProject };

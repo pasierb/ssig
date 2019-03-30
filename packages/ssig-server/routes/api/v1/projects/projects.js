@@ -1,7 +1,7 @@
-const models = require("../../../../db/models");
+const { Project } = require("../../../../db/models");
 const { versionCanvasRenderer } = require("../../../../interactors");
 
-async function project(req, res) {
+async function getProject(req, res) {
   const { projectId } = req.params;
 
   const variables = Object.keys(req.query).reduce((acc, key) => {
@@ -20,15 +20,17 @@ async function project(req, res) {
     return acc;
   }, {});
 
-  const project = await models.Project.findByPk(projectId, {
+  const project = await Project.findByPk(projectId, {
     include: [{ association: "publishedVersion" }]
   });
 
   if (!project || !project.publishedVersion) {
-    return res.status(404).send('Project does not exist or has no published version')
+    return res
+      .status(404)
+      .send("Project does not exist or has no published version");
   }
 
-  project.publishedVersion.increment("invocationsCount")
+  project.publishedVersion.increment("invocationsCount");
 
   const canvas = await versionCanvasRenderer(
     project.publishedVersion,
@@ -40,4 +42,25 @@ async function project(req, res) {
   return canvas.createJPEGStream().pipe(res);
 }
 
-module.exports = project;
+async function createProject(req, res) {
+  if (!req.user) {
+    throw new Error();
+  }
+
+  try {
+    const project = await Project.create({
+      name: "New project",
+      userId: req.user.id
+    });
+    const version = await project.createVersion();
+
+    res.json({ project, version });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+}
+
+module.exports = {
+  getProject,
+  createProject
+};

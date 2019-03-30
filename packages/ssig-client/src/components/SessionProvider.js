@@ -16,6 +16,7 @@ function authenticateQuery() {
     query {
       me {
         username
+        isAnonymous
       }
     }
   `);
@@ -31,10 +32,12 @@ export default class SessionProvider extends Component {
       signInModalOpen: false,
       store: {
         isAuthenticating: false,
+        isAnonymous: false,
         currentUser: null
       },
       actions: {
         authenticate: this.authenticate,
+        anonymousSignUp: this.anonymousSignUp,
         toggleSignInModal: this.handleToggleSignInModal
       }
     };
@@ -50,12 +53,19 @@ export default class SessionProvider extends Component {
     }));
   };
 
-
   authenticate = () => {
     this.setState({ store: { isAuthenticating: true, currentUser: null } });
 
-    authenticateQuery().then(({ me }) => {
-      this.setState({ store: { isAuthenticating: false, currentUser: me } });
+    return authenticateQuery().then(({ me }) => {
+      this.setState({
+        store: {
+          isAuthenticating: false,
+          isAnonymous: me && !!me.isAnonymous,
+          currentUser: me
+        }
+      });
+
+      return me;
     });
   };
 

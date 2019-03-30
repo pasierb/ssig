@@ -1,7 +1,7 @@
 .ProjectCard {
   min-width: 200px;
   opacity: 0;
-  animation: revealProjectCard 0.5s ease;
+  animation: revealProjectCard 0.5s;
   animation-delay: var(--reveal-delay);
   animation-fill-mode: forwards;
 }
