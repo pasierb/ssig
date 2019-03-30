@@ -1,13 +1,16 @@
 import { h, Component } from "preact";
 import throttle from "lodash/throttle";
+
 import Modal from "../Modal";
 import LayerList from "../LayerList";
 import LayerListItem from "./LayerListItem";
 import VersionPreview from "../VersionPreview";
 import VersionForm from "../VersionForm";
 import NewLayerForm from "../NewLayerForm";
-import styles from "./Editor.scss";
 import ZoomControl from "./ZoomControl";
+import Button from "./Button";
+
+import styles from "./Editor.scss";
 
 export default class Editor extends Component {
   state = {
@@ -76,46 +79,34 @@ export default class Editor extends Component {
             onLayerChange={onLayerChange}
           />
         </pinch-zoom>
-        <button
-          className={`button is-medium is-primary ${
-            styles["Editor__back-button"]
-          }`}
+        <Button
+          className={`is-medium is-primary ${styles["Editor__back-button"]}`}
           onClick={onBack}
-        >
-          <i className="fas fa-arrow-left" />
-        </button>
+          icon={() => <i className="fas fa-arrow-left" />}
+        />
         <div className={styles["Editor__zoom-container"]}>
           <ZoomControl value={state.zoom} onChange={this.handleZoomChange} />
         </div>
         <div className={styles["Editor__controls-container"]}>
           <div className="buttons">
-            <button
-              className="button is-link"
+            <Button
+              className="is-link"
               onClick={this.toggleVersionModal}
+              icon={() => <i className="fas fa-cog" />}
               disabled={disabled}
-            >
-              <span className="icon">
-                <i className="fas fa-cog" />
-              </span>
-            </button>
-            <button
-              className="button is-link"
-              disabled={disabled}
+            />
+            <Button
+              className="is-link"
               onClick={onVersionPublish}
-            >
-              <span className="icon">
-                <i className="fas fa-upload" />
-              </span>
-            </button>
-            <button
-              className="button is-link"
-              onClick={this.toggleNewLayerModal}
+              icon={() => <i className="fas fa-upload" />}
               disabled={disabled}
-            >
-              <span className="icon">
-                <i className="fas fa-plus" />
-              </span>
-            </button>
+            />
+            <Button
+              className="is-link"
+              onClick={this.toggleNewLayerModal}
+              icon={() => <i className="fas fa-plus" />}
+              disabled={disabled}
+            />
           </div>
         </div>
         <div className={styles["Editor__layers-container"]}>

@@ -4,7 +4,7 @@
   "description": "SSIG Serve",
   "main": "app.js",
   "scripts": {
-    "dev": "node --inspect app.js",
+    "dev": "SERVER_SECRET=devdev node --inspect app.js",
     "start": "node app.js",
     "db:migrate": "sequelize db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
