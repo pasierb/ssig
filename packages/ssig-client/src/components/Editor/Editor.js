@@ -8,7 +8,7 @@ import VersionPreview from "../VersionPreview";
 import VersionForm from "../VersionForm";
 import NewLayerForm from "../NewLayerForm";
 import ZoomControl from "./ZoomControl";
-import Button from "./Button";
+import Button from "../Button";
 
 import styles from "./Editor.scss";
 
