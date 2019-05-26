@@ -14,5 +14,11 @@ module.exports = {
     password: 'changemessig',
     database: 'ssig_development'
   },
+  test: {
+    ...defaultConfig,
+    database: "ssig_test",
+    username: "root",
+    password: "changemessig"
+  },
   production: defaultConfig
 };
