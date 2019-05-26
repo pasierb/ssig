@@ -4,7 +4,8 @@
   "description": "",
   "main": "lib/ssig-renderer.umd.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",

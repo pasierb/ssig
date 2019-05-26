@@ -19,7 +19,8 @@ function expectCanvasMatchFixture(canvas, fixtureName) {
             expect(pixelDelta).toBe(0);
 
             if (pixelDelta !== 0) {
-                diff.pack().pipe(fs.createWriteStream('diff.png'));
+                // TODO: save diff image
+                // diff.pack().pipe(fs.createWriteStream('diff.png'));
             }
 
             resolve(pixelDelta);
