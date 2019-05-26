@@ -30,3 +30,5 @@ Run app
 lerna bootstrap
 lerna run dev --stream
 ```
+
+Dev server is running at [https://localhost:3001](https://localhost:3001)
