@@ -1,4 +1,3 @@
-require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
@@ -29,7 +28,6 @@ if (!twitterToken || !twitterTokenSecret) {
 
 const sessionStore = new SequelizeStore({ db: sequelize });
 const app = express();
-const port = process.env.SERVER_PORT || 3000;
 const secret = process.env.SERVER_SECRET || Date.now() + "";
 
 sessionStore.sync();
@@ -183,10 +181,4 @@ app.get("*", (req, res) => {
 
 app.use(Sentry.Handlers.errorHandler());
 
-app.listen(port, err => {
-  if (err) {
-    console.error(e);
-  }
-
-  console.log(`ssig server running on port ${port}`);
-});
+module.exports = app;
