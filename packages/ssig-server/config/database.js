@@ -8,21 +8,17 @@ const defaultConfig = {
 };
 
 module.exports = {
-  production: defaultConfig,
   development: {
     ...defaultConfig,
-    host: '0.0.0.0',
-    port: 3306,
-    database: "ssig_development",
-    username: "root",
-    password: "changemessig"
+    username: 'root',
+    password: 'changemessig',
+    database: 'ssig_development'
   },
   test: {
     ...defaultConfig,
-    host: '0.0.0.0',
-    port: 3306,
     database: "ssig_test",
     username: "root",
     password: "changemessig"
-  }
+  },
+  production: defaultConfig
 };
