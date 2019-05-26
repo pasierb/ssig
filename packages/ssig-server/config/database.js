@@ -8,6 +8,11 @@ const defaultConfig = {
 };
 
 module.exports = {
-  development: defaultConfig,
+  development: {
+    ...defaultConfig,
+    username: 'root',
+    password: 'changemessig',
+    database: 'ssig_development'
+  },
   production: defaultConfig
 };
