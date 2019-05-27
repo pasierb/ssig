@@ -3,24 +3,35 @@ process.env.NODE_ENV = "test";
 process.env.TWITTER_TOKEN = "dummyTwitterToken";
 process.env.TWITTER_TOKEN_SECRET = "dummyTwitterSecret";
 
-function truncate() {
-    const models = require('../db/models');
+const models = require('../db/models');
 
-    return Promise.all(Object.keys(models).map((key) => {
-        if (['sequelize', 'Sequelize'].includes(key)) return null;
+async function truncate() {
 
-        return models[key].destroy({ where: {}, force: true });
-    }))
+    await models.Project.update({ publishedVersionId: null }, { where: {}, force: true });
+    await models.sequelize.query(`DELETE FROM Sessions`);
+
+    const truncateModels = [
+        'Layer',
+        'Version',
+        'Project',
+        'User'
+    ]
+    
+    for (let model of truncateModels) {
+        await models[model].destroy({ where: {}, force: true });
+    }
+
+    return true;
 }
 
 beforeEach(async function() {
     await truncate();
-
-    const app = require('../app');
-
-    global.app = app;
 });
 
-afterEach(function() {
+before(function() {
+    global.app = require('../app');
+});
+
+after(function() {
     delete global.app;
 });

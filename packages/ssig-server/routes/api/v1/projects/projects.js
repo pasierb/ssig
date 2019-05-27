@@ -2,7 +2,10 @@ const { Project } = require("../../../../db/models");
 const { versionCanvasRenderer } = require("../../../../interactors");
 
 async function getProject(req, res) {
-  const { projectId } = req.params;
+  let { projectId } = req.params;
+  let format;
+
+  [projectId, format = 'jpeg'] = projectId.split('.')
 
   const variables = Object.keys(req.query).reduce((acc, key) => {
     const [code, attr] = key.split(".");
@@ -38,8 +41,21 @@ async function getProject(req, res) {
   );
 
   res.set("Cache-Control", "public, max-age=60, s-maxage=31536000");
-  res.writeHead(200, { "Content-Type": "image/jpeg" });
-  return canvas.createJPEGStream().pipe(res);
+
+  switch(format) {
+    case 'png': {
+      res.writeHead(200, { "Content-Type": 'image/png' });
+
+      return canvas.createPNGStream().pipe(res);
+    }
+    default: {
+      res.writeHead(200, { "Content-Type": 'image/jpeg' });
+
+      return canvas.createJPEGStream({
+        quality: 0.95
+      }).pipe(res);
+    }
+  }
 }
 
 async function createProject(req, res) {
