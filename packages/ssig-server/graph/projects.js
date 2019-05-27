@@ -17,7 +17,7 @@ function projectResolver(model) {
 
       return versions.map(versionResolver);
     },
-    async version({ id }, obj) {
+    async version({ id }) {
       const versions = await model.getVersions({ where: { id }, limit: 1 });
 
       return versionResolver(versions[0]);
