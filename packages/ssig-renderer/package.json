@@ -5,7 +5,8 @@
   "main": "lib/ssig-renderer.umd.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "jest"
+    "test:unit": "jest",
+    "test": "npm run test"
   },
   "author": "",
   "license": "ISC",
